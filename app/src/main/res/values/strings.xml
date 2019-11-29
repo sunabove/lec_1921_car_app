@@ -1,4 +1,13 @@
 <resources>
     <string name="app_name">My Car</string>
     <string name="title_activity_car">CarActivity</string>
+
+    <string name="Rs">\u20B9</string>
+    <string name="left_arrow">U+2190</string>
+    <string name="filled_bullet">\u25CF</string>
+    <string name="linear_bullet">\u25CB</string>
+    <string name="rect_bullet">\u25A0</string>
+    <string name="blank_rect">\u25A1</string>
+    <string name="true_tick">\u2713</string>
+    <string name="star">\u2605</string>
 </resources>

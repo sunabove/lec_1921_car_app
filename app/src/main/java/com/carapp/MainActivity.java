@@ -1,6 +1,7 @@
 package com.carapp;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -11,6 +12,8 @@ import java.net.URL;
 
 public class MainActivity extends ComActivity {
 
+    boolean isActive = false ;
+    boolean serverActive = false ;
     TextView status ;
 
     @Override
@@ -27,34 +30,52 @@ public class MainActivity extends ComActivity {
         super.onResume();
         Log.v( "sunabove", "onResume");
 
-        status.setText( "Checking the server connectivity.\n Wait seconds, please!" );
+        this.isActive = true ;
+        serverActive = false ;
 
-        this.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                checkServer();
-            }
-        }, 2000);
-
+        checkServer();
     }
 
     private void checkServer() {
-        try {
-            URL url = new URL("http://www.android.com/");
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setConnectTimeout( 10_000 ); // timing out in a minute
 
-            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String str;
-            while ((str = in.readLine()) != null) {
-                //
+        status.setText( "Checking the server connectivity.\n Wait seconds, please!" );
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while( ! serverActive && isActive ) {
+                    try {
+                        URL url = new URL("http://10.3.141.1/info.html");
+                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                        //conn.setConnectTimeout( 10_000 ); // timing out in a minute
+
+                        BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                        String str;
+                        while ((str = in.readLine()) != null) {
+                            //
+                        }
+                        serverActive = true;
+
+                        Thread.currentThread().sleep( 2_000 );
+                    } catch (Exception e) {
+                        //e.printStackTrace();
+                    }
+                }
             }
+        }).start();
 
-            startActivity(new android.content.Intent( this, com.carapp.CarActivity.class));
-        } catch( Exception  e ){
-            e.printStackTrace();
-
-        }
-
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Log.d("sunabove", "run: postDelayerd");
+                if( serverActive ) {
+                    isActive = false ;
+                    startActivity(new android.content.Intent( MainActivity.this, com.carapp.CarActivity.class));
+                } else {
+                    handler.postDelayed( this, 3_000 );
+                }
+            }
+        }, 3000);
     }
 }
