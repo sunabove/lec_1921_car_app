@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -14,7 +13,7 @@ import java.net.URL;
 
 public class MainActivity extends ComActivity {
 
-    boolean isActive = false ;
+    boolean activityAlive = false ;
     boolean serverActive = false ;
     TextView status ;
 
@@ -34,7 +33,7 @@ public class MainActivity extends ComActivity {
         super.onResume();
         Log.v( "sunabove", "onResume");
 
-        this.isActive = true ;
+        this.activityAlive = true ;
         serverActive = false ;
 
         checkServer();
@@ -48,7 +47,7 @@ public class MainActivity extends ComActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while( ! serverActive && isActive ) {
+                while( ! serverActive && activityAlive) {
                     try {
                         mode = 1;
 
@@ -89,19 +88,23 @@ public class MainActivity extends ComActivity {
                     status.setText( "서버 연결중입니다.\n잠시만 기다려 주세요!" );
                 } else if ( 2 == mode ) {
                     status.setTextColor(Color.parseColor("#009688"));
-                    status.setText( "서버에 성공하였습니다." );
+                    status.setText( "서버에 성공하였습니다.\n차량 제어 화면으로 전환합니다.\n잠시만 기다려 주세요." );
 
-                    sleep( 2_000 );
+                    activityAlive = false ;
+
+                    new Handler().postDelayed(new Runnable() {
+                        public void run() {
+                            activityAlive = false ;
+                            startActivity(new android.content.Intent( MainActivity.this, com.carapp.CarActivity.class));
+                        }
+                    }, 3000);
                 } else if ( 3 == mode ) {
                     status.setTextColor(Color.parseColor("#FF0000"));
                     status.setText( "서버 연결에 실패하였습니다.\n잠시후 다시 연결을 시도합니다." );
                 }
 
-                if( serverActive ) {
-                    isActive = false ;
-                    startActivity(new android.content.Intent( MainActivity.this, com.carapp.CarActivity.class));
-                } else {
-                    handler.postDelayed( this, 500 );
+                if(activityAlive) {
+                     handler.postDelayed( this, 500 );
                 }
             }
         }, 500);
