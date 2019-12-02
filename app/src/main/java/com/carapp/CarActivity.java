@@ -25,10 +25,7 @@ public class CarActivity extends ComActivity {
         videoView.getSettings().setLoadWithOverviewMode(true);
         videoView.getSettings().setUseWideViewPort(true);
 
-        //String vidAddress = "https://archive.org/download/ksnn_compilation_master_the_internet/ksnn_compilation_master_the_internet_512kb.mp4";
-        String url = "http://10.3.141.1/stream.mjpg";
-
-        videoView.loadUrl("http://10.3.141.1/stream.mjpg");
+        videoView.loadUrl("http://10.3.141.1/video_feed");
     }
 
 }
