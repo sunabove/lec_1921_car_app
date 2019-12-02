@@ -15,4 +15,12 @@ public class ComActivity extends AppCompatActivity implements ComInterface {
         new Handler().postDelayed( r, delayMillis);
     }
 
+    public void sleep( long millis ) {
+        try {
+            Thread.currentThread().sleep(millis);
+        } catch ( Exception e ) {
+            //
+        }
+    }
+
 }
