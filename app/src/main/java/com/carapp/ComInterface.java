@@ -5,7 +5,7 @@ package com.carapp;
  */
 public interface ComInterface {
 
-    public static final String finmartHomePageUrl = "http://finmart.iptime.org/static/pinegrow/" ;
+    public static final String TAG = "sunabove";
 
     public static final long HANDLER_DELAY_SPINNER_ITEM = 200;
 

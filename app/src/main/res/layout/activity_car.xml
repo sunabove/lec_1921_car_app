@@ -41,9 +41,9 @@
                 android:id="@+id/forward"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/fontawesome-webfont"
-                android:text="&#f641"
-                android:textSize="24sp" />
+                android:fontFamily="sans-serif-medium"
+                android:text="FORWARD"
+                android:textSize="30sp" />
 
             <TextView
                 android:id="@+id/textView"
@@ -60,22 +60,22 @@
                 android:id="@+id/left"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="24sp"
-                android:text="LEFT" />
+                android:text="LEFT"
+                android:textSize="30sp" />
 
             <Button
-                android:id="@+id/start"
+                android:id="@+id/stop"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="START"
-                android:textSize="24sp" />
+                android:textSize="30sp" />
 
             <Button
                 android:id="@+id/right"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="24sp"
-                android:text="RIGHT" />
+                android:text="RIGHT"
+                android:textSize="30sp" />
         </TableRow>
 
         <TableRow
@@ -92,8 +92,8 @@
                 android:id="@+id/backward"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="24sp"
-                android:text="Backward" />
+                android:text="Backward"
+                android:textSize="30sp" />
 
             <TextView
                 android:id="@+id/textView4"

@@ -5,7 +5,7 @@ import android.view.View;
 import androidx.annotation.*;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class ComActivity extends AppCompatActivity {
+public class ComActivity extends AppCompatActivity implements ComInterface {
 
     public <T extends View> T findViewById(@IdRes int id) {
         return (T) super.findViewById(id);
