@@ -27,8 +27,10 @@ public class Orientation implements SensorEventListener {
 
   private int mLastAccuracy;
   private Listener mListener;
+  private CarActivity activity;
 
-  public Orientation(Activity activity) {
+  public Orientation(CarActivity activity) {
+    this.activity = activity ;
     mWindowManager = activity.getWindow().getWindowManager();
     mSensorManager = (SensorManager) activity.getSystemService(Activity.SENSOR_SERVICE);
 
@@ -104,8 +106,7 @@ public class Orientation implements SensorEventListener {
     }
 
     float[] adjustedRotationMatrix = new float[9];
-    SensorManager.remapCoordinateSystem(rotationMatrix, worldAxisForDeviceAxisX,
-        worldAxisForDeviceAxisY, adjustedRotationMatrix);
+    SensorManager.remapCoordinateSystem(rotationMatrix, worldAxisForDeviceAxisX, worldAxisForDeviceAxisY, adjustedRotationMatrix);
 
     // Transform rotation matrix into azimuth/pitch/roll
     float[] orientation = new float[3];
@@ -115,6 +116,7 @@ public class Orientation implements SensorEventListener {
     float pitch = orientation[1] * -57;
     float roll = orientation[2] * -57;
 
+    activity.pitchRollUpdated( pitch, roll );
     mListener.onOrientationChanged(pitch, roll);
   }
 }

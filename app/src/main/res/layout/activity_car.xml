@@ -141,15 +141,31 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <EditText
-                android:id="@+id/status"
-                android:layout_width="wrap_content"
-                android:layout_height="100dp"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_span="3"
-                android:ems="10"
-                android:gravity="start|top"
-                android:inputType="textMultiLine"
-                android:text="Welcome" />
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/pitchRoll"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:text="pitch roll" />
+
+                <EditText
+                    android:id="@+id/status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    android:layout_span="3"
+                    android:ems="10"
+                    android:gravity="start|top"
+                    android:inputType="textMultiLine"
+                    android:text="Welcome" />
+            </LinearLayout>
+
         </TableRow>
 
     </TableLayout>

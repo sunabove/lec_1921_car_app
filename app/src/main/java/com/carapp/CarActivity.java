@@ -1,10 +1,5 @@
 package com.carapp;
 
-import android.content.Context;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -31,18 +26,17 @@ public class CarActivity extends ComActivity implements Orientation.Listener {
     Button stop;
 
     EditText status ;
+    EditText pitchRoll ;
 
     RequestQueue requestQueue ;
     boolean motionEnabled = false ;
 
     // orientation sensor
-    private Orientation mOrientation;
-    private AttitudeIndicator mAttitudeIndicator;
+    private Orientation orientation;
+    private AttitudeIndicator attitudeIndicator;
     // -- orientation sensor
 
-    public double toDegree( double radian ) {
-        double degree = Math.toDegrees( radian );
-
+    public double prettyDegree( double degree ) {
         degree = degree % 360 ;
 
         if( 180 < degree ) {
@@ -58,10 +52,11 @@ public class CarActivity extends ComActivity implements Orientation.Listener {
 
         this.requestQueue = Volley.newRequestQueue(this);
 
-        mOrientation = new Orientation(this);
-        mAttitudeIndicator = this.findViewById(R.id.attitude_indicator);
+        orientation = new Orientation(this);
+        attitudeIndicator = this.findViewById(R.id.attitude_indicator);
 
         this.status = this.findViewById(R.id.status);
+        this.pitchRoll = this.findViewById(R.id.pitchRoll);
 
         videoView = this.findViewById(R.id.videoView);
         forward = this.findViewById(R.id.forward);
@@ -131,6 +126,12 @@ public class CarActivity extends ComActivity implements Orientation.Listener {
         right.setEnabled( motionEnabled );
     }
 
+    public void pitchRollUpdated( double pitch, double roll ) {
+        String text = String.format( "pitch: %05.2f  roll %05.2f", prettyDegree( pitch ), prettyDegree( roll ) );
+
+        pitchRoll.setText( text );
+    }
+
     public void getCarMotion( String motion) {
 
         if( "stop".equalsIgnoreCase( motion ) ) {
@@ -170,19 +171,19 @@ public class CarActivity extends ComActivity implements Orientation.Listener {
 
         videoView.loadUrl( "http://10.3.141.1/video_feed" );
 
-        mOrientation.startListening(this);
+        orientation.startListening(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
 
-        mOrientation.stopListening();
+        orientation.stopListening();
     }
 
     @Override
     public void onOrientationChanged(float pitch, float roll) {
-        mAttitudeIndicator.setAttitude(pitch, roll);
+        attitudeIndicator.setAttitude(pitch, roll);
     }
 
 }
