@@ -28,6 +28,7 @@ public class CarActivity extends ComActivity {
     EditText status ;
 
     RequestQueue requestQueue ;
+    boolean motionEnabled = false ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +50,9 @@ public class CarActivity extends ComActivity {
         backward.setText(HtmlCompat.fromHtml("&darr;", HtmlCompat.FROM_HTML_MODE_COMPACT));
         left.setText(HtmlCompat.fromHtml("&larr;", HtmlCompat.FROM_HTML_MODE_COMPACT));
         right.setText(HtmlCompat.fromHtml("&rarr;", HtmlCompat.FROM_HTML_MODE_COMPACT));
-        stop.setText(HtmlCompat.fromHtml("&bull;", HtmlCompat.FROM_HTML_MODE_COMPACT));
+        // stop.setText(HtmlCompat.fromHtml("&bull;", HtmlCompat.FROM_HTML_MODE_COMPACT));
+
+        this.paintUI();
 
         forward.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -80,6 +83,28 @@ public class CarActivity extends ComActivity {
                 getCarMotion( "stop" );
             }
         });
+
+        // stop / start listener
+        stop.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                motionEnabled = ! motionEnabled ;
+
+                paintUI();
+            }
+        });
+    }
+
+    public void paintUI() {
+        if( motionEnabled )  {
+            stop.setText( "STOP" );
+        } else {
+            stop.setText( "START" );
+        }
+
+        forward.setEnabled( motionEnabled );
+        backward.setEnabled( motionEnabled );
+        left.setEnabled( motionEnabled );
+        right.setEnabled( motionEnabled );
     }
 
     public void getCarMotion( String motion) {
