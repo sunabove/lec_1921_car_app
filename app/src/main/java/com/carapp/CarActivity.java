@@ -162,10 +162,6 @@ public class CarActivity extends ComActivity implements Orientation.Listener {
 
     public void getCarMotion( String motion) {
 
-        if( "stop".equalsIgnoreCase( motion ) ) {
-            requestQueue.cancelAll(TAG);
-        }
-
         // Instantiate the RequestQueue.
         String url = String.format("http://10.3.141.1/car.json?motion=%s", motion);
 
