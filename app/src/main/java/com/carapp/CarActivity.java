@@ -127,7 +127,10 @@ public class CarActivity extends ComActivity implements Orientation.Listener {
     }
 
     public void pitchRollUpdated( double pitch, double roll ) {
-        String text = String.format( "pitch: %05.2f  roll %05.2f", prettyDegree( pitch ), prettyDegree( roll ) );
+        pitch =  - prettyDegree( pitch );
+        roll = - prettyDegree( roll ) ;
+
+        String text = String.format( "pitch: %05.2f  roll %05.2f", pitch, roll);
 
         pitchRoll.setText( text );
     }
