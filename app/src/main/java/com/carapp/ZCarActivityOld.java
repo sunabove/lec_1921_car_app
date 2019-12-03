@@ -21,7 +21,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-public class CarActivity extends ComActivity implements Orientation.Listener {
+public class ZCarActivityOld extends ComActivity {
 
     WebView videoView ;
     Button forward;
@@ -35,10 +35,10 @@ public class CarActivity extends ComActivity implements Orientation.Listener {
     RequestQueue requestQueue ;
     boolean motionEnabled = false ;
 
-    // orientation sensor
-    private Orientation mOrientation;
-    private AttitudeIndicator mAttitudeIndicator;
-    // -- orientation sensor
+    // motion sensor
+    private SensorManager sensorManager;
+    private Sensor accelerometer;
+    private Sensor magnetic;
 
     public double toDegree( double radian ) {
         double degree = Math.toDegrees( radian );
@@ -51,6 +51,63 @@ public class CarActivity extends ComActivity implements Orientation.Listener {
         return degree ;
     }
 
+    private SensorEventListener orientationListener = new SensorEventListener() {
+
+        // Gravity rotational data
+        private float gravity[];
+        // Magnetic rotational data
+        private float magnetic[]; //for magnetic rotational data
+        private float accels[] = new float[3];
+        private float mags[] = new float[3];
+        private float[] values = new float[3];
+
+        // azimuth, pitch and roll
+        private float azimuth;
+        private float pitch;
+        private float roll;
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        }
+
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            switch (event.sensor.getType()) {
+                case Sensor.TYPE_MAGNETIC_FIELD:
+                    mags = event.values.clone();
+                    break;
+                case Sensor.TYPE_ACCELEROMETER:
+                    accels = event.values.clone();
+                    break;
+            }
+
+            if (mags != null && accels != null) {
+                gravity = new float[9];
+                magnetic = new float[9];
+                SensorManager.getRotationMatrix(gravity, magnetic, accels, mags);
+                float[] outGravity = new float[9];
+                SensorManager.remapCoordinateSystem(gravity, SensorManager.AXIS_X,SensorManager.AXIS_Z, outGravity);
+                SensorManager.getOrientation(outGravity, values);
+
+                azimuth = values[0] * 57.2957795f;
+                pitch =values[1] * 57.2957795f;
+                roll = values[2] * 57.2957795f;
+                mags = null;
+                accels = null;
+
+                double yaw_deg = toDegree( azimuth );
+                double pitch_deg = toDegree( pitch );
+                double roll_deg = toDegree( roll );
+
+                String text = String.format("pitch: %05.2f roll: %05.2f yaw: %05.2f", pitch_deg, roll_deg, yaw_deg );
+
+                status.setText( text );
+            }
+        }
+    };;
+    // -- motion sensor
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,8 +115,9 @@ public class CarActivity extends ComActivity implements Orientation.Listener {
 
         this.requestQueue = Volley.newRequestQueue(this);
 
-        mOrientation = new Orientation(this);
-        mAttitudeIndicator = this.findViewById(R.id.attitude_indicator);
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        magnetic = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
         this.status = this.findViewById(R.id.status);
 
@@ -170,19 +228,14 @@ public class CarActivity extends ComActivity implements Orientation.Listener {
 
         videoView.loadUrl( "http://10.3.141.1/video_feed" );
 
-        mOrientation.startListening(this);
+        sensorManager.registerListener(orientationListener, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener(orientationListener, magnetic, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
-        mOrientation.stopListening();
-    }
-
-    @Override
-    public void onOrientationChanged(float pitch, float roll) {
-        mAttitudeIndicator.setAttitude(pitch, roll);
+        sensorManager.unregisterListener( orientationListener );
     }
 
 }
