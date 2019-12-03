@@ -126,13 +126,38 @@ public class CarActivity extends ComActivity implements Orientation.Listener {
         right.setEnabled( motionEnabled );
     }
 
+    private long then = System.currentTimeMillis();
+
+    // pitch roll 값이 변했을 경우, 차를 제어한다.
     public void pitchRollUpdated( double pitch, double roll ) {
-        pitch =  - prettyDegree( pitch );
-        roll = - prettyDegree( roll ) ;
+        pitch = -prettyDegree(pitch);
+        roll = -prettyDegree(roll);
 
-        String text = String.format( "pitch: %05.2f  roll %05.2f", pitch, roll);
+        String text = String.format("pitch: %05.2f  roll %05.2f", pitch, roll);
 
-        pitchRoll.setText( text );
+        pitchRoll.setText(text);
+
+        final long now = System.currentTimeMillis();
+
+        if( ! motionEnabled ) {
+            // do nothing!
+        }else if (now - then < 700 ) {
+            // do nothing!
+        } else {
+            if (15 <= roll) {
+                this.getCarMotion("right");
+            } else if ( -15 >= roll) {
+                this.getCarMotion("left");
+            } else if (30 <= pitch) {
+                this.getCarMotion("forward");
+            } else if (5 >= pitch) {
+                this.getCarMotion("backward");
+            } else {
+                this.getCarMotion("stop");
+            }
+
+            then = now ;
+        }
     }
 
     public void getCarMotion( String motion) {
