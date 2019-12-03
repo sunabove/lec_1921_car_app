@@ -107,6 +107,6 @@ public class MainActivity extends ComActivity {
                      handler.postDelayed( this, 500 );
                 }
             }
-        }, 500);
+        }, 2_000);
     }
 }
