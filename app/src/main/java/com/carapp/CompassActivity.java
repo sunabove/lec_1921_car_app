@@ -25,7 +25,8 @@ public class CompassActivity extends ComActivity {
 
         sotwFormatter = new SOTWFormatter(this);
 
-        arrowView = findViewById(R.id.main_image_hands);
+        //arrowView = findViewById(R.id.main_image_hands);
+        arrowView = findViewById(R.id.main_image_dial);
         sotwLabel = findViewById(R.id.sotw_label);
         setupCompass();
     }
