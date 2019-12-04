@@ -16,6 +16,9 @@ public class MainActivity extends ComActivity {
     boolean activityAlive = false ;
     boolean serverActive = false ;
     TextView status ;
+    TextView error ;
+
+    String errorMessage = "" ;
 
     int mode = 0 ;
 
@@ -25,6 +28,7 @@ public class MainActivity extends ComActivity {
         setContentView(R.layout.activity_main);
 
         this.status = this.findViewById(R.id.status);
+        this.error = this.findViewById(R.id.error);
     }
 
     @Override
@@ -34,7 +38,10 @@ public class MainActivity extends ComActivity {
         Log.v( "sunabove", "onResume");
 
         this.activityAlive = true ;
-        serverActive = false ;
+        this.serverActive = false ;
+
+        this.errorMessage = "";
+        this.error.setText( errorMessage );
 
         checkServer();
     }
@@ -50,7 +57,6 @@ public class MainActivity extends ComActivity {
                 while( ! serverActive && activityAlive) {
                     try {
                         mode = 1;
-
                         sleep( 3000 );
 
                         URL url = new URL("http://10.3.141.1/info.html");
@@ -63,6 +69,7 @@ public class MainActivity extends ComActivity {
                         }
 
                         serverActive = true;
+                        errorMessage = "";
 
                         sleep( 3_000 );
 
@@ -70,6 +77,9 @@ public class MainActivity extends ComActivity {
 
                     } catch (Exception e) {
                         mode = 3 ;
+
+                        errorMessage = e.getMessage();
+
                         e.printStackTrace();
                     }
 
@@ -83,12 +93,14 @@ public class MainActivity extends ComActivity {
             @Override
             public void run() {
                 //Log.d("sunabove", "run: postDelayerd");
+                error.setText( errorMessage );
+
                 if( 1 == mode ) {
                     status.setTextColor(Color.parseColor("#009688"));
                     status.setText( "서버 연결중입니다.\n잠시만 기다려 주세요!" );
                 } else if ( 2 == mode ) {
                     status.setTextColor(Color.parseColor("#009688"));
-                    status.setText( "서버에 성공하였습니다.\n차량 제어 화면으로 전환합니다.\n잠시만 기다려 주세요." );
+                    status.setText( "서버 연결에 성공하였습니다.\n차량 제어 화면으로 전환합니다.\n잠시만 기다려 주세요." );
 
                     activityAlive = false ;
 
