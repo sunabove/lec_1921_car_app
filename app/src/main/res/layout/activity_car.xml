@@ -93,7 +93,8 @@
                     android:id="@+id/sotw_label"
                     android:layout_width="60dp"
                     android:layout_height="wrap_content"
-                    android:text="sotw " />
+                    android:text="sotw "
+                    android:textSize="18sp" />
 
             </LinearLayout>
 
