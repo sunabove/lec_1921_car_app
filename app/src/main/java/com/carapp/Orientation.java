@@ -18,59 +18,59 @@ public class Orientation implements SensorEventListener {
 
   private static final int SENSOR_DELAY_MICROS = 16 * 1000; // 16ms
 
-  private final WindowManager mWindowManager;
+  private final WindowManager windowManager;
 
-  private final SensorManager mSensorManager;
+  private final SensorManager sensorManager;
 
   @Nullable
-  private final Sensor mRotationSensor;
+  private final Sensor rotationSensor;
 
-  private int mLastAccuracy;
-  private Listener mListener;
+  private int lastAccuracy;
+  private Listener listener;
   private CarActivity activity;
 
   public Orientation(CarActivity activity) {
     this.activity = activity ;
-    mWindowManager = activity.getWindow().getWindowManager();
-    mSensorManager = (SensorManager) activity.getSystemService(Activity.SENSOR_SERVICE);
+    windowManager = activity.getWindow().getWindowManager();
+    sensorManager = (SensorManager) activity.getSystemService(Activity.SENSOR_SERVICE);
 
     // Can be null if the sensor hardware is not available
-    mRotationSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+    rotationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
   }
 
   public void startListening(Listener listener) {
-    if (mListener == listener) {
+    if (this.listener == listener) {
       return;
     }
-    mListener = listener;
-    if (mRotationSensor == null) {
+    this.listener = listener;
+    if (rotationSensor == null) {
       LogUtil.w("Rotation vector sensor not available; will not provide orientation data.");
       return;
     }
-    mSensorManager.registerListener(this, mRotationSensor, SENSOR_DELAY_MICROS);
+    sensorManager.registerListener(this, rotationSensor, SENSOR_DELAY_MICROS);
   }
 
   public void stopListening() {
-    mSensorManager.unregisterListener(this);
-    mListener = null;
+    sensorManager.unregisterListener(this);
+    listener = null;
   }
 
   @Override
   public void onAccuracyChanged(Sensor sensor, int accuracy) {
-    if (mLastAccuracy != accuracy) {
-      mLastAccuracy = accuracy;
+    if (lastAccuracy != accuracy) {
+      lastAccuracy = accuracy;
     }
   }
 
   @Override
   public void onSensorChanged(SensorEvent event) {
-    if (mListener == null) {
+    if (listener == null) {
       return;
     }
-    if (mLastAccuracy == SensorManager.SENSOR_STATUS_UNRELIABLE) {
+    if (lastAccuracy == SensorManager.SENSOR_STATUS_UNRELIABLE) {
       return;
     }
-    if (event.sensor == mRotationSensor) {
+    if (event.sensor == rotationSensor) {
       updateOrientation(event.values);
     }
   }
@@ -85,7 +85,7 @@ public class Orientation implements SensorEventListener {
 
     // Remap the axes as if the device screen was the instrument panel,
     // and adjust the rotation matrix for the device orientation.
-    switch (mWindowManager.getDefaultDisplay().getRotation()) {
+    switch (windowManager.getDefaultDisplay().getRotation()) {
       case Surface.ROTATION_0:
       default:
         worldAxisForDeviceAxisX = SensorManager.AXIS_X;
@@ -117,6 +117,6 @@ public class Orientation implements SensorEventListener {
     float roll = orientation[2] * -57;
 
     activity.pitchRollUpdated( pitch, roll );
-    mListener.onOrientationChanged(pitch, roll);
+    listener.onOrientationChanged(pitch, roll);
   }
 }

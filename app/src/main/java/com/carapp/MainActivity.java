@@ -92,7 +92,7 @@ public class MainActivity extends ComActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                //Log.d("sunabove", "run: postDelayerd");
+                Log.d("sunabove", "run: postDelayerd");
                 error.setText( errorMessage );
 
                 if( 1 == mode ) {

@@ -26,7 +26,8 @@ public class CarActivity extends ComActivity implements Orientation.Listener {
     Button stop;
 
     EditText status ;
-    EditText pitchRoll ;
+    EditText pitch ;
+    EditText roll ;
 
     RequestQueue requestQueue ;
     boolean motionEnabled = false ;
@@ -56,7 +57,8 @@ public class CarActivity extends ComActivity implements Orientation.Listener {
         attitudeIndicator = this.findViewById(R.id.attitude_indicator);
 
         this.status = this.findViewById(R.id.status);
-        this.pitchRoll = this.findViewById(R.id.pitchRoll);
+        this.pitch = this.findViewById(R.id.pitch);
+        this.roll = this.findViewById(R.id.roll);
 
         videoView = this.findViewById(R.id.videoView);
         forward = this.findViewById(R.id.forward);
@@ -75,37 +77,34 @@ public class CarActivity extends ComActivity implements Orientation.Listener {
 
         forward.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                getCarMotion( "forward" );
+                moveCar( "forward" );
             }
         });
 
         backward.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                getCarMotion( "backward" );
+                moveCar( "backward" );
             }
         });
 
         left.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                getCarMotion( "left" );
+                moveCar( "left" );
             }
         });
 
         right.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                getCarMotion( "right" );
+                moveCar( "right" );
             }
         });
 
         stop.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                getCarMotion( "stop" );
-            }
-        });
+                if( motionEnabled ) {
+                    moveCar("stop");
+                }
 
-        // stop / start listener
-        stop.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
                 motionEnabled = ! motionEnabled ;
 
                 paintUI();
@@ -135,7 +134,8 @@ public class CarActivity extends ComActivity implements Orientation.Listener {
 
         String text = String.format("pitch: %05.2f  roll %05.2f", pitch, roll);
 
-        pitchRoll.setText(text);
+        this.pitch.setText( String.format( "%5.2f", pitch));
+        this.roll.setText( String.format( "%5.2f", roll));
 
         final long now = System.currentTimeMillis();
 
@@ -145,22 +145,22 @@ public class CarActivity extends ComActivity implements Orientation.Listener {
             // do nothing!
         } else {
             if (15 <= roll) {
-                this.getCarMotion("right");
+                this.moveCar("right");
             } else if ( -15 >= roll) {
-                this.getCarMotion("left");
+                this.moveCar("left");
             } else if (30 <= pitch) {
-                this.getCarMotion("forward");
+                this.moveCar("forward");
             } else if (5 >= pitch) {
-                this.getCarMotion("backward");
+                this.moveCar("backward");
             } else {
-                this.getCarMotion("stop");
+                this.moveCar("stop");
             }
 
             then = now ;
         }
     }
 
-    public void getCarMotion( String motion) {
+    public void moveCar(String motion) {
 
         // Instantiate the RequestQueue.
         String url = String.format("http://10.3.141.1/car.json?motion=%s", motion);
