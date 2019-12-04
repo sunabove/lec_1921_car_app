@@ -1,6 +1,7 @@
 package com.carapp;
 
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
@@ -59,6 +60,11 @@ public class CarActivity extends ComActivity implements Orientation.Listener {
         this.status = this.findViewById(R.id.status);
         this.pitch = this.findViewById(R.id.pitch);
         this.roll = this.findViewById(R.id.roll);
+
+        // hide keyboard always
+        this.status.setInputType(InputType.TYPE_NULL);
+        this.pitch.setInputType(InputType.TYPE_NULL);
+        this.roll.setInputType(InputType.TYPE_NULL);
 
         videoView = this.findViewById(R.id.videoView);
         forward = this.findViewById(R.id.forward);
