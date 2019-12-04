@@ -55,7 +55,6 @@ public class MainActivity extends ComActivity {
 
                         URL url = new URL("http://10.3.141.1/info.html");
                         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                        //conn.setConnectTimeout( 10_000 ); // timing out in a minute
 
                         BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                         String str;
@@ -71,6 +70,7 @@ public class MainActivity extends ComActivity {
 
                     } catch (Exception e) {
                         mode = 3 ;
+                        e.printStackTrace();
                     }
 
                     sleep( 5_000 );
@@ -82,7 +82,7 @@ public class MainActivity extends ComActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Log.d("sunabove", "run: postDelayerd");
+                //Log.d("sunabove", "run: postDelayerd");
                 if( 1 == mode ) {
                     status.setTextColor(Color.parseColor("#009688"));
                     status.setText( "서버 연결중입니다.\n잠시만 기다려 주세요!" );
