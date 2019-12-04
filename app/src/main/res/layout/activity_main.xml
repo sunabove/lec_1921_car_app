@@ -75,7 +75,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Error "
-            android:textColor="#E91E63" />
+            android:textColor="#E91E63"
+            android:textSize="20dp" />
     </TableRow>
 
     <TableRow
