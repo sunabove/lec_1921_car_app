@@ -17,7 +17,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-public class CarActivity extends ComActivity implements Orientation.Listener {
+public class CarActivity extends CompassActivity implements Orientation.Listener {
 
     WebView videoView ;
     Button forward;
@@ -50,7 +50,7 @@ public class CarActivity extends ComActivity implements Orientation.Listener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_car);
+        // setContentView(R.layout.activity_car);
 
         this.requestQueue = Volley.newRequestQueue(this);
 
@@ -194,7 +194,8 @@ public class CarActivity extends ComActivity implements Orientation.Listener {
     protected void onResume()
     {
         super.onResume();
-        Log.v( "sunabove", "onResume");
+
+        Log.v( TAG, "onResume");
 
         videoView.getSettings().setLoadWithOverviewMode(true);
         videoView.getSettings().setUseWideViewPort(true);
