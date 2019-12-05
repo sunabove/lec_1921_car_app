@@ -27,16 +27,20 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
-public class GoogleMapActivity extends FragmentActivity implements OnMapReadyCallback {
+public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback {
 
     private GoogleMap map;
     private FusedLocationProviderClient fusedLocationClient;
     MarkerOptions myLocMarker ;
 
+    public int getLayoutId() {
+        return R.layout.activity_maps;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
+        //setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -58,7 +62,7 @@ public class GoogleMapActivity extends FragmentActivity implements OnMapReadyCal
                                     LatLng latlng = new LatLng(location.getLatitude(), location.getLongitude());
 
                                     myLocMarker = new MarkerOptions().position(latlng).title("현재 나의 위치") ;
-                                    map.addMarker(myLocMarker);
+                                    map.addMarker(myLocMarker).showInfoWindow();
 
                                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, map.getMaxZoomLevel() - 5));
                                 }

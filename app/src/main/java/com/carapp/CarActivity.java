@@ -1,5 +1,6 @@
 package com.carapp;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 
 import androidx.core.text.HtmlCompat;
 
@@ -47,10 +49,15 @@ public class CarActivity extends CompassActivity implements Orientation.Listener
         return degree ;
     }
 
+    public int getLayoutId() {
+        return R.layout.activity_car ;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // setContentView(R.layout.activity_car);
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         this.requestQueue = Volley.newRequestQueue(this);
 

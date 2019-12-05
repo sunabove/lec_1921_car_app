@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
-public class CompassActivity extends ComActivity {
+public abstract class CompassActivity extends ComActivity {
 
     private Compass compass;
     private ImageView arrowView;
@@ -21,7 +21,6 @@ public class CompassActivity extends ComActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_car);
 
         sotwFormatter = new SOTWFormatter(this);
 

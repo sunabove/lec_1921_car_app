@@ -22,10 +22,13 @@ public class MainActivity extends ComActivity {
 
     int mode = 0 ;
 
+    public int getLayoutId() {
+        return R.layout.activity_main ;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
         this.status = this.findViewById(R.id.status);
         this.error = this.findViewById(R.id.error);
