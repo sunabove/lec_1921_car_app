@@ -12,6 +12,8 @@ import android.os.Handler;
 import android.provider.Settings;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.Button;
@@ -34,6 +36,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams;
 
 public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback {
 
@@ -81,7 +84,7 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
 
                 motionEnabled = ! motionEnabled ;
 
-                stop.setText( motionEnabled ? "STOP" : "START");
+                stop.setText( motionEnabled ? "STOP" : "START" );
             }
         });
 
@@ -100,6 +103,54 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
                 }, 1_500);
             }
         });
+
+        this.videoView.setOnTouchListener(new View.OnTouchListener(){
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction()==MotionEvent.ACTION_MOVE){
+                    return false;
+                }
+
+                if (event.getAction()==MotionEvent.ACTION_UP){
+                    whenVideoViewClicked();
+                }
+
+                return false;
+            }
+        });
+    }
+
+    private boolean videoFullWidth = false ;
+
+    public void whenVideoViewClicked() {
+        Log.d( TAG, "VideoView Clicked.");
+
+        final WebView videoView = this.videoView;
+
+        int w = videoView.getWidth() ;
+        int sw = this.getScreenWidth() ;
+        int sh = this.getScreenHeight() ;
+
+        if( ! videoFullWidth ) {
+            w = ( sw - 8 ) ;
+
+            status.setText( "동영상 화면을 최대로 확장합니다." );
+        } else {
+            w = sw / 2;
+            status.setText( "동영상 이전 크기로 복원합니다." );
+        }
+
+        int h = (int) ( w*3.0/4.0 );
+
+        LayoutParams params = new LayoutParams(w, h);
+        params.bottomMargin = 4;
+        params.leftMargin = 4;
+        params.gravity = Gravity.LEFT | Gravity.BOTTOM ;
+
+        videoView.setLayoutParams( params );
+
+        videoFullWidth = ! videoFullWidth ;
     }
 
     @Override
