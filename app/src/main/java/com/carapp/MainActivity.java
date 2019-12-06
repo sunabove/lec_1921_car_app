@@ -65,6 +65,7 @@ public class MainActivity extends ComActivity {
                         sleep( 3000 );
 
                         URL url = new URL("http://10.3.141.1/info.html");
+
                         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
                         conn.setConnectTimeout(5_000); //set timeout to 5 seconds
@@ -130,7 +131,7 @@ public class MainActivity extends ComActivity {
                     }, 3000);
                 } else if ( 3 == mode ) {
                     status.setTextColor(Color.parseColor("#FF0000"));
-                    status.setText( "서버 연결에 실패하였습니다.\n잠시후 다시 연결을 시도합니다." );
+                    status.setText( "서버 연결에 실패하였습니다.\n라즈베리파이 공유기를 체크하세요.\n차량 서버 실행 여부를 체크하세요.\n잠시후 다시 연결을 시도합니다." );
                 }
 
                 if(activityAlive) {
