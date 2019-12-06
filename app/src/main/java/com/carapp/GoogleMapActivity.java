@@ -10,6 +10,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
@@ -42,6 +43,7 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
     private WebView videoView ;
     private Button stop ;
     private FloatingActionButton goBack ;
+    private EditText status ;
 
     public int getLayoutId() {
         return R.layout.activity_maps;
@@ -55,7 +57,11 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
 
         this.videoView = this.findViewById(R.id.videoView);
         this.stop = this.findViewById(R.id.stop );
-        this.goBack = this.findViewById(R.id.goBack) ;
+        this.goBack = this.findViewById(R.id.goBack);
+        this.status = this.findViewById(R.id.status);
+
+        // hide keyboard always
+        this.status.setInputType(InputType.TYPE_NULL);
 
         //setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -67,7 +73,6 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
 
         this.stop.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                EditText status = null ;
                 if( motionEnabled ) {
                     moveCar("stop", status );
                 }
@@ -82,12 +87,15 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
             public void onClick(View v) {
                 motionEnabled = false;
 
+                status.setText( "이전 화면으로 돌아갑니다." );
+
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-
+                        // 이전 화면으로 돌아감.
+                        finish();
                     }
-                }, 500);
+                }, 1_500);
             }
         });
     }
@@ -121,6 +129,8 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
                                     map.addMarker(myLocMarker).showInfoWindow();
 
                                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, map.getMaxZoomLevel() - 5));
+
+                                    status.setText( "지도를 핸드폰 현재 위치로 이동하였습니다.");
                                 }
                             }
                         }
@@ -171,9 +181,12 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 17));
 
+        status.setText( "지도가 로드되었습니다.");
+
         new android.os.Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                status.setText( "현재 위치를 체크중입니다.");
                 getLastLocation();
             }
         }, 5_000);
