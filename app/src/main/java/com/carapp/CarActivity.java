@@ -32,9 +32,6 @@ public class CarActivity extends CompassActivity implements Orientation.Listener
     EditText pitch ;
     EditText roll ;
 
-    RequestQueue requestQueue ;
-    boolean motionEnabled = false ;
-
     // orientation sensor
     private Orientation orientation;
     private AttitudeIndicator attitudeIndicator;
@@ -58,8 +55,6 @@ public class CarActivity extends CompassActivity implements Orientation.Listener
         super.onCreate(savedInstanceState);
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-        this.requestQueue = Volley.newRequestQueue(this);
 
         orientation = new Orientation(this);
         attitudeIndicator = this.findViewById(R.id.attitude_indicator);
@@ -90,32 +85,32 @@ public class CarActivity extends CompassActivity implements Orientation.Listener
 
         forward.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                moveCar( "forward" );
+                moveCar( "forward", status );
             }
         });
 
         backward.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                moveCar( "backward" );
+                moveCar( "backward", status );
             }
         });
 
         left.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                moveCar( "left" );
+                moveCar( "left", status );
             }
         });
 
         right.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                moveCar( "right" );
+                moveCar( "right", status );
             }
         });
 
         stop.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if( motionEnabled ) {
-                    moveCar("stop");
+                    moveCar("stop", status );
                 }
 
                 motionEnabled = ! motionEnabled ;
@@ -158,38 +153,19 @@ public class CarActivity extends CompassActivity implements Orientation.Listener
             // do nothing!
         } else {
             if (15 <= roll) {
-                this.moveCar("right");
+                this.moveCar("right", status);
             } else if ( -15 >= roll) {
-                this.moveCar("left");
+                this.moveCar("left", status);
             } else if (30 <= pitch) {
-                this.moveCar("forward");
+                this.moveCar("forward", status);
             } else if (5 >= pitch) {
-                this.moveCar("backward");
+                this.moveCar("backward", status);
             } else {
-                this.moveCar("stop");
+                this.moveCar("stop", status);
             }
 
             then = now ;
         }
-    }
-
-    public void moveCar(String motion) {
-        String url = String.format("http://10.3.141.1/car.json?motion=%s", motion);
-
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        status.setText( response.toString() );
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                status.setText("That didn't work!");
-            }
-        });
-
-        requestQueue.add(stringRequest);
     }
 
     @Override

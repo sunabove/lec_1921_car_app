@@ -4,10 +4,22 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.widget.EditText;
+
 import androidx.annotation.*;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 public abstract class ComActivity extends AppCompatActivity implements ComInterface {
+
+    protected RequestQueue requestQueue ;
+    protected boolean motionEnabled = false ;
 
     public abstract int getLayoutId() ;
 
@@ -39,6 +51,30 @@ public abstract class ComActivity extends AppCompatActivity implements ComInterf
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView( this.getLayoutId() );
+
+        this.requestQueue = Volley.newRequestQueue(this);
     }
 
+    public void moveCar(String motion, final EditText status ) {
+        String url = String.format("http://10.3.141.1/car.json?motion=%s", motion);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if( null != status ) {
+                            status.setText(response.toString());
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if( null != status ) {
+                    status.setText("That didn't work!");
+                }
+            }
+        });
+
+        requestQueue.add(stringRequest);
+    }
 }

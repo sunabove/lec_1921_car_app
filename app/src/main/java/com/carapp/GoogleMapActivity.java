@@ -10,7 +10,10 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.View;
 import android.webkit.WebView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -35,6 +38,7 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
     private FusedLocationProviderClient fusedLocationClient;
     MarkerOptions myLocMarker ;
     WebView videoView ;
+    Button stop ;
 
     public int getLayoutId() {
         return R.layout.activity_maps;
@@ -44,7 +48,10 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        this.motionEnabled = false ;
+
         videoView = this.findViewById(R.id.videoView);
+        stop = this.findViewById(R.id.stop );
 
         //setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -53,6 +60,19 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        stop.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                EditText status = null ;
+                if( motionEnabled ) {
+                    moveCar("stop", status );
+                }
+
+                motionEnabled = ! motionEnabled ;
+
+                stop.setText( motionEnabled ? "STOP" : "START");
+            }
+        });
     }
 
     @Override
