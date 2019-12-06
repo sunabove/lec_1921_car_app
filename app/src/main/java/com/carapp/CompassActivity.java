@@ -8,12 +8,11 @@ import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
 public abstract class CompassActivity extends ComActivity {
 
     private Compass compass;
     private ImageView arrowView;
-    private TextView sotwLabel;  // SOTW is for "side of the world"
+    private TextView sotwLabel;
 
     private float currentAzimuth;
     private SOTWFormatter sotwFormatter;
@@ -33,7 +32,6 @@ public abstract class CompassActivity extends ComActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Log.d(TAG, "start compass");
         compass.start();
     }
 
@@ -52,7 +50,6 @@ public abstract class CompassActivity extends ComActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        Log.d(TAG, "stop compass");
         compass.stop();
     }
 
@@ -63,8 +60,7 @@ public abstract class CompassActivity extends ComActivity {
     }
 
     private void adjustArrow(float azimuth) {
-        Log.d(TAG, "will set rotation from " + currentAzimuth + " to "
-                + azimuth);
+        //Log.d(TAG, "will set rotation from " + currentAzimuth + " to " + azimuth);
 
         Animation an = new RotateAnimation(-currentAzimuth, -azimuth,
                 Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
@@ -86,8 +82,6 @@ public abstract class CompassActivity extends ComActivity {
         return new Compass.CompassListener() {
             @Override
             public void onNewAzimuth(final float azimuth) {
-                // UI updates only in UI thread
-                // https://stackoverflow.com/q/11140285/444966
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

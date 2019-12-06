@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
@@ -31,14 +32,16 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback {
 
     private GoogleMap map;
     private FusedLocationProviderClient fusedLocationClient;
-    MarkerOptions myLocMarker ;
-    WebView videoView ;
-    Button stop ;
+    private MarkerOptions myLocMarker ;
+    private WebView videoView ;
+    private Button stop ;
+    private FloatingActionButton goBack ;
 
     public int getLayoutId() {
         return R.layout.activity_maps;
@@ -50,8 +53,9 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
 
         this.motionEnabled = false ;
 
-        videoView = this.findViewById(R.id.videoView);
-        stop = this.findViewById(R.id.stop );
+        this.videoView = this.findViewById(R.id.videoView);
+        this.stop = this.findViewById(R.id.stop );
+        this.goBack = this.findViewById(R.id.goBack) ;
 
         //setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -59,9 +63,9 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        this.fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        stop.setOnClickListener(new View.OnClickListener() {
+        this.stop.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 EditText status = null ;
                 if( motionEnabled ) {
@@ -71,6 +75,19 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
                 motionEnabled = ! motionEnabled ;
 
                 stop.setText( motionEnabled ? "STOP" : "START");
+            }
+        });
+
+        this.goBack.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                motionEnabled = false;
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                    }
+                }, 500);
             }
         });
     }

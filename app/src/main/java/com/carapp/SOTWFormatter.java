@@ -25,7 +25,7 @@ public class SOTWFormatter {
     public String format(float azimuth) {
         int iAzimuth = (int)azimuth;
         int index = findClosestIndex(iAzimuth);
-        return iAzimuth + "° " + names[index];
+        return iAzimuth + "°\n" + names[index];
     }
 
     private void initLocalizedNames(Context context) {

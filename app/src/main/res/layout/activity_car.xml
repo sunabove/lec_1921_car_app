@@ -42,7 +42,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|end"
-                    android:layout_margin="@dimen/fab_margin"
+                    android:layout_margin="4dp"
                     app:backgroundTint="#8BC34A"
                     app:fabSize="normal"
                     app:maxImageSize="32dp"
@@ -106,8 +106,8 @@
 
                         <ImageView
                             android:id="@+id/main_image_hands"
-                            android:layout_width="20dp"
-                            android:layout_height="180dp"
+                            android:layout_width="60dp"
+                            android:layout_height="match_parent"
                             android:layout_centerInParent="true"
                             android:contentDescription="@string/compass_hands"
                             android:scaleType="fitXY"
