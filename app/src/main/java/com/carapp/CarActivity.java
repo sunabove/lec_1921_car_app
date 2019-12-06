@@ -18,19 +18,21 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class CarActivity extends CompassActivity implements Orientation.Listener {
 
-    WebView videoView ;
-    Button forward;
-    Button backward;
-    Button left;
-    Button right;
-    Button stop;
+    private WebView videoView ;
+    private Button forward;
+    private Button backward;
+    private Button left;
+    private Button right;
+    private Button stop;
 
-    EditText status ;
-    EditText pitch ;
-    EditText roll ;
+    private EditText status ;
+    private EditText pitch ;
+    private EditText roll ;
+    private FloatingActionButton goToMap ;
 
     // orientation sensor
     private Orientation orientation;
@@ -56,12 +58,14 @@ public class CarActivity extends CompassActivity implements Orientation.Listener
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        orientation = new Orientation(this);
-        attitudeIndicator = this.findViewById(R.id.attitude_indicator);
+        this.orientation = new Orientation(this);
+        this.attitudeIndicator = this.findViewById(R.id.attitude_indicator);
 
         this.status = this.findViewById(R.id.status);
         this.pitch = this.findViewById(R.id.pitch);
         this.roll = this.findViewById(R.id.roll);
+
+        this.goToMap = this.findViewById(R.id.goToMap );
 
         // hide keyboard always
         this.status.setInputType(InputType.TYPE_NULL);
@@ -116,6 +120,13 @@ public class CarActivity extends CompassActivity implements Orientation.Listener
                 motionEnabled = ! motionEnabled ;
 
                 paintUI();
+            }
+        });
+
+        // 지도 버튼을 클릭하면 지도 화면으로 이동한다.
+        goToMap.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startActivity(new android.content.Intent(CarActivity.this, com.carapp.GoogleMapActivity.class));
             }
         });
     }

@@ -110,7 +110,7 @@ public class MainActivity extends ComActivity {
                     new Handler().postDelayed(new Runnable() {
                         public void run() {
                             activityAlive = false ;
-                            boolean test = true ;
+                            boolean test = false ;
                             if( ! test ) {
                                 startActivity(new android.content.Intent(MainActivity.this, com.carapp.CarActivity.class));
                             } else {
