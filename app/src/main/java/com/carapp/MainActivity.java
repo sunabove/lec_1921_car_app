@@ -46,13 +46,15 @@ public class MainActivity extends ComActivity {
         this.errorMessage = "";
         this.error.setText( errorMessage );
 
-        checkServer();
+        this.checkServer();
     }
 
     private void checkServer() {
 
         status.setTextColor(Color.parseColor("#009688"));
         status.setText( "서버 연결중입니다.\n잠시만 기다려 주세요!" );
+
+        this.serverActive = false ;
 
         new Thread(new Runnable() {
             @Override
@@ -65,10 +67,18 @@ public class MainActivity extends ComActivity {
                         URL url = new URL("http://10.3.141.1/info.html");
                         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-                        BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                        String str;
-                        while ((str = in.readLine()) != null) {
-                            //
+                        conn.setConnectTimeout(5_000); //set timeout to 5 seconds
+                        conn.connect();
+
+                        BufferedReader in ;
+                        if (200 <= conn.getResponseCode() && conn.getResponseCode() <= 299) {
+                            in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                        } else {
+                            in = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+                        }
+
+                        while ( in.readLine() != null) {
+                            // do nothing.
                         }
 
                         serverActive = true;

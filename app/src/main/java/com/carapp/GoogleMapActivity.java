@@ -60,6 +60,8 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
         this.goBack = this.findViewById(R.id.goBack);
         this.status = this.findViewById(R.id.status);
 
+        this.status.setText( "" );
+
         // hide keyboard always
         this.status.setInputType(InputType.TYPE_NULL);
 
