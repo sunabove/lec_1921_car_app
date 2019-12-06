@@ -174,16 +174,12 @@ public class CarActivity extends CompassActivity implements Orientation.Listener
     }
 
     public void moveCar(String motion) {
-
-        // Instantiate the RequestQueue.
         String url = String.format("http://10.3.141.1/car.json?motion=%s", motion);
 
-        // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        // Display the first 500 characters of the response string.
                         status.setText( response.toString() );
                     }
                 }, new Response.ErrorListener() {
@@ -193,7 +189,6 @@ public class CarActivity extends CompassActivity implements Orientation.Listener
             }
         });
 
-        // Add the request to the RequestQueue.
         requestQueue.add(stringRequest);
     }
 

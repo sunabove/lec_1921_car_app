@@ -10,7 +10,9 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.webkit.WebView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -32,6 +34,7 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
     private GoogleMap map;
     private FusedLocationProviderClient fusedLocationClient;
     MarkerOptions myLocMarker ;
+    WebView videoView ;
 
     public int getLayoutId() {
         return R.layout.activity_maps;
@@ -41,6 +44,8 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        videoView = this.findViewById(R.id.videoView);
+
         //setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -48,6 +53,19 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+
+        Log.v( TAG, "onResume");
+
+        videoView.getSettings().setLoadWithOverviewMode(true);
+        videoView.getSettings().setUseWideViewPort(true);
+
+        videoView.loadUrl( "http://10.3.141.1/video_feed" );
     }
 
     @SuppressLint("MissingPermission")
