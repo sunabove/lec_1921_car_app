@@ -1,14 +1,17 @@
 package com.carapp;
 
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
-import android.view.View;
+import android.view.*;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.MediaController;
+import android.widget.VideoView;
 
 import androidx.core.text.HtmlCompat;
 
