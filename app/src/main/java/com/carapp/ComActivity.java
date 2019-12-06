@@ -54,27 +54,4 @@ public abstract class ComActivity extends AppCompatActivity implements ComInterf
 
         this.requestQueue = Volley.newRequestQueue(this);
     }
-
-    public void moveCar(String motion, final EditText status ) {
-        String url = String.format("http://10.3.141.1/car.json?motion=%s", motion);
-
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        if( null != status ) {
-                            status.setText(response.toString());
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                if( null != status ) {
-                    status.setText("That didn't work!");
-                }
-            }
-        });
-
-        requestQueue.add(stringRequest);
-    }
 }

@@ -116,6 +116,8 @@ public class CarActivity extends CompassActivity implements Orientation.Listener
 
         stop.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                motionPrev = "";
+
                 if( motionEnabled ) {
                     moveCar("stop", status );
                 }
@@ -148,6 +150,7 @@ public class CarActivity extends CompassActivity implements Orientation.Listener
     }
 
     private long then = System.currentTimeMillis();
+    private String motionPrev = "" ;
 
     // pitch roll 값이 변했을 경우, 차를 제어한다.
     public void pitchRollUpdated( double pitch, double roll ) {
@@ -166,20 +169,51 @@ public class CarActivity extends CompassActivity implements Orientation.Listener
         }else if (now - then < 700 ) {
             // do nothing!
         } else {
+            String motion = "" ;
             if (15 <= roll) {
-                this.moveCar("right", status);
+                motion = "right" ;
             } else if ( -15 >= roll) {
-                this.moveCar("left", status);
+                motion = "left" ;
             } else if (30 <= pitch) {
-                this.moveCar("forward", status);
+                motion = "forward" ;
             } else if (5 >= pitch) {
-                this.moveCar("backward", status);
+                motion = "backward" ;
             } else {
-                this.moveCar("stop", status);
+                motion = "stop" ;
+            }
+
+            if( motion.equalsIgnoreCase( motionPrev ) ) {
+                // do nothing!
+            } else {
+                this.moveCar(motion, status);
+                this.motionPrev = motion;
             }
 
             then = now ;
         }
+    }
+
+    public void moveCar(final String motion, final EditText status ) {
+        String url = String.format("http://10.3.141.1/car.json?motion=%s", motion);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if( null != status ) {
+                            status.setText(response.toString());
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if( null != status ) {
+                    status.setText("That didn't work!");
+                }
+            }
+        });
+
+        requestQueue.add(stringRequest);
     }
 
     @Override

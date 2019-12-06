@@ -25,6 +25,10 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -279,5 +283,28 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
                 // Granted. Start getting the location information
             }
         }
+    }
+
+    public void moveCar(final String motion, final EditText status ) {
+        String url = String.format("http://10.3.141.1/car.json?motion=%s", motion);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if( null != status ) {
+                            status.setText(response.toString());
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if( null != status ) {
+                    status.setText("That didn't work!");
+                }
+            }
+        });
+
+        requestQueue.add(stringRequest);
     }
 }
