@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,8 +23,6 @@ public class CompassActivity extends ComActivity {
     private float currentAzimuth;
     private SOTWFormatter sotwFormatter;
     protected boolean sotwNewLine = false ;
-
-    private FloatingActionButton goBackCompass ;
 
     @Override
     public int getLayoutId() {
@@ -40,23 +39,13 @@ public class CompassActivity extends ComActivity {
         this.arrowView = findViewById(R.id.main_image_dial);
         this.sotwLabel = findViewById(R.id.sotw_label);
 
-        this.setupCompass();
+        TextView status = findViewById(R.id.status);
 
-        this.goBackCompass = this.findViewById(R.id.goBackCompass);
-
-        if( null != goBackCompass ) {
-            this.goBackCompass.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            // 이전 화면으로 돌아감.
-                            finish();
-                        }
-                    }, 300);
-                }
-            });
+        if( null != status ) {
+            status.setText( "" );
         }
+
+        this.setupCompass();
     }
 
     @Override

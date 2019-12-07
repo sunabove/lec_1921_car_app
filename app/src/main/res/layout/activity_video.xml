@@ -7,11 +7,19 @@
     tools:context=".VideoActivity">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
+        android:id="@+id/goBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        android:layout_marginTop="4dp"
+        android:layout_marginRight="10dp"
+        app:backgroundTint="#8BC34A"
+        app:maxImageSize="35dp"
+        app:srcCompat="@drawable/go_back_act" />
+
+    <WebView
+        android:id="@+id/videoView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -49,7 +49,6 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
     private MarkerOptions myLocMarker ;
     private WebView videoView ;
     private Button stop ;
-    private FloatingActionButton goBack ;
     private EditText status ;
 
     public int getLayoutId() {
@@ -64,7 +63,6 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
 
         this.videoView = this.findViewById(R.id.videoView);
         this.stop = this.findViewById(R.id.stop );
-        this.goBack = this.findViewById(R.id.goBack);
         this.status = this.findViewById(R.id.status);
 
         this.status.setText( "" );
@@ -89,22 +87,6 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
                 motionEnabled = ! motionEnabled ;
 
                 stop.setText( motionEnabled ? "STOP" : "START" );
-            }
-        });
-
-        this.goBack.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                motionEnabled = false;
-
-                status.setText( "이전 화면으로 돌아갑니다." );
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        // 이전 화면으로 돌아감.
-                        finish();
-                    }
-                }, 1_500);
             }
         });
 

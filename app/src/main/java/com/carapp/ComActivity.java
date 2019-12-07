@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.*;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +22,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
@@ -28,6 +30,8 @@ import java.nio.ByteOrder;
 import java.util.Locale;
 
 public abstract class ComActivity extends AppCompatActivity implements ComInterface {
+
+    private FloatingActionButton goBack ;
 
     protected RequestQueue requestQueue ;
     protected boolean motionEnabled = false ;
@@ -40,6 +44,28 @@ public abstract class ComActivity extends AppCompatActivity implements ComInterf
         setContentView( this.getLayoutId() );
 
         this.requestQueue = Volley.newRequestQueue(this);
+
+        this.goBack = this.findViewById(R.id.goBack);
+
+        if( null != goBack ) {
+            this.goBack.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    TextView status = findViewById(R.id.status);
+
+                    if( null != status ) {
+                        status.setText( "이전 화면으로 돌아갑니다." );
+                    }
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            // 이전 화면으로 돌아감.
+                            finish();
+                        }
+                    }, 300);
+                }
+            });
+        }
     }
 
     public <T extends View> T findViewById(@IdRes int id) {
@@ -111,8 +137,7 @@ public abstract class ComActivity extends AppCompatActivity implements ComInterf
     }
 
     // 동영상을 플레이 한다.
-    protected void playVideo()
-    {
+    protected void playVideo() {
         super.onResume();
 
         Log.v( TAG, "playVideo");
