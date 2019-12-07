@@ -10,6 +10,7 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
@@ -36,6 +37,8 @@ public class CarActivity extends CompassActivity implements Orientation.Listener
     private EditText pitch ;
     private EditText roll ;
     private FloatingActionButton goToMap ;
+    private ImageView compassDial ;
+    private ImageView compassHands ;
 
     // orientation sensor
     private Orientation orientation;
@@ -61,12 +64,16 @@ public class CarActivity extends CompassActivity implements Orientation.Listener
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        this.sotwNewLine = true ;
+
         this.orientation = new Orientation(this);
         this.attitudeIndicator = this.findViewById(R.id.attitude_indicator);
 
         this.status = this.findViewById(R.id.status);
         this.pitch = this.findViewById(R.id.pitch);
         this.roll = this.findViewById(R.id.roll);
+        this.compassDial = this.findViewById(R.id.main_image_dial);
+        this.compassHands = this.findViewById(R.id.main_image_hands);
 
         this.goToMap = this.findViewById(R.id.goToMap );
 
@@ -132,6 +139,18 @@ public class CarActivity extends CompassActivity implements Orientation.Listener
         goToMap.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 startActivity(new android.content.Intent(CarActivity.this, com.carapp.GoogleMapActivity.class));
+            }
+        });
+
+        this.compassDial.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startActivity(new android.content.Intent(CarActivity.this, com.carapp.CompassActivity.class));
+            }
+        });
+
+        this.compassHands.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startActivity(new android.content.Intent(CarActivity.this, com.carapp.CompassActivity.class));
             }
         });
     }

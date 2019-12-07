@@ -22,10 +22,10 @@ public class SOTWFormatter {
         initLocalizedNames(context);
     }
 
-    public String format(float azimuth) {
+    public String format(float azimuth, boolean newLine) {
         int iAzimuth = (int)azimuth;
         int index = findClosestIndex(iAzimuth);
-        return iAzimuth + "°\n" + names[index];
+        return iAzimuth + "°" + ( newLine ? "\n" : " " ) + names[index];
     }
 
     private void initLocalizedNames(Context context) {

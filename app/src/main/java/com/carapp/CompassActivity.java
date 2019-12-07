@@ -8,7 +8,7 @@ import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public abstract class CompassActivity extends ComActivity {
+public class CompassActivity extends ComActivity {
 
     private Compass compass;
     private ImageView arrowView;
@@ -16,6 +16,12 @@ public abstract class CompassActivity extends ComActivity {
 
     private float currentAzimuth;
     private SOTWFormatter sotwFormatter;
+    protected boolean sotwNewLine = false ;
+
+    @Override
+    public int getLayoutId() {
+        return R.layout.activity_compass;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,8 +80,8 @@ public abstract class CompassActivity extends ComActivity {
         arrowView.startAnimation(an);
     }
 
-    private void adjustSotwLabel(float azimuth) {
-        sotwLabel.setText(sotwFormatter.format(azimuth));
+    public void adjustSotwLabel(float azimuth) {
+        sotwLabel.setText(sotwFormatter.format(azimuth, sotwNewLine));
     }
 
     private Compass.CompassListener getCompassListener() {
