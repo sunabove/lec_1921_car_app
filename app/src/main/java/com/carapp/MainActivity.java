@@ -13,14 +13,16 @@ import java.net.URL;
 
 public class MainActivity extends ComActivity {
 
-    boolean activityAlive = false ;
-    boolean serverActive = false ;
-    TextView status ;
-    TextView error ;
+    private boolean activityAlive = false ;
+    private boolean serverActive = false ;
+    private TextView status ;
+    private TextView error ;
+    private TextView wifi ;
+    private TextView ipaddr ;
 
-    String errorMessage = "" ;
+    private String errorMessage = "" ;
 
-    int mode = 0 ;
+    private int mode = 0 ;
 
     public int getLayoutId() {
         return R.layout.activity_main ;
@@ -32,6 +34,9 @@ public class MainActivity extends ComActivity {
 
         this.status = this.findViewById(R.id.status);
         this.error = this.findViewById(R.id.error);
+
+        this.wifi = this.findViewById(R.id.wifi);
+        this.ipaddr = this.findViewById(R.id.ipaddr);
     }
 
     @Override
@@ -43,6 +48,9 @@ public class MainActivity extends ComActivity {
         this.activityAlive = true ;
         this.serverActive = false ;
 
+        this.wifi.setText( this.getWifiSsid() );
+        this.ipaddr.setText( this.getIpAddr() );
+
         this.errorMessage = "";
         this.error.setText( errorMessage );
 
@@ -53,6 +61,9 @@ public class MainActivity extends ComActivity {
 
         status.setTextColor(Color.parseColor("#009688"));
         status.setText( "서버 연결중입니다.\n잠시만 기다려 주세요!" );
+
+        this.wifi.setText( this.getWifiSsid() );
+        this.ipaddr.setText( this.getIpAddr() );
 
         this.serverActive = false ;
 
@@ -109,6 +120,9 @@ public class MainActivity extends ComActivity {
                 Log.d("sunabove", "run: postDelayerd");
                 error.setText( errorMessage );
 
+                wifi.setText( getWifiSsid() );
+                ipaddr.setText( getIpAddr() );
+
                 if( 1 == mode ) {
                     status.setTextColor(Color.parseColor("#009688"));
                     status.setText( "서버 연결중입니다.\n잠시만 기다려 주세요!" );
@@ -131,7 +145,13 @@ public class MainActivity extends ComActivity {
                     }, 3000);
                 } else if ( 3 == mode ) {
                     status.setTextColor(Color.parseColor("#FF0000"));
-                    status.setText( "서버 연결에 실패하였습니다.\n라즈베리파이 공유기를 체크하세요.\n차량 서버 실행 여부를 체크하세요.\n잠시후 다시 연결을 시도합니다." );
+                    String ipAddr = getIpAddr();
+
+                    if( ipAddr.startsWith( "10.3.")) {
+                        status.setText("차량 서버 실행 여부를 체크하세요.\n\n잠시후 다시 연결을 시도합니다.");
+                    } else {
+                        status.setText("라즈베리파이 공유기를 연결하세요.\n\n잠시후 다시 연결을 시도합니다.");
+                    }
                 }
 
                 if(activityAlive) {
