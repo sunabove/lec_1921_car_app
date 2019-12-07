@@ -153,6 +153,24 @@ public class CarActivity extends CompassActivity implements Orientation.Listener
                 startActivity(new android.content.Intent(CarActivity.this, com.carapp.CompassActivity.class));
             }
         });
+
+        // 비디오 화면을 클릭하면 전체 영상 보기 화면으로 이동한다.
+        this.videoView.setOnTouchListener(new View.OnTouchListener(){
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction()==MotionEvent.ACTION_MOVE){
+                    return false;
+                }
+
+                if (event.getAction()==MotionEvent.ACTION_UP){
+                    Log.d( TAG, "VideoView Clicked.");
+                    startActivity(new android.content.Intent(CarActivity.this, com.carapp.VideoActivity.class));
+                }
+
+                return false;
+            }
+        });
     }
 
     public void paintUI() {

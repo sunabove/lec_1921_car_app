@@ -91,6 +91,7 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
             }
         });
 
+        // 비디오 화면을 클릭하면 전체 영상 보기 화면으로 이동한다.
         this.videoView.setOnTouchListener(new View.OnTouchListener(){
 
             @Override
@@ -100,18 +101,13 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
                 }
 
                 if (event.getAction()==MotionEvent.ACTION_UP){
-                    whenVideoViewClicked();
+                    Log.d( TAG, "VideoView Clicked.");
+                    startActivity(new android.content.Intent(GoogleMapActivity.this, com.carapp.VideoActivity.class));
                 }
 
                 return false;
             }
         });
-    }
-
-    public void whenVideoViewClicked() {
-        Log.d( TAG, "VideoView Clicked.");
-
-        startActivity(new android.content.Intent(this, com.carapp.VideoActivity.class));
     }
 
     public void whenVideoViewClickedOld() {
