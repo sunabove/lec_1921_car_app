@@ -7,7 +7,9 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.format.Formatter;
+import android.util.Log;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.EditText;
 
 import androidx.annotation.*;
@@ -106,5 +108,21 @@ public abstract class ComActivity extends AppCompatActivity implements ComInterf
         }
 
         return ipAddr;
+    }
+
+    // 동영상을 플레이 한다.
+    protected void playVideo()
+    {
+        super.onResume();
+
+        Log.v( TAG, "playVideo");
+
+        WebView videoView = this.findViewById(R.id.videoView);
+        if( null != videoView ) {
+            videoView.getSettings().setLoadWithOverviewMode(true);
+            videoView.getSettings().setUseWideViewPort(true);
+
+            videoView.loadUrl("http://10.3.141.1/video_feed");
+        }
     }
 }

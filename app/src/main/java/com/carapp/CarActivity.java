@@ -242,12 +242,9 @@ public class CarActivity extends CompassActivity implements Orientation.Listener
 
         Log.v( TAG, "onResume");
 
-        videoView.getSettings().setLoadWithOverviewMode(true);
-        videoView.getSettings().setUseWideViewPort(true);
+        this.orientation.startListening(this);
 
-        videoView.loadUrl( "http://10.3.141.1/video_feed" );
-
-        orientation.startListening(this);
+        this.playVideo();
     }
 
     @Override

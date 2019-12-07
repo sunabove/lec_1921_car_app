@@ -152,7 +152,7 @@ public class MainActivity extends ComActivity {
                     if( ipAddr.startsWith( "10.3.")) {
                         status.setText("차량 서버 실행 여부를 체크하세요.\n\n잠시후 다시 연결을 시도합니다.");
                     } else {
-                        status.setText("라즈베리파이 공유기를 연결하세요.\n\n잠시후 다시 연결을 시도합니다.");
+                        status.setText("라즈베리파이 공유기를 연결하세요.\n\nWi-Fi 선택 화면으로 이동합니다..");
 
                         activityAlive = false ;
 
@@ -161,7 +161,7 @@ public class MainActivity extends ComActivity {
                             public void run() {
                                 startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
                             }
-                        }, 1_000);
+                        }, 1_500);
                     }
                 }
 

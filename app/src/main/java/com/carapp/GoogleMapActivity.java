@@ -164,10 +164,7 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
 
         Log.v( TAG, "onResume");
 
-        videoView.getSettings().setLoadWithOverviewMode(true);
-        videoView.getSettings().setUseWideViewPort(true);
-
-        videoView.loadUrl( "http://10.3.141.1/video_feed" );
+        this.playVideo();
     }
 
     @SuppressLint("MissingPermission")
