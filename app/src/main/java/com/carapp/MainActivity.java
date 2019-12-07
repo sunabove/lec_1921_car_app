@@ -1,8 +1,10 @@
 package com.carapp;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -151,11 +153,20 @@ public class MainActivity extends ComActivity {
                         status.setText("차량 서버 실행 여부를 체크하세요.\n\n잠시후 다시 연결을 시도합니다.");
                     } else {
                         status.setText("라즈베리파이 공유기를 연결하세요.\n\n잠시후 다시 연결을 시도합니다.");
+
+                        activityAlive = false ;
+
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                            }
+                        }, 1_000);
                     }
                 }
 
                 if(activityAlive) {
-                     handler.postDelayed( this, 500 );
+                     handler.postDelayed( this, 1_500 );
                 }
             }
         }, 2_000);

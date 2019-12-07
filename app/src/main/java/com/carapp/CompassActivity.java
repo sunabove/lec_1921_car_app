@@ -2,11 +2,16 @@ package com.carapp;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class CompassActivity extends ComActivity {
 
@@ -18,6 +23,8 @@ public class CompassActivity extends ComActivity {
     private SOTWFormatter sotwFormatter;
     protected boolean sotwNewLine = false ;
 
+    private FloatingActionButton goBackCompass ;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_compass;
@@ -27,12 +34,29 @@ public class CompassActivity extends ComActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        sotwFormatter = new SOTWFormatter(this);
+        this.sotwFormatter = new SOTWFormatter(this);
 
         //arrowView = findViewById(R.id.main_image_hands);
-        arrowView = findViewById(R.id.main_image_dial);
-        sotwLabel = findViewById(R.id.sotw_label);
-        setupCompass();
+        this.arrowView = findViewById(R.id.main_image_dial);
+        this.sotwLabel = findViewById(R.id.sotw_label);
+
+        this.setupCompass();
+
+        this.goBackCompass = this.findViewById(R.id.goBackCompass);
+
+        if( null != goBackCompass ) {
+            this.goBackCompass.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            // 이전 화면으로 돌아감.
+                            finish();
+                        }
+                    }, 300);
+                }
+            });
+        }
     }
 
     @Override
