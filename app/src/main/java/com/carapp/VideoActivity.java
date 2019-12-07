@@ -11,6 +11,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 public class VideoActivity extends ComActivity {
 
@@ -24,6 +25,12 @@ public class VideoActivity extends ComActivity {
         super.onCreate(savedInstanceState);
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
+        TextView status = findViewById(R.id.status);
+
+        if( null != status ) {
+            status.setText( "" );
+        }
     }
 
     @Override
