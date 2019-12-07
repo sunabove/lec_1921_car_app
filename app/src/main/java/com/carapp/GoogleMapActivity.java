@@ -50,6 +50,7 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
     private WebView videoView ;
     private Button stop ;
     private EditText status ;
+    private boolean videoFullWidth = false ;
 
     public int getLayoutId() {
         return R.layout.activity_maps;
@@ -107,9 +108,13 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
         });
     }
 
-    private boolean videoFullWidth = false ;
-
     public void whenVideoViewClicked() {
+        Log.d( TAG, "VideoView Clicked.");
+
+        startActivity(new android.content.Intent(this, com.carapp.VideoActivity.class));
+    }
+
+    public void whenVideoViewClickedOld() {
         Log.d( TAG, "VideoView Clicked.");
 
         final WebView videoView = this.videoView;

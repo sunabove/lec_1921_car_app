@@ -17,6 +17,18 @@
         app:maxImageSize="35dp"
         app:srcCompat="@drawable/go_back_act" />
 
+    <TextView
+        android:id="@+id/status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="4dp"
+        android:layout_gravity="top|left"
+        android:layout_weight="1"
+        android:text="Status"
+        android:textColor="#4CAF50"
+        android:textSize="20sp" />
+
     <WebView
         android:id="@+id/videoView"
         android:layout_width="match_parent"

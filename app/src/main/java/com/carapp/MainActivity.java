@@ -130,7 +130,7 @@ public class MainActivity extends ComActivity {
                     status.setText( "서버 연결중입니다.\n잠시만 기다려 주세요!" );
                 } else if ( 2 == mode ) {
                     status.setTextColor(Color.parseColor("#009688"));
-                    status.setText( "서버 연결에 성공하였습니다.\n차량 제어 화면으로 전환합니다.\n잠시만 기다려 주세요." );
+                    status.setText( "서버 연결에 성공하였습니다.\n차량 제어 화면으로 이동합니다.\n잠시만 기다려 주세요." );
 
                     activityAlive = false ;
 
