@@ -53,15 +53,23 @@
         android:layout_marginRight="4dp"
         android:layout_marginBottom="4dp" />
 
-    <EditText
-        android:id="@+id/status"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:background="#4DCFCACA"
-        android:clickable="false"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Status " />
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:background="#4DCFCACA"
+            android:clickable="false"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Status " />
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
