@@ -60,6 +60,8 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        this.hideActionBar();
+
         this.motionEnabled = false ;
 
         this.videoView = this.findViewById(R.id.videoView);
@@ -146,6 +148,8 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
         super.onResume();
 
         Log.v( TAG, "onResume");
+
+        this.hideActionBar();
 
         this.playVideo();
     }

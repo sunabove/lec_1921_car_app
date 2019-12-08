@@ -62,6 +62,8 @@ public class CarActivity extends CompassActivity implements Orientation.Listener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        this.hideActionBar();
+
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         this.sotwNewLine = true ;
@@ -259,6 +261,8 @@ public class CarActivity extends CompassActivity implements Orientation.Listener
         super.onResume();
 
         Log.v( TAG, "onResume");
+
+        this.hideActionBar();
 
         this.orientation.startListening(this);
 

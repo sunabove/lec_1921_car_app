@@ -1,6 +1,8 @@
 package com.carapp;
 
+import android.app.ActionBar;
 import android.content.pm.ActivityInfo;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -11,6 +13,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 public class VideoActivity extends ComActivity {
@@ -23,6 +26,8 @@ public class VideoActivity extends ComActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        this.hideActionBar();
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
@@ -37,6 +42,8 @@ public class VideoActivity extends ComActivity {
     protected void onResume()
     {
         super.onResume();
+
+        this.hideActionBar();
 
         Log.v( TAG, "onResume");
 
