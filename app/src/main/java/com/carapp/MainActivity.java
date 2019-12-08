@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -21,6 +23,7 @@ public class MainActivity extends ComActivity {
     private TextView error ;
     private TextView wifi ;
     private TextView ipaddr ;
+    private ImageView logo;
 
     private String errorMessage = "" ;
 
@@ -39,6 +42,8 @@ public class MainActivity extends ComActivity {
 
         this.wifi = this.findViewById(R.id.wifi);
         this.ipaddr = this.findViewById(R.id.ipaddr);
+
+        this.logo = this.findViewById(R.id.logo);
     }
 
     @Override
@@ -152,16 +157,18 @@ public class MainActivity extends ComActivity {
                     if( ipAddr.startsWith( "10.3.")) {
                         status.setText("차량 서버 실행 여부를 체크하세요.\n\n잠시후 다시 연결을 시도합니다.");
                     } else {
-                        status.setText("라즈베리파이 공유기를 연결하세요.\n\nWi-Fi 선택 화면으로 이동합니다..");
+                        status.setText("라즈베리파이 공유기를 연결하세요.\n\nWi-Fi 선택 화면으로 이동합니다.");
 
                         activityAlive = false ;
+
+                        Toast.makeText( status.getContext(), "Wi-Fi 선택 화면으로 이동합니다.", Toast.LENGTH_SHORT).show();
 
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
                             }
-                        }, 1_500);
+                        }, 2_000);
                     }
                 }
 

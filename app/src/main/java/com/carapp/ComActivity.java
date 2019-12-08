@@ -12,6 +12,7 @@ import android.view.View;
 import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.*;
 import androidx.appcompat.app.AppCompatActivity;
