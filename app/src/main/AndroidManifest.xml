@@ -15,21 +15,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity
-            android:name=".VideoActivity"
-            android:label="@string/title_activity_video"
-            android:parentActivityName=".CompassActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.carapp.CompassActivity" />
-        </activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -41,13 +34,24 @@
             android:label="@string/title_activity_car"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+
         <activity
             android:name=".GoogleMapActivity"
             android:label="@string/title_activity_maps"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+
         <activity
             android:name=".CompassActivity"
             android:label="MyCar Compass"></activity>
+
+        <activity
+            android:name=".VideoActivity"
+            android:label="@string/title_activity_video"
+            android:parentActivityName=".CompassActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+
+
     </application>
 
 </manifest>
