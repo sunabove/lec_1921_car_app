@@ -214,11 +214,13 @@ public class CarActivity extends CompassActivity implements Orientation.Listener
         backward.setBackgroundColor( currMotion.equalsIgnoreCase( Motion.BACKWARD ) ? green : gray );
         left.setBackgroundColor( currMotion.equalsIgnoreCase( Motion.LEFT ) ? green : gray );
         right.setBackgroundColor( currMotion.equalsIgnoreCase( Motion.RIGHT ) ? green : gray );
+        stop.setBackgroundColor( currMotion.equalsIgnoreCase( Motion.STOP ) ? green : gray );
 
         forward.setTextColor( currMotion.equalsIgnoreCase( Motion.FORWARD ) ? yellow : black );
         backward.setTextColor( currMotion.equalsIgnoreCase( Motion.BACKWARD ) ? yellow : black );
         left.setTextColor( currMotion.equalsIgnoreCase( Motion.LEFT ) ? yellow : black );
         right.setTextColor( currMotion.equalsIgnoreCase( Motion.RIGHT ) ? yellow : black );
+        stop.setTextColor( currMotion.equalsIgnoreCase( Motion.STOP ) ? yellow : black );
     }
     // -- paintUI
 
@@ -247,9 +249,9 @@ public class CarActivity extends CompassActivity implements Orientation.Listener
                 motion = Motion.RIGHT ;
             } else if ( -15 >= roll) {
                 motion = Motion.LEFT ;
-            } else if (50 <= pitch) {
+            } else if ( 45 <= pitch) {
                 motion = Motion.FORWARD ;
-            } else if ( 20 >= pitch) {
+            } else if ( 25 >= pitch) {
                 motion = Motion.BACKWARD ;
             } else {
                 motion = Motion.STOP ;
