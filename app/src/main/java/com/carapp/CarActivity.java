@@ -221,6 +221,11 @@ public class CarActivity extends CompassActivity implements Orientation.Listener
         left.setTextColor( currMotion.equalsIgnoreCase( Motion.LEFT ) ? yellow : black );
         right.setTextColor( currMotion.equalsIgnoreCase( Motion.RIGHT ) ? yellow : black );
         stop.setTextColor( currMotion.equalsIgnoreCase( Motion.STOP ) ? yellow : black );
+
+        if( ! motionEnabled ) {
+            stop.setBackgroundColor( gray );
+            stop.setTextColor( black );
+        }
     }
     // -- paintUI
 
