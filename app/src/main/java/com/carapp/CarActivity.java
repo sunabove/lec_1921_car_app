@@ -256,15 +256,19 @@ public class CarActivity extends CompassActivity implements Orientation.Listener
                 motion = Motion.LEFT ;
             } else if ( 45 <= pitch) {
                 motion = Motion.FORWARD ;
-            } else if ( 27 >= pitch) {
+            } else if ( 32 >= pitch) {
                 motion = Motion.BACKWARD ;
             } else {
                 motion = Motion.STOP ;
             }
 
-            if( motion.equalsIgnoreCase( motionPrev ) ) {
+            /*
+            if( false && motion.equalsIgnoreCase( motionPrev ) ) {
                 // do nothing!
-            } else {
+            }
+            */
+
+            if( true ){
                 this.moveCar(motion, status);
                 this.motionPrev = motion;
             }
@@ -272,11 +276,12 @@ public class CarActivity extends CompassActivity implements Orientation.Listener
             motionTime = now ;
         }
     }
+    // -- pitchRollUpdated
 
     public void moveCar(final String motion, final EditText status ) {
         this.currMotion = motion ;
 
-        String url = String.format("http://10.3.141.1/car.json?motion=%s", motion);
+        String url = String.format("http://10.3.141.1/car.json?motion=%s", motion.toLowerCase() );
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
