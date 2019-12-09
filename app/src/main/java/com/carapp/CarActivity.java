@@ -256,7 +256,7 @@ public class CarActivity extends CompassActivity implements Orientation.Listener
                 motion = Motion.LEFT ;
             } else if ( 45 <= pitch) {
                 motion = Motion.FORWARD ;
-            } else if ( 25 >= pitch) {
+            } else if ( 27 >= pitch) {
                 motion = Motion.BACKWARD ;
             } else {
                 motion = Motion.STOP ;
