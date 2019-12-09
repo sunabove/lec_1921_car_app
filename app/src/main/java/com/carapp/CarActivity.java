@@ -1,8 +1,10 @@
 package com.carapp;
 
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.InputType;
 import android.util.Log;
 import android.view.*;
@@ -14,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
+import androidx.core.content.ContextCompat;
 import androidx.core.text.HtmlCompat;
 
 import com.android.volley.Request;
@@ -44,6 +47,16 @@ public class CarActivity extends CompassActivity implements Orientation.Listener
     private Orientation orientation;
     private AttitudeIndicator attitudeIndicator;
     // -- orientation sensor
+
+    private String currMotion = "";
+
+    protected static class Motion {
+        public static final String FORWARD = "FORWARD" ;
+        public static final String BACKWARD = "BACKWARD" ;
+        public static final String LEFT = "LEFT" ;
+        public static final String RIGHT = "RIGHT" ;
+        public static final String STOP = "STOP" ;
+    }
 
     public double prettyDegree( double degree ) {
         degree = degree % 360 ;
@@ -101,25 +114,25 @@ public class CarActivity extends CompassActivity implements Orientation.Listener
 
         forward.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                moveCar( "forward", status );
+                moveCar( Motion.FORWARD, status );
             }
         });
 
         backward.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                moveCar( "backward", status );
+                moveCar( Motion.BACKWARD, status );
             }
         });
 
         left.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                moveCar( "left", status );
+                moveCar( Motion.LEFT, status );
             }
         });
 
         right.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                moveCar( "right", status );
+                moveCar( Motion.RIGHT, status );
             }
         });
 
@@ -128,7 +141,7 @@ public class CarActivity extends CompassActivity implements Orientation.Listener
                 motionPrev = "";
 
                 if( motionEnabled ) {
-                    moveCar("stop", status );
+                    moveCar(Motion.STOP, status );
                 }
 
                 motionEnabled = ! motionEnabled ;
@@ -186,9 +199,30 @@ public class CarActivity extends CompassActivity implements Orientation.Listener
         backward.setEnabled( motionEnabled );
         left.setEnabled( motionEnabled );
         right.setEnabled( motionEnabled );
-    }
 
-    private long then = System.currentTimeMillis();
+        int gray = Color.parseColor("#d3d3d3") ;
+
+        int black = Color.parseColor("#000000") ;
+
+        int yellow = Color.parseColor("#ffff00") ;
+
+        int green = Color.parseColor("#00FF00") ;
+
+        String currMotion = this.currMotion ;
+
+        forward.setBackgroundColor( currMotion.equalsIgnoreCase( Motion.FORWARD ) ? green : gray );
+        backward.setBackgroundColor( currMotion.equalsIgnoreCase( Motion.BACKWARD ) ? green : gray );
+        left.setBackgroundColor( currMotion.equalsIgnoreCase( Motion.LEFT ) ? green : gray );
+        right.setBackgroundColor( currMotion.equalsIgnoreCase( Motion.RIGHT ) ? green : gray );
+
+        forward.setTextColor( currMotion.equalsIgnoreCase( Motion.FORWARD ) ? yellow : black );
+        backward.setTextColor( currMotion.equalsIgnoreCase( Motion.BACKWARD ) ? yellow : black );
+        left.setTextColor( currMotion.equalsIgnoreCase( Motion.LEFT ) ? yellow : black );
+        right.setTextColor( currMotion.equalsIgnoreCase( Motion.RIGHT ) ? yellow : black );
+    }
+    // -- paintUI
+
+    private long motionTime = System.currentTimeMillis();
     private String motionPrev = "" ;
 
     // pitch roll 값이 변했을 경우, 차를 제어한다.
@@ -205,20 +239,20 @@ public class CarActivity extends CompassActivity implements Orientation.Listener
 
         if( ! motionEnabled ) {
             // do nothing!
-        }else if (now - then < 700 ) {
+        }else if (now - motionTime < 700 ) {
             // do nothing!
         } else {
             String motion = "" ;
             if (15 <= roll) {
-                motion = "right" ;
+                motion = Motion.RIGHT ;
             } else if ( -15 >= roll) {
-                motion = "left" ;
-            } else if (30 <= pitch) {
-                motion = "forward" ;
-            } else if (5 >= pitch) {
-                motion = "backward" ;
+                motion = Motion.LEFT ;
+            } else if (50 <= pitch) {
+                motion = Motion.FORWARD ;
+            } else if ( 20 >= pitch) {
+                motion = Motion.BACKWARD ;
             } else {
-                motion = "stop" ;
+                motion = Motion.STOP ;
             }
 
             if( motion.equalsIgnoreCase( motionPrev ) ) {
@@ -228,11 +262,13 @@ public class CarActivity extends CompassActivity implements Orientation.Listener
                 this.motionPrev = motion;
             }
 
-            then = now ;
+            motionTime = now ;
         }
     }
 
     public void moveCar(final String motion, final EditText status ) {
+        this.currMotion = motion ;
+
         String url = String.format("http://10.3.141.1/car.json?motion=%s", motion);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -253,6 +289,13 @@ public class CarActivity extends CompassActivity implements Orientation.Listener
         });
 
         requestQueue.add(stringRequest);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                paintUI();
+            }
+        }, 0);
     }
 
     @Override

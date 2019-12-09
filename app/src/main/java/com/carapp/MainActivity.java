@@ -1,7 +1,13 @@
 package com.carapp;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
+import android.net.NetworkInfo;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
@@ -29,6 +35,8 @@ public class MainActivity extends ComActivity {
 
     private int mode = 0 ;
 
+    private int wifeChangeCnt = 0 ;
+
     public int getLayoutId() {
         return R.layout.activity_main ;
     }
@@ -44,6 +52,29 @@ public class MainActivity extends ComActivity {
         this.ipaddr = this.findViewById(R.id.ipaddr);
 
         this.logo = this.findViewById(R.id.logo);
+
+        class WifiReceiver extends BroadcastReceiver {
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                NetworkInfo info = intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
+                if(info != null && info.isConnected()) {
+                    wifeChangeCnt += 1;
+                    if( 1 < wifeChangeCnt && isRaspberryWifiConnected() ) {
+                        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+                        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+                        String ssid = wifiInfo.getSSID();
+
+                        Log.d(TAG, "wifi changed to " + ssid);
+                    }
+                }
+            }
+        }
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
+
+        registerReceiver( new WifiReceiver(), intentFilter);
     }
 
     @Override
@@ -62,6 +93,11 @@ public class MainActivity extends ComActivity {
         this.error.setText( errorMessage );
 
         this.checkServer();
+    }
+
+    public boolean isRaspberryWifiConnected() {
+        String ipAddr = getIpAddr();
+        return ipAddr.startsWith( "10.3.");
     }
 
     private void checkServer() {
@@ -152,9 +188,8 @@ public class MainActivity extends ComActivity {
                     }, 3000);
                 } else if ( 3 == mode ) {
                     status.setTextColor(Color.parseColor("#FF0000"));
-                    String ipAddr = getIpAddr();
 
-                    if( ipAddr.startsWith( "10.3.")) {
+                    if( isRaspberryWifiConnected() ) {
                         status.setText("차량 서버 실행 여부를 체크하세요.\n\n잠시후 다시 연결을 시도합니다.");
                     } else {
                         status.setText("라즈베리파이 공유기를 연결하세요.\n\nWi-Fi 선택 화면으로 이동합니다.");
