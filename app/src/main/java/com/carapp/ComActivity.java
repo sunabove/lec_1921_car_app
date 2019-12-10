@@ -28,10 +28,16 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.json.JSONObject;
+
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Locale;
+
+import io.socket.client.IO;
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 
 public abstract class ComActivity extends AppCompatActivity implements ComInterface {
 
@@ -39,7 +45,6 @@ public abstract class ComActivity extends AppCompatActivity implements ComInterf
 
     protected RequestQueue requestQueue ;
     protected boolean motionEnabled = false ;
-
 
     public abstract int getLayoutId() ;
 
