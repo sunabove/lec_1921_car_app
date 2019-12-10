@@ -78,6 +78,11 @@ public abstract class ComActivity extends AppCompatActivity implements ComInterf
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
     public <T extends View> T findViewById(@IdRes int id) {
         return (T) super.findViewById(id);
     }

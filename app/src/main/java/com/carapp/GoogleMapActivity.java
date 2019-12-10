@@ -35,20 +35,26 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams;
+import androidx.lifecycle.Lifecycle;
 
 import org.json.JSONObject;
+
+import java.util.concurrent.ExecutionException;
 
 public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback {
 
     private GoogleMap map;
     private FusedLocationProviderClient fusedLocationClient;
 
-    private MarkerOptions myPhoneMarker;
+    private Marker myPhoneMarker;
+    private Marker currCarMarker;
+    private int currMarkerUpdCnt = 0 ;
 
     private WebView videoView ;
     private Button stop ;
@@ -181,8 +187,40 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        log.setText( "\nResponse: " + response.toString() );
-                        getCarLocation( 500 );
+
+                        try {
+                            log.setText("\nResponse: " + response.toString());
+
+                            double latitude = Double.parseDouble(response.get("latitude").toString().trim());
+                            double longitude = Double.parseDouble(response.get("longitude").toString().trim());
+                            double heading = Double.parseDouble(response.get("heading").toString().trim());
+                            double altitude = Double.parseDouble(response.get("altitude").toString().trim());
+                            String timestamp = response.get( "timestamp" ).toString().trim();
+
+                            if( null != currCarMarker ) {
+                                currCarMarker.remove();
+                            }
+
+                            if( true ){
+                                currMarkerUpdCnt += 1 ;
+
+                                LatLng latlng = new LatLng(latitude, longitude);
+                                MarkerOptions options = new MarkerOptions();
+                                options.position(latlng).title(String.format("현재 차량 위치 [%04d]", currMarkerUpdCnt ));
+
+                                currCarMarker = map.addMarker(options);
+                                currCarMarker.showInfoWindow();
+
+                                map.moveCamera(CameraUpdateFactory.newLatLng(latlng));
+                            }
+
+                        } catch ( Exception e ) {
+                            e.printStackTrace();
+                        }
+
+                        if( GoogleMapActivity.this.getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
+                            getCarLocation(500);
+                        }
                     }
 
 
@@ -207,10 +245,16 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
                             public void onComplete(@NonNull Task<Location> task) {
                                 Location location = task.getResult();
                                 if (location != null) {
+                                    if( null != myPhoneMarker ) {
+                                        myPhoneMarker.remove();
+                                    }
+
                                     LatLng latlng = new LatLng(location.getLatitude(), location.getLongitude());
 
-                                    myPhoneMarker = new MarkerOptions().position(latlng).title("현재 나의 위치") ;
-                                    map.addMarker(myPhoneMarker).showInfoWindow();
+                                    MarkerOptions options = new MarkerOptions();
+                                    options.position(latlng).title("현재 나의 위치") ;
+                                    myPhoneMarker = map.addMarker(options);
+                                    myPhoneMarker.showInfoWindow();
 
                                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, map.getMaxZoomLevel() - 5));
 
