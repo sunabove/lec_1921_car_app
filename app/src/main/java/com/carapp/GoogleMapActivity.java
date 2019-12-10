@@ -189,13 +189,18 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
                     public void onResponse(JSONObject response) {
 
                         try {
-                            log.setText("\nResponse: " + response.toString());
-
                             double latitude = Double.parseDouble(response.get("latitude").toString().trim());
                             double longitude = Double.parseDouble(response.get("longitude").toString().trim());
                             double heading = Double.parseDouble(response.get("heading").toString().trim());
                             double altitude = Double.parseDouble(response.get("altitude").toString().trim());
                             String timestamp = response.get( "timestamp" ).toString().trim();
+
+                            String text = "" ;
+                            text += String.format(  "Latitude  : %3.5f", latitude);
+                            text += String.format("\nLongitude : ", longitude ) ;
+                            text += String.format("\nHeading   : ", heading ) ;
+
+                            log.setText( text );
 
                             if( null != currCarMarker ) {
                                 currCarMarker.remove();
@@ -219,7 +224,7 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
                         }
 
                         if( GoogleMapActivity.this.getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
-                            getCarLocation(500);
+                            getCarLocation(1_000);
                         }
                     }
 
