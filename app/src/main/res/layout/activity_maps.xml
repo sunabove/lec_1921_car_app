@@ -9,15 +9,6 @@
     tools:context=".GoogleMapActivity">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/info"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|end"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="70dp"
-        app:srcCompat="@android:drawable/ic_dialog_info" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/goBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,20 +19,21 @@
         app:maxImageSize="35dp"
         app:srcCompat="@drawable/go_back_act" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/stop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="4dp"
+        app:srcCompat="@drawable/start" />
+
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
-
-
-    <Button
-        android:id="@+id/stop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:text="START" />
 
     <WebView
         android:id="@+id/videoView"

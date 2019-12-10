@@ -243,7 +243,7 @@ public abstract class ComActivity extends AppCompatActivity implements ComInterf
 
     // 두 위경도 사이의 거리를 m로 구한다.
     public float[] getDistance(LatLng from, LatLng to ) {
-        float[] results = new float[1];
+        float[] results = new float[2];
         Location.distanceBetween( from.latitude, from.longitude, to.latitude, to.longitude, results );
 
         return results ;

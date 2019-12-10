@@ -45,6 +45,7 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams;
 import androidx.lifecycle.Lifecycle;
@@ -63,11 +64,11 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
     private Marker currCarMarker;
     private int currMarkerUpdCnt = 0 ;
     private Polyline gpsPath = null ;
-    private ArrayList<LatLng> gpsLog = new ArrayList<>();
+    private GpsLog gpsLog = new GpsLog();
     private LatLng lastGpsLatLng ;
 
     private WebView videoView ;
-    private Button stop ;
+    private FloatingActionButton stop ;
     private EditText status ;
     private EditText log ;
 
@@ -125,9 +126,7 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
 
                 motionEnabled = ! motionEnabled ;
 
-                stop.setText( motionEnabled ? "STOP" : "START" );
-
-                stop.setTextColor( motionEnabled ? red : black );
+                stop.setImageResource( motionEnabled ? R.drawable.stop : R.drawable.start );
             }
         });
 
@@ -261,7 +260,7 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
 
                             if( true ) {
                                 LatLng latLng = new LatLng(latitude, longitude);
-                                ArrayList<LatLng> gpsLog = GoogleMapActivity.this.gpsLog ;
+                                GpsLog gpsLog = GoogleMapActivity.this.gpsLog ;
 
                                 if( null == lastGpsLatLng ) {
                                     lastGpsLatLng = latLng;
@@ -301,7 +300,17 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
                                 currCarMarker = map.addMarker(markerOptions);
 
                                 currCarMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.car_map_icon_02));
-                                currCarMarker.setRotation( (float) heading );
+
+                                if( 1 > gpsLog.size() ) {
+                                    currCarMarker.setRotation( (float) heading );
+                                } else {
+                                    double gpsHeading = gpsLog.getHeading( heading );
+
+                                    currCarMarker.setRotation( (float) gpsHeading );
+
+                                    Log.d( "heading" , "heading = " + gpsHeading );
+                                }
+
                                 //currCarMarker.showInfoWindow();
 
                                 Projection projection = map.getProjection();
@@ -316,7 +325,7 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
                                 double xr = Math.abs( sw/2.0 - x )/sw ;
                                 double yr = Math.abs( sh/2.0 - y )/sh ;
 
-                                if( true ) {
+                                if( false ) {
                                     Log.d("screen range", "xr = " + xr);
                                     Log.d("screen range", "yr = " + yr);
                                 }
@@ -449,15 +458,19 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
 
     private int moveCnt = 0 ;
 
-    public void moveCar(final String motion, final EditText status, final double pitchDeg, double rollDeg ) {
-        String url = String.format("http://10.3.141.1/car.json?motion=%s&pitchDeg=%f&rollDeg=%f", motion, pitchDeg, rollDeg);
+    public void moveCar(final String motion, final EditText status, double pitchDeg, double rollDeg ) {
+        pitchDeg = pitchDeg % 360;
+        rollDeg = rollDeg % 360;
+
+        String url = String.format("http://10.3.141.1/car_move.json?motion=%s&pitchDeg=%f&rollDeg=%f", motion, pitchDeg, rollDeg);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         if( null != status ) {
-                            status.setText(String.format("[04%d] %s", moveCnt, motion.toUpperCase() ) );
+                            moveCnt += 1 ;
+                            status.setText(String.format("[%04d] %s", moveCnt, motion.toUpperCase() ) );
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -514,12 +527,14 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
             }
             */
 
-            if( true ){
+            if( "stop".equalsIgnoreCase( this.motionPrev) && "stop".equalsIgnoreCase( motion ) ) {
+                // do nothing!
+            } else if( true ){
                 this.moveCar(motion, status, pitch, roll );
                 this.motionPrev = motion;
+                motionTime = now ;
             }
 
-            motionTime = now ;
         }
     }
     // -- pitchRollUpdated
