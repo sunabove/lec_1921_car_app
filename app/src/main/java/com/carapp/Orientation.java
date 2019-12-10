@@ -27,10 +27,8 @@ public class Orientation implements SensorEventListener {
 
   private int lastAccuracy;
   private Listener listener;
-  private CarActivity activity;
 
-  public Orientation(CarActivity activity) {
-    this.activity = activity ;
+  public Orientation(ComActivity activity) {
     windowManager = activity.getWindow().getWindowManager();
     sensorManager = (SensorManager) activity.getSystemService(Activity.SENSOR_SERVICE);
 
@@ -116,7 +114,6 @@ public class Orientation implements SensorEventListener {
     float pitch = orientation[1] * -57;
     float roll = orientation[2] * -57;
 
-    activity.pitchRollUpdated( pitch, roll );
     listener.onOrientationChanged(pitch, roll);
   }
 }

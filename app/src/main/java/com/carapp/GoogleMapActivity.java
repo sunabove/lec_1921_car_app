@@ -54,7 +54,7 @@ import org.json.JSONObject;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback {
+public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback , Orientation.Listener  {
 
     private GoogleMap map;
     private FusedLocationProviderClient fusedLocationClient;
@@ -71,6 +71,16 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
     private EditText status ;
     private EditText log ;
 
+    private EditText pitch ;
+    private EditText roll ;
+
+    // orientation sensor
+    private Orientation orientation;
+
+    private String currMotion = "";
+    private long motionTime = System.currentTimeMillis();
+    private String motionPrev = "" ;
+
     private boolean videoFullWidth = false ;
 
     public int getLayoutId() {
@@ -83,12 +93,16 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
 
         this.hideActionBar();
 
-        this.motionEnabled = false ;
-
         this.videoView = this.findViewById(R.id.videoView);
         this.stop = this.findViewById(R.id.stop );
         this.status = this.findViewById(R.id.status);
         this.log = this.findViewById(R.id.log);
+
+        this.pitch = this.findViewById(R.id.pitch);
+        this.roll = this.findViewById(R.id.roll);
+
+        this.motionEnabled = false ;
+        this.orientation = new Orientation(this);
 
         this.status.setText( "" );
 
@@ -136,6 +150,29 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
         });
     }
 
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+
+        Log.v( TAG, "onResume");
+
+        this.hideActionBar();
+
+        this.playVideo();
+
+        this.getCarLocation( 200 );
+
+        this.orientation.startListening(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        orientation.stopListening();
+    }
+
     public void whenVideoViewClickedOld() {
         Log.d( TAG, "VideoView Clicked.");
 
@@ -164,20 +201,6 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
         videoView.setLayoutParams( params );
 
         videoFullWidth = ! videoFullWidth ;
-    }
-
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-
-        Log.v( TAG, "onResume");
-
-        this.hideActionBar();
-
-        this.playVideo();
-
-        this.getCarLocation( 200 );
     }
 
     // 차량의 최근 위치를 반환한다.
@@ -414,31 +437,6 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
 
     }
 
-    int PERMISSION_ID = 44;
-
-    private boolean checkPermissions() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        return false;
-    }
-
-    private void requestPermissions() {
-        ActivityCompat.requestPermissions(
-                this,
-                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
-                PERMISSION_ID
-        );
-    }
-
-    private boolean isLocationEnabled() {
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
-                LocationManager.NETWORK_PROVIDER
-        );
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -471,4 +469,55 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
 
         requestQueue.add(stringRequest);
     }
+
+    // pitch roll 값이 변했을 경우, 차를 제어한다.
+    public void onOrientationChanged( float pitch, float roll ) {
+        this.pitchRollUpdated( pitch, roll );
+    }
+
+    // pitch roll 값이 변했을 경우, 차를 제어한다.
+    private void pitchRollUpdated( double pitch, double roll ) {
+        pitch = -prettyDegree(pitch);
+        roll = -prettyDegree(roll);
+
+        String text = String.format("pitch: %05.2f  roll %05.2f", pitch, roll);
+
+        this.pitch.setText( String.format( "%5.2f", pitch));
+        this.roll.setText( String.format( "%5.2f", roll));
+
+        final long now = System.currentTimeMillis();
+
+        if( ! motionEnabled ) {
+            // do nothing!
+        }else if (now - motionTime < 700 ) {
+            // do nothing!
+        } else {
+            String motion = "" ;
+            if (15 <= roll) {
+                motion = Motion.RIGHT ;
+            } else if ( -15 >= roll) {
+                motion = Motion.LEFT ;
+            } else if ( 45 <= pitch) {
+                motion = Motion.FORWARD ;
+            } else if ( 32 >= pitch) {
+                motion = Motion.BACKWARD ;
+            } else {
+                motion = Motion.STOP ;
+            }
+
+            /*
+            if( false && motion.equalsIgnoreCase( motionPrev ) ) {
+                // do nothing!
+            }
+            */
+
+            if( true ){
+                this.moveCar(motion, status);
+                this.motionPrev = motion;
+            }
+
+            motionTime = now ;
+        }
+    }
+    // -- pitchRollUpdated
 }

@@ -1,10 +1,13 @@
 package com.carapp;
 
+import android.Manifest;
 import android.app.ActionBar;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -21,6 +24,7 @@ import android.widget.Toast;
 
 import androidx.annotation.*;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -55,6 +59,14 @@ public abstract class ComActivity extends AppCompatActivity implements ComInterf
     protected static final int black = Color.parseColor("#FFFFFF") ;
     protected static final int red = Color.parseColor("#FF0000") ;
 
+    protected static class Motion {
+        public static final String FORWARD = "FORWARD" ;
+        public static final String BACKWARD = "BACKWARD" ;
+        public static final String LEFT = "LEFT" ;
+        public static final String RIGHT = "RIGHT" ;
+        public static final String STOP = "STOP" ;
+    }
+
     public abstract int getLayoutId() ;
 
     @Override
@@ -86,6 +98,16 @@ public abstract class ComActivity extends AppCompatActivity implements ComInterf
             });
         }
     }
+
+    public double prettyDegree( double degree ) {
+        degree = degree % 360 ;
+
+        if( 180 < degree ) {
+            degree = degree - 360 ;
+        }
+        return degree ;
+    }
+
 
     @Override
     protected void onPause() {
@@ -192,6 +214,31 @@ public abstract class ComActivity extends AppCompatActivity implements ComInterf
                 actionBar.hide();
             }
         }
+    }
+
+    protected static final int PERMISSION_ID = 44;
+
+    protected boolean checkPermissions() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        }
+        return false;
+    }
+
+    protected void requestPermissions() {
+        ActivityCompat.requestPermissions(
+                this,
+                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                PERMISSION_ID
+        );
+    }
+
+    protected boolean isLocationEnabled() {
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
+                LocationManager.NETWORK_PROVIDER
+        );
     }
 
     // 두 위경도 사이의 거리를 m로 구한다.
