@@ -34,6 +34,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -44,8 +45,6 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams;
 import androidx.lifecycle.Lifecycle;
 
 import org.json.JSONObject;
-
-import java.util.concurrent.ExecutionException;
 
 public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback {
 
@@ -179,6 +178,18 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
         }, delay );
     }
 
+    public double prettyAngle( double angleDegDecimal ) {
+        double angle = angleDegDecimal %360 ;
+
+        int ang = (int) angle ;
+        double deg = angle - ang ;
+        deg = 60*deg;
+
+        angle = angle + deg ;
+
+        return angle ;
+    }
+
     private void getCarLocationImpl() {
         String url = "http://10.3.141.1/send_me_curr_pos.json";
 
@@ -196,10 +207,10 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
                             String timestamp = response.get( "timestamp" ).toString().trim();
 
                             String text = "" ;
-                            text += String.format(  "Lat  : %3.6f", latitude);
-                            text += String.format("\nLon  : %3.6f", longitude ) ;
-                            text += String.format("\nHead : %3.6f", heading ) ;
-                            text += String.format("\nAlt  : %3.6f", altitude ) ;
+                            text += String.format(  "Lat     : %3.6f °", prettyAngle( latitude ) );
+                            text += String.format("\nLon    : %3.6f °", prettyAngle( longitude ) ) ;
+                            text += String.format("\nHead : %3.6f °", prettyAngle( heading ) ) ;
+                            text += String.format("\nAlt     : %3.6f m", altitude ) ;
 
                             log.setText( text );
 
@@ -215,6 +226,9 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
                                 options.position(latlng).title(String.format("현재 차량 위치 [%04d]", currMarkerUpdCnt ));
 
                                 currCarMarker = map.addMarker(options);
+
+                                currCarMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.car_map_icon_02));
+                                currCarMarker.setRotation( (float) heading );
                                 currCarMarker.showInfoWindow();
 
                                 map.moveCamera(CameraUpdateFactory.newLatLng(latlng));
@@ -259,7 +273,10 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
 
                                     MarkerOptions options = new MarkerOptions();
                                     options.position(latlng).title("현재 나의 위치") ;
+
                                     myPhoneMarker = map.addMarker(options);
+                                    myPhoneMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.smart_phone_icon_01));
+
                                     myPhoneMarker.showInfoWindow();
 
                                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, map.getMaxZoomLevel() - 5));
