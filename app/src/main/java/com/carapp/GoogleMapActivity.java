@@ -196,9 +196,10 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
                             String timestamp = response.get( "timestamp" ).toString().trim();
 
                             String text = "" ;
-                            text += String.format(  "Latitude  : %3.5f", latitude);
-                            text += String.format("\nLongitude : ", longitude ) ;
-                            text += String.format("\nHeading   : ", heading ) ;
+                            text += String.format(  "Lat  : %3.6f", latitude);
+                            text += String.format("\nLon  : %3.6f", longitude ) ;
+                            text += String.format("\nHead : %3.6f", heading ) ;
+                            text += String.format("\nAlt  : %3.6f", altitude ) ;
 
                             log.setText( text );
 
