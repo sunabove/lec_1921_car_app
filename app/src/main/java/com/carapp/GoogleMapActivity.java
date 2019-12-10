@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -34,6 +35,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -277,9 +279,17 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
 
                                 currCarMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.car_map_icon_02));
                                 currCarMarker.setRotation( (float) heading );
-                                currCarMarker.showInfoWindow();
+                                //currCarMarker.showInfoWindow();
 
-                                map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                                Projection projection = map.getProjection();
+                                Point scrPos = projection.toScreenLocation(currCarMarker.getPosition());
+                                int sw = getScreenWidth();
+                                int sh = getScreenHeight();
+
+                                if( 0.4 < Math.abs( scrPos.x - sw )/sw || 0.4 < Math.abs( scrPos.y - sh) / sh ) {
+                                    map.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+                                }
+
                             }
 
                         } catch ( Exception e ) {
