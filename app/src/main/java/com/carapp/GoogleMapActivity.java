@@ -19,15 +19,14 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.FragmentActivity;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -39,17 +38,23 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams;
+
+import org.json.JSONObject;
 
 public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback {
 
     private GoogleMap map;
     private FusedLocationProviderClient fusedLocationClient;
-    private MarkerOptions myLocMarker ;
+
+    private MarkerOptions myPhoneMarker;
+
     private WebView videoView ;
     private Button stop ;
     private EditText status ;
+    private EditText log ;
+
     private boolean videoFullWidth = false ;
 
     public int getLayoutId() {
@@ -67,6 +72,7 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
         this.videoView = this.findViewById(R.id.videoView);
         this.stop = this.findViewById(R.id.stop );
         this.status = this.findViewById(R.id.status);
+        this.log = this.findViewById(R.id.log);
 
         this.status.setText( "" );
 
@@ -152,10 +158,43 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
         this.hideActionBar();
 
         this.playVideo();
+
+        this.getCarLocation();
     }
 
+    // 차량의 최근 위치를 반환한다.
+    private void getCarLocation() {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getCarLocationImpl();
+
+                handler.postDelayed( this, 200 );
+            }
+        }, 100 );
+    }
+
+    private void getCarLocationImpl() {
+        String url = "http://10.3.141.1/send_me_curr_pos.json";
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        log.append( "\nResponse: " + response.toString() );
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                });
+    }
+
+    // 핸드폰의 최근 위치를 반환한다.
     @SuppressLint("MissingPermission")
-    private void getLastLocation(){
+    private void getPhoneLastLocation(){
         if (checkPermissions()) {
             if (isLocationEnabled()) {
                 fusedLocationClient.getLastLocation().addOnCompleteListener(
@@ -166,8 +205,8 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
                                 if (location != null) {
                                     LatLng latlng = new LatLng(location.getLatitude(), location.getLongitude());
 
-                                    myLocMarker = new MarkerOptions().position(latlng).title("현재 나의 위치") ;
-                                    map.addMarker(myLocMarker).showInfoWindow();
+                                    myPhoneMarker = new MarkerOptions().position(latlng).title("현재 나의 위치") ;
+                                    map.addMarker(myPhoneMarker).showInfoWindow();
 
                                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, map.getMaxZoomLevel() - 5));
 
@@ -228,7 +267,7 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
             @Override
             public void run() {
                 status.setText( "현재 위치를 체크중입니다.");
-                getLastLocation();
+                getPhoneLastLocation();
             }
         }, 5_000);
 

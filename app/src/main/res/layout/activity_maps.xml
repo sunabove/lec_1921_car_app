@@ -58,7 +58,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="6dp"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <EditText
             android:id="@+id/status"
@@ -70,6 +70,14 @@
             android:ems="10"
             android:inputType="textPersonName"
             android:text="Status " />
+
+        <EditText
+            android:id="@+id/log"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:gravity="start|top"
+            android:inputType="textMultiLine" />
     </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

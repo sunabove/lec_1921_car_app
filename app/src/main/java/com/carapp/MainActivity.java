@@ -185,7 +185,7 @@ public class MainActivity extends ComActivity {
                     new Handler().postDelayed(new Runnable() {
                         public void run() {
                             activityAlive = false ;
-                            boolean test = false ;
+                            boolean test = true ;
                             if( ! test ) {
                                 startActivity(new android.content.Intent(MainActivity.this, com.carapp.CarActivity.class));
                             } else {
