@@ -3,6 +3,8 @@ package com.carapp;
 import android.app.ActionBar;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.location.Location;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -26,6 +28,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONObject;
@@ -45,6 +48,12 @@ public abstract class ComActivity extends AppCompatActivity implements ComInterf
 
     protected RequestQueue requestQueue ;
     protected boolean motionEnabled = false ;
+
+    protected static final int gray = Color.parseColor("#d3d3d3") ;
+    protected static final int yellow = Color.parseColor("#ffff00") ;
+    protected static final int green = Color.parseColor("#00FF00") ;
+    protected static final int black = Color.parseColor("#FFFFFF") ;
+    protected static final int red = Color.parseColor("#FF0000") ;
 
     public abstract int getLayoutId() ;
 
@@ -183,6 +192,13 @@ public abstract class ComActivity extends AppCompatActivity implements ComInterf
                 actionBar.hide();
             }
         }
+    }
 
+    // 두 위경도 사이의 거리를 m로 구한다.
+    public float[] getDistance(LatLng from, LatLng to ) {
+        float[] results = new float[1];
+        Location.distanceBetween( from.latitude, from.longitude, to.latitude, to.longitude, results );
+
+        return results ;
     }
 }

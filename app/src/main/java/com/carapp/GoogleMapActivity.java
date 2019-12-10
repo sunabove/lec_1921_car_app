@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -38,6 +39,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
@@ -45,6 +48,9 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams;
 import androidx.lifecycle.Lifecycle;
 
 import org.json.JSONObject;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback {
 
@@ -54,6 +60,9 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
     private Marker myPhoneMarker;
     private Marker currCarMarker;
     private int currMarkerUpdCnt = 0 ;
+    private Polyline gpsPath = null ;
+    private ArrayList<LatLng> gpsLog = new ArrayList<>();
+    private LatLng lastGpsLatLng ;
 
     private WebView videoView ;
     private Button stop ;
@@ -101,6 +110,8 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
                 motionEnabled = ! motionEnabled ;
 
                 stop.setText( motionEnabled ? "STOP" : "START" );
+
+                stop.setTextColor( motionEnabled ? red : black );
             }
         });
 
@@ -218,20 +229,57 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
                                 currCarMarker.remove();
                             }
 
+                            if( null !=gpsPath ) {
+                                gpsPath.remove();
+
+                            }
+
+                            if( true ) {
+                                LatLng latLng = new LatLng(latitude, longitude);
+                                ArrayList<LatLng> gpsLog = GoogleMapActivity.this.gpsLog ;
+
+                                if( null == lastGpsLatLng ) {
+                                    lastGpsLatLng = latLng;
+                                } else if( null != lastGpsLatLng ){
+                                    float dists [] = getDistance( lastGpsLatLng, latLng );
+                                    if( 0.01f > dists[0] ) {
+                                        gpsLog.remove( gpsLog.size() -1 );
+                                        gpsLog.add( latLng );
+                                    } else {
+                                        gpsLog.add( latLng );
+                                    }
+                                } else {
+                                    gpsLog.add(latLng);
+                                }
+
+                                if( 1_000 < gpsLog.size() ) {
+                                    while( 1_000 < gpsLog.size() ) {
+                                        gpsLog.remove( 0 );
+                                    }
+                                }
+
+                                PolylineOptions polyOptions = new PolylineOptions().width( 10 ).color(Color.BLUE).geodesic(true);
+                                for( LatLng log : gpsLog ) {
+                                    polyOptions.add( log );
+                                }
+                                gpsPath = map.addPolyline( polyOptions );
+                            }
+
                             if( true ){
                                 currMarkerUpdCnt += 1 ;
 
-                                LatLng latlng = new LatLng(latitude, longitude);
-                                MarkerOptions options = new MarkerOptions();
-                                options.position(latlng).title(String.format("현재 차량 위치 [%04d]", currMarkerUpdCnt ));
+                                LatLng latLng = new LatLng(latitude, longitude);
+                                MarkerOptions markerOptions = new MarkerOptions();
+                                markerOptions.position(latLng);
+                                markerOptions.title(String.format("현재 차량 위치 [%04d]", currMarkerUpdCnt ));
 
-                                currCarMarker = map.addMarker(options);
+                                currCarMarker = map.addMarker(markerOptions);
 
                                 currCarMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.car_map_icon_02));
                                 currCarMarker.setRotation( (float) heading );
                                 currCarMarker.showInfoWindow();
 
-                                map.moveCamera(CameraUpdateFactory.newLatLng(latlng));
+                                map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
                             }
 
                         } catch ( Exception e ) {
@@ -279,7 +327,7 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
 
                                     myPhoneMarker.showInfoWindow();
 
-                                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, map.getMaxZoomLevel() - 5));
+                                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, map.getMaxZoomLevel() - 2 ));
 
                                     status.setText( "지도를 핸드폰 현재 위치로 이동하였습니다.");
                                 }

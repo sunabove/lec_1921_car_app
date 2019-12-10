@@ -200,14 +200,6 @@ public class CarActivity extends CompassActivity implements Orientation.Listener
         left.setEnabled( motionEnabled );
         right.setEnabled( motionEnabled );
 
-        int gray = Color.parseColor("#d3d3d3") ;
-
-        int black = Color.parseColor("#000000") ;
-
-        int yellow = Color.parseColor("#ffff00") ;
-
-        int green = Color.parseColor("#00FF00") ;
-
         String currMotion = this.currMotion ;
 
         forward.setBackgroundColor( currMotion.equalsIgnoreCase( Motion.FORWARD ) ? green : gray );
