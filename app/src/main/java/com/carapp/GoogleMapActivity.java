@@ -462,7 +462,7 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
         pitchDeg = pitchDeg % 360;
         rollDeg = rollDeg % 360;
 
-        String url = String.format("http://10.3.141.1/car_move.json?motion=%s&pitchDeg=%f&rollDeg=%f", motion, pitchDeg, rollDeg);
+        String url = String.format("http://10.3.141.1/car.json?motion=%s&pitchDeg=%f&rollDeg=%f", motion, pitchDeg, rollDeg);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
