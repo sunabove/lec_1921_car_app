@@ -120,7 +120,7 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
         this.stop.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if( motionEnabled ) {
-                    moveCar("stop", status );
+                    moveCar(Motion.STOP.toLowerCase(), status, 0, 0 );
                 }
 
                 motionEnabled = ! motionEnabled ;
@@ -447,15 +447,17 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
         }
     }
 
-    public void moveCar(final String motion, final EditText status ) {
-        String url = String.format("http://10.3.141.1/car.json?motion=%s", motion);
+    private int moveCnt = 0 ;
+
+    public void moveCar(final String motion, final EditText status, final double pitchDeg, double rollDeg ) {
+        String url = String.format("http://10.3.141.1/car.json?motion=%s&pitchDeg=%f&rollDeg=%f", motion, pitchDeg, rollDeg);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         if( null != status ) {
-                            status.setText(response.toString());
+                            status.setText(String.format("[04%d] %s", moveCnt, motion.toUpperCase() ) );
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -477,6 +479,7 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
 
     // pitch roll 값이 변했을 경우, 차를 제어한다.
     private void pitchRollUpdated( double pitch, double roll ) {
+
         pitch = -prettyDegree(pitch);
         roll = -prettyDegree(roll);
 
@@ -512,7 +515,7 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
             */
 
             if( true ){
-                this.moveCar(motion, status);
+                this.moveCar(motion, status, pitch, roll );
                 this.motionPrev = motion;
             }
 

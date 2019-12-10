@@ -201,6 +201,8 @@ public class CarActivity extends CompassActivity implements Orientation.Listener
 
         if( ! motionEnabled ) {
             stop.setBackgroundColor( gray );
+            stop.setTextColor( red );
+        } else {
             stop.setTextColor( black );
         }
     }
