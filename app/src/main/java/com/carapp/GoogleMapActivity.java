@@ -159,20 +159,18 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
 
         this.playVideo();
 
-        this.getCarLocation();
+        this.getCarLocation( 200 );
     }
 
     // 차량의 최근 위치를 반환한다.
-    private void getCarLocation() {
+    private void getCarLocation( long delay ) {
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 getCarLocationImpl();
-
-                handler.postDelayed( this, 200 );
             }
-        }, 100 );
+        }, delay );
     }
 
     private void getCarLocationImpl() {
@@ -183,13 +181,19 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        log.append( "\nResponse: " + response.toString() );
+                        log.setText( "\nResponse: " + response.toString() );
+                        getCarLocation( 500 );
                     }
+
+
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        getCarLocation( 3_000 );
                     }
                 });
+
+        this.requestQueue.add( jsonObjectRequest );
     }
 
     // 핸드폰의 최근 위치를 반환한다.
