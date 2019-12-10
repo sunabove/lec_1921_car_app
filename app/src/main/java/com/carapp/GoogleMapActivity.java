@@ -283,10 +283,22 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
 
                                 Projection projection = map.getProjection();
                                 Point scrPos = projection.toScreenLocation(currCarMarker.getPosition());
+
+                                double x = scrPos.x;
+                                double y = scrPos.y;
+
                                 int sw = getScreenWidth();
                                 int sh = getScreenHeight();
 
-                                if( 0.4 < Math.abs( scrPos.x - sw )/sw || 0.4 < Math.abs( scrPos.y - sh) / sh ) {
+                                double xr = Math.abs( sw/2.0 - x )/sw ;
+                                double yr = Math.abs( sh/2.0 - y )/sh ;
+
+                                if( true ) {
+                                    Log.d("screen range", "xr = " + xr);
+                                    Log.d("screen range", "yr = " + yr);
+                                }
+
+                                if( 0.35 < xr || 0.4 < yr ) {
                                     map.animateCamera(CameraUpdateFactory.newLatLng(latLng));
                                 }
 
