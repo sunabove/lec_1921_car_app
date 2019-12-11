@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Point;
@@ -93,6 +94,8 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
 
         this.hideActionBar();
+
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         this.videoView = this.findViewById(R.id.videoView);
         this.stop = this.findViewById(R.id.stop );

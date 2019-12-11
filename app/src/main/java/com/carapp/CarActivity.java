@@ -62,7 +62,7 @@ public class CarActivity extends CompassActivity implements Orientation.Listener
 
         this.hideActionBar();
 
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         this.sotwNewLine = true ;
 

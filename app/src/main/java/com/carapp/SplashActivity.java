@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
@@ -44,6 +45,8 @@ public class SplashActivity extends ComActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         this.status = this.findViewById(R.id.status);
         this.error = this.findViewById(R.id.error);
