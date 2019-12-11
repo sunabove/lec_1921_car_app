@@ -16,19 +16,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import io.socket.client.IO;
-import io.socket.client.Socket;
-import io.socket.emitter.Emitter;
-
-public class MainActivity extends ComActivity {
+public class SplashActivity extends ComActivity {
 
     private boolean activityAlive = false ;
     private boolean serverActive = false ;
@@ -45,7 +38,7 @@ public class MainActivity extends ComActivity {
     private int wifeChangeCnt = 0 ;
 
     public int getLayoutId() {
-        return R.layout.activity_main ;
+        return R.layout.activity_splash;
     }
 
     @Override
@@ -167,7 +160,7 @@ public class MainActivity extends ComActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Log.d("sunabove", "run: postDelayerd");
+                Log.d(TAG, "run: postDelayerd");
                 error.setText( errorMessage );
 
                 wifi.setText( getWifiSsid() );
@@ -187,9 +180,9 @@ public class MainActivity extends ComActivity {
                             activityAlive = false ;
                             boolean test = false ;
                             if( ! test ) {
-                                startActivity(new android.content.Intent(MainActivity.this, com.carapp.CarActivity.class));
+                                startActivity(new android.content.Intent(SplashActivity.this, com.carapp.CarActivity.class));
                             } else {
-                                startActivity(new android.content.Intent(MainActivity.this, com.carapp.GoogleMapActivity.class));
+                                startActivity(new android.content.Intent(SplashActivity.this, com.carapp.GoogleMapActivity.class));
                             }
                         }
                     }, 3000);
