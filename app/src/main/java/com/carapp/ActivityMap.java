@@ -245,10 +245,10 @@ public class ActivityMap extends ComActivity implements OnMapReadyCallback , Ori
                             String timestamp = response.get( "timestamp" ).toString().trim();
 
                             String text = "" ;
-                            text += String.format(  "Lat     : %3.6f °", prettyAngle( latitude ) );
-                            text += String.format("   Lon    : %3.6f °", prettyAngle( longitude ) ) ;
+                            text += String.format(  "Lat     :  %3.6f °", prettyAngle( latitude ) );
+                            text += String.format("   Lon   : %3.6f °", prettyAngle( longitude ) ) ;
                             text += String.format("\nHead : %3.6f °", prettyAngle( heading ) ) ;
-                            text += String.format("   Alt     : %3.6f m", altitude ) ;
+                            text += String.format("   Alt    :  %3.6f m", altitude ) ;
 
                             log.setText( text );
 
