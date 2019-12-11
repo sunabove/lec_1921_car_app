@@ -20,7 +20,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".SplashActivity"
+        <activity android:name=".ActivitySplash"
             android:theme="@style/AppTheme.NoActionBar"
             >
             <intent-filter>
@@ -30,24 +30,24 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CarActivity"
+            android:name=".ActivityCompassCar"
             android:label="@string/title_activity_car"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"></activity>
 
         <activity
-            android:name=".GoogleMapActivity"
+            android:name=".ActivityMap"
             android:label="@string/title_activity_maps"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
 
         <activity
-            android:name=".CompassActivity"
+            android:name=".ActivityCompass"
             android:label="MyCar Compass"></activity>
 
         <activity
-            android:name=".VideoActivity"
+            android:name=".ActivityVideo"
             android:label="@string/title_activity_video"
-            android:parentActivityName=".CompassActivity"
+            android:parentActivityName=".ActivityCompass"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 

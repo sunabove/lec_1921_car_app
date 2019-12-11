@@ -22,7 +22,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class SplashActivity extends ComActivity {
+public class ActivitySplash extends ComActivity {
 
     private boolean activityAlive = false ;
     private boolean serverActive = false ;
@@ -183,9 +183,9 @@ public class SplashActivity extends ComActivity {
                             activityAlive = false ;
                             boolean test = false ;
                             if( ! test ) {
-                                startActivity(new android.content.Intent(SplashActivity.this, com.carapp.CarActivity.class));
+                                startActivity(new android.content.Intent(ActivitySplash.this, ActivityCompassCar.class));
                             } else {
-                                startActivity(new android.content.Intent(SplashActivity.this, com.carapp.GoogleMapActivity.class));
+                                startActivity(new android.content.Intent(ActivitySplash.this, ActivityMap.class));
                             }
                         }
                     }, 3000);

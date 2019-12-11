@@ -1,8 +1,6 @@
 package com.carapp;
 
 import android.content.pm.ActivityInfo;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.InputType;
@@ -11,23 +9,17 @@ import android.view.*;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.MediaController;
-import android.widget.VideoView;
 
-import androidx.core.content.ContextCompat;
 import androidx.core.text.HtmlCompat;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class CarActivity extends CompassActivity implements Orientation.Listener {
+public class ActivityCompassCar extends ActivityCompass implements Orientation.Listener {
 
     private WebView videoView ;
     private Button forward;
@@ -138,19 +130,19 @@ public class CarActivity extends CompassActivity implements Orientation.Listener
         // 지도 버튼을 클릭하면 지도 화면으로 이동한다.
         goToMap.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                startActivity(new android.content.Intent(CarActivity.this, com.carapp.GoogleMapActivity.class));
+                startActivity(new android.content.Intent(ActivityCompassCar.this, ActivityMap.class));
             }
         });
 
         this.compassDial.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                startActivity(new android.content.Intent(CarActivity.this, com.carapp.CompassActivity.class));
+                startActivity(new android.content.Intent(ActivityCompassCar.this, ActivityCompass.class));
             }
         });
 
         this.compassHands.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                startActivity(new android.content.Intent(CarActivity.this, com.carapp.CompassActivity.class));
+                startActivity(new android.content.Intent(ActivityCompassCar.this, ActivityCompass.class));
             }
         });
 
@@ -165,7 +157,7 @@ public class CarActivity extends CompassActivity implements Orientation.Listener
 
                 if (event.getAction()==MotionEvent.ACTION_UP){
                     Log.d( TAG, "VideoView Clicked.");
-                    startActivity(new android.content.Intent(CarActivity.this, com.carapp.VideoActivity.class));
+                    startActivity(new android.content.Intent(ActivityCompassCar.this, ActivityVideo.class));
                 }
 
                 return false;

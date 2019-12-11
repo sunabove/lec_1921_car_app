@@ -1,15 +1,12 @@
 package com.carapp;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
@@ -19,12 +16,10 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -53,10 +48,7 @@ import androidx.lifecycle.Lifecycle;
 
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-
-public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback , Orientation.Listener  {
+public class ActivityMap extends ComActivity implements OnMapReadyCallback , Orientation.Listener  {
 
     private GoogleMap map;
     private FusedLocationProviderClient fusedLocationClient;
@@ -144,7 +136,7 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
 
                 if (event.getAction()==MotionEvent.ACTION_UP){
                     Log.d( TAG, "VideoView Clicked.");
-                    startActivity(new android.content.Intent(GoogleMapActivity.this, com.carapp.VideoActivity.class));
+                    startActivity(new android.content.Intent(ActivityMap.this, ActivityVideo.class));
                 }
 
                 return false;
@@ -263,7 +255,7 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
 
                             if( true ) {
                                 LatLng latLng = new LatLng(latitude, longitude);
-                                GpsLog gpsLog = GoogleMapActivity.this.gpsLog ;
+                                GpsLog gpsLog = ActivityMap.this.gpsLog ;
 
                                 if( null == lastGpsLatLng ) {
                                     lastGpsLatLng = latLng;
@@ -343,7 +335,7 @@ public class GoogleMapActivity extends ComActivity implements OnMapReadyCallback
                             e.printStackTrace();
                         }
 
-                        if( GoogleMapActivity.this.getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
+                        if( ActivityMap.this.getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
                             getCarLocation(1_000);
                         }
                     }
