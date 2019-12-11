@@ -30,7 +30,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ActivityCompassCar"
+            android:name=".ActivityCar"
             android:label="@string/title_activity_car"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"></activity>

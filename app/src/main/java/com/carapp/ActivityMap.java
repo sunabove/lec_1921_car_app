@@ -136,7 +136,7 @@ public class ActivityMap extends ComActivity implements OnMapReadyCallback , Ori
 
                 if (event.getAction()==MotionEvent.ACTION_UP){
                     Log.d( TAG, "VideoView Clicked.");
-                    startActivity(new android.content.Intent(ActivityMap.this, ActivityVideo.class));
+                    whenVideoViewClicked();
                 }
 
                 return false;
@@ -167,17 +167,25 @@ public class ActivityMap extends ComActivity implements OnMapReadyCallback , Ori
         orientation.stopListening();
     }
 
-    public void whenVideoViewClickedOld() {
+    public void whenVideoViewClicked() {
         Log.d( TAG, "VideoView Clicked.");
+
+        boolean useActivity = false;
+        if( useActivity ) {
+            startActivity(new android.content.Intent(ActivityMap.this, ActivityVideo.class));
+            return ;
+        }
 
         final WebView videoView = this.videoView;
 
-        int w = videoView.getWidth() ;
         int sw = this.getScreenWidth() ;
         int sh = this.getScreenHeight() ;
 
+        int m = 4;
+        int w = videoView.getWidth() ;
+
         if( ! videoFullWidth ) {
-            w = ( sw - 8 ) ;
+            w = ( sw - 2*m ) ;
 
             status.setText( "동영상 화면을 최대로 확장합니다." );
         } else {
@@ -188,8 +196,8 @@ public class ActivityMap extends ComActivity implements OnMapReadyCallback , Ori
         int h = (int) ( w*3.0/4.0 );
 
         LayoutParams params = new LayoutParams(w, h);
-        params.bottomMargin = 4;
-        params.leftMargin = 4;
+        params.bottomMargin = m;
+        params.leftMargin = m;
         params.gravity = Gravity.LEFT | Gravity.BOTTOM ;
 
         videoView.setLayoutParams( params );
@@ -238,9 +246,9 @@ public class ActivityMap extends ComActivity implements OnMapReadyCallback , Ori
 
                             String text = "" ;
                             text += String.format(  "Lat     : %3.6f °", prettyAngle( latitude ) );
-                            text += String.format("\nLon    : %3.6f °", prettyAngle( longitude ) ) ;
+                            text += String.format("   Lon    : %3.6f °", prettyAngle( longitude ) ) ;
                             text += String.format("\nHead : %3.6f °", prettyAngle( heading ) ) ;
-                            text += String.format("\nAlt     : %3.6f m", altitude ) ;
+                            text += String.format("   Alt     : %3.6f m", altitude ) ;
 
                             log.setText( text );
 

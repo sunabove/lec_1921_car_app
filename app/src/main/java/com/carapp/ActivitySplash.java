@@ -183,7 +183,7 @@ public class ActivitySplash extends ComActivity {
                             activityAlive = false ;
                             boolean test = false ;
                             if( ! test ) {
-                                startActivity(new android.content.Intent(ActivitySplash.this, ActivityCompassCar.class));
+                                startActivity(new android.content.Intent(ActivitySplash.this, ActivityCar.class));
                             } else {
                                 startActivity(new android.content.Intent(ActivitySplash.this, ActivityMap.class));
                             }

@@ -19,7 +19,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class ActivityCompassCar extends ActivityCompass implements Orientation.Listener {
+public class ActivityCar extends ActivityCompass implements Orientation.Listener {
 
     private WebView videoView ;
     private Button forward;
@@ -130,19 +130,19 @@ public class ActivityCompassCar extends ActivityCompass implements Orientation.L
         // 지도 버튼을 클릭하면 지도 화면으로 이동한다.
         goToMap.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                startActivity(new android.content.Intent(ActivityCompassCar.this, ActivityMap.class));
+                startActivity(new android.content.Intent(ActivityCar.this, ActivityMap.class));
             }
         });
 
         this.compassDial.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                startActivity(new android.content.Intent(ActivityCompassCar.this, ActivityCompass.class));
+                startActivity(new android.content.Intent(ActivityCar.this, ActivityCompass.class));
             }
         });
 
         this.compassHands.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                startActivity(new android.content.Intent(ActivityCompassCar.this, ActivityCompass.class));
+                startActivity(new android.content.Intent(ActivityCar.this, ActivityCompass.class));
             }
         });
 
@@ -157,7 +157,7 @@ public class ActivityCompassCar extends ActivityCompass implements Orientation.L
 
                 if (event.getAction()==MotionEvent.ACTION_UP){
                     Log.d( TAG, "VideoView Clicked.");
-                    startActivity(new android.content.Intent(ActivityCompassCar.this, ActivityVideo.class));
+                    startActivity(new android.content.Intent(ActivityCar.this, ActivityVideo.class));
                 }
 
                 return false;
