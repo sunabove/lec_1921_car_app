@@ -110,7 +110,6 @@ public abstract class ComActivity extends AppCompatActivity implements ComInterf
         return degree ;
     }
 
-
     @Override
     protected void onPause() {
         super.onPause();

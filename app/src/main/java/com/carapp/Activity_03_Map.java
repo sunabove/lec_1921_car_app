@@ -229,11 +229,13 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
         }, delay );
     }
 
+    private int carLocCnt = 0 ;
     private void getCarLocationByHttpImpl( final long delay ) {
         String url = "http://10.3.141.1/send_me_curr_pos.json";
         final String tag = "car location" ;
 
-        Log.d( tag, "Getting car location by http...." );
+        carLocCnt += 1;
+        Log.d( tag, String.format("[%04d] Getting car location by http ...", carLocCnt ) );
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -249,6 +251,8 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+
                         Log.d( tag, "Error has occured" );
 
                         getCarLocationByHttp( 3*delay );
@@ -288,6 +292,8 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
 
             }
 
+            final String tag = "car location" ;
+
             if( true ) {
                 LatLng latLng = new LatLng(latitude, longitude);
                 GpsLog gpsLog = Activity_03_Map.this.gpsLog ;
@@ -296,7 +302,10 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
                     lastGpsLatLng = latLng;
                 } else if( null != lastGpsLatLng ){
                     float dists [] = getDistance( lastGpsLatLng, latLng );
-                    if( 0.01f > dists[0] ) {
+                    float dist = dists[ 0 ];
+
+                    if( 0.01f > dist ) {
+                        Log.d( tag , String.format("dist = %f", dists ) );
                         gpsLog.remove( gpsLog.size() -1 );
                         gpsLog.add( latLng );
                     } else {
