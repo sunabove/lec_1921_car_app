@@ -165,6 +165,8 @@ public class ActivityMap extends ComActivity implements OnMapReadyCallback , Ori
         super.onPause();
 
         orientation.stopListening();
+
+        this.stopPlayVideo();
     }
 
     public void whenVideoViewClicked() {

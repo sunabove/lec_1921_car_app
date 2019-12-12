@@ -52,4 +52,11 @@ public class ActivityVideo extends ComActivity {
         this.playVideo();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        this.stopPlayVideo();
+    }
+
 }

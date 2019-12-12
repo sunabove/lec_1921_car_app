@@ -165,6 +165,36 @@ public class ActivityCar extends ActivityCompass implements Orientation.Listener
         });
     }
 
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+
+        Log.v( TAG, "onResume");
+
+        this.hideActionBar();
+
+        this.orientation.startListening(this);
+
+        this.playVideo();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        orientation.stopListening();
+
+        this.stopPlayVideo();
+    }
+
+    @Override
+    public void onOrientationChanged(float pitch, float roll) {
+        attitudeIndicator.setAttitude(pitch, roll);
+
+        this.pitchRollUpdated( pitch, roll );
+    }
+
     public void paintUI() {
         if( motionEnabled )  {
             stop.setText( "STOP" );
@@ -230,34 +260,6 @@ public class ActivityCar extends ActivityCompass implements Orientation.Listener
                 paintUI();
             }
         }, 0);
-    }
-
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-
-        Log.v( TAG, "onResume");
-
-        this.hideActionBar();
-
-        this.orientation.startListening(this);
-
-        this.playVideo();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        orientation.stopListening();
-    }
-
-    @Override
-    public void onOrientationChanged(float pitch, float roll) {
-        attitudeIndicator.setAttitude(pitch, roll);
-
-        this.pitchRollUpdated( pitch, roll );
     }
 
     // pitch roll 값이 변했을 경우, 차를 제어한다.

@@ -197,6 +197,18 @@ public abstract class ComActivity extends AppCompatActivity implements ComInterf
         }
     }
 
+    // 동영상을 중지 한다.
+    protected void stopPlayVideo() {
+        super.onResume();
+
+        Log.v( TAG, "playVideo");
+
+        WebView videoView = this.findViewById(R.id.videoView);
+        if( null != videoView ) {
+            videoView.loadUrl("about:blank");
+        }
+    }
+
     public void hideActionBar() {
         // If the Android version is lower than Jellybean, use this call to hide
         // the status bar.
