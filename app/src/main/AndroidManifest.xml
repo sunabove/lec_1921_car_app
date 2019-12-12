@@ -48,7 +48,9 @@
         <activity
             android:name=".Activity_04_Video"
             android:label="@string/title_activity_video"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="landscape"
+            />
     </application>
 
 </manifest>

@@ -77,10 +77,12 @@ public class Activity_01_Splash extends ComActivity {
             }
         }
 
+        /*
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
 
         registerReceiver( new WifiReceiver(), intentFilter);
+        */
     }
 
     @Override
@@ -221,7 +223,9 @@ public class Activity_01_Splash extends ComActivity {
                             public void run() {
                                 activityAlive = false;
                                 boolean test = true;
-                                if (test) {
+                                if( test ) {
+                                    startActivity(new android.content.Intent(Activity_01_Splash.this, Activity_04_Video.class));
+                                } else if (test) {
                                     startActivity(new android.content.Intent(Activity_01_Splash.this, Activity_03_Map.class));
                                 } else {
                                     startActivity(new android.content.Intent(Activity_01_Splash.this, Activity_02_Car.class));

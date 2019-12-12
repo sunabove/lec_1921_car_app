@@ -27,10 +27,6 @@ public class Activity_04_Video extends ComActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.hideActionBar();
-
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-
         TextView status = findViewById(R.id.status);
 
         if( null != status ) {
@@ -43,11 +39,7 @@ public class Activity_04_Video extends ComActivity {
     {
         super.onResume();
 
-        this.hideActionBar();
-
         Log.v( TAG, "onResume");
-
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
         this.playVideo();
     }
@@ -56,7 +48,7 @@ public class Activity_04_Video extends ComActivity {
     protected void onPause() {
         super.onPause();
 
-        this.stopPlayVideo();
+        //this.stopPlayVideo();
     }
 
 }
