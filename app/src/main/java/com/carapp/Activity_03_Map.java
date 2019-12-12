@@ -304,8 +304,10 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
                     float dists [] = getDistance( lastGpsLatLng, latLng );
                     float dist = dists[ 0 ];
 
-                    if( 0.01f > dist ) {
-                        Log.d( tag , String.format("dist = %f", dists ) );
+                    Log.d( tag , String.format("dist is small = %f", dists ) );
+
+                    if( 0.1f > dist ) {
+                        Log.d( tag , String.format("dist is small = %f", dists ) );
                         gpsLog.remove( gpsLog.size() -1 );
                         gpsLog.add( latLng );
                     } else {
