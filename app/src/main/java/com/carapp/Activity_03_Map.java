@@ -300,21 +300,25 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
 
                 if( null == lastGpsLatLng ) {
                     lastGpsLatLng = latLng;
+
+                    gpsLog.add( latLng );
                 } else if( null != lastGpsLatLng ){
                     float dists [] = getDistance( lastGpsLatLng, latLng );
                     float dist = dists[ 0 ];
 
-                    Log.d( tag , String.format("dist is small = %f", dists ) );
+                    Log.d( tag , String.format("dist = %f", dist ) );
 
                     if( 0.1f > dist ) {
-                        Log.d( tag , String.format("dist is small = %f", dists ) );
-                        gpsLog.remove( gpsLog.size() -1 );
+                        Log.d( tag , String.format("dist is small = %f", dist ) );
+                        if( 0 < gpsLog.size() ) {
+                            gpsLog.remove(gpsLog.size() - 1);
+                        }
                         gpsLog.add( latLng );
                     } else {
                         gpsLog.add( latLng );
                     }
-                } else {
-                    gpsLog.add(latLng);
+
+                    lastGpsLatLng = latLng;
                 }
 
                 if( 1_000 < gpsLog.size() ) {
