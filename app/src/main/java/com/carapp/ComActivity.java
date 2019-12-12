@@ -281,21 +281,4 @@ public abstract class ComActivity extends AppCompatActivity implements ComInterf
         return angle ;
     }
 
-
-    public Socket getSocket() {
-        if( null != this.socket ) {
-            return this.socket ;
-        } else if( null == this.socket ) {
-            try {
-                this.socket = IO.socket("http://10.3.141.1");
-
-                return this.socket ;
-            } catch (Exception e) {
-                e.printStackTrace();
-                this.socket = null;
-            }
-        }
-
-        return this.socket ;
-    }
 }

@@ -1,6 +1,7 @@
 package com.carapp;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -9,6 +10,7 @@ import android.graphics.Point;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PowerManager;
 import android.provider.Settings;
 import android.text.InputType;
 import android.util.Log;
@@ -211,59 +213,15 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
     }
 
     private void getCarLocation( long delay ) {
-        this.getCarLocationBySocket();
+        this.getCarLocationByHttp( 500 );
     }
 
     private void getCarLocationBySocket() {
         //final Socket socket = this.getSocket();
 
-        this.socket = this.getSocket();
-
-        final Activity_03_Map activity = this;
-        final String tag = "socket" ;
-
-        if( null != socket ) {
-            socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
-                @Override
-                public void call(Object... args) {
-                    Log.d( tag, "socket connected");
-                    socket.emit("send_me_curr_pos", "hi");
-                    //socket.disconnect();
-                }
-
-            });
-
-            socket.on("send_me_curr_pos", new Emitter.Listener() {
-
-                @Override
-                public void call(Object... args) {
-                    int idx = 0 ;
-                    for( Object arg : args ) {
-                        Log.d( tag, String.format("[%03d] curr_pos args = %s", idx, "" + arg ) );
-                        idx += 1 ;
-                    }
-
-                    socket.emit("send_me_curr_pos", "hi");
-                }
-
-            });
-
-            socket.on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
-
-                @Override
-                public void call(Object... args) {
-                    activity.socket = null;
-
-                    Log.d( tag, "socket disconnected.");
-                }
-
-            });
-
-            if( ! socket.connected() ) {
-                socket.connect();
-            } else {
-            }
-        }
+        Intent intent = new Intent(this, SocketService.class);
+        intent.setAction( SocketService.ACTION_CURR_LOC );
+        startService(intent);
     }
 
     // 차량의 최근 위치를 반환한다.
