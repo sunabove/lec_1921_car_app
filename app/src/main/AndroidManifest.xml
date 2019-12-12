@@ -29,6 +29,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".ActivityCar"
             android:label="@string/title_activity_car"
@@ -42,12 +43,12 @@
 
         <activity
             android:name=".ActivityCompass"
-            android:label="MyCar Compass"></activity>
+            android:label="MyCar Compass"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
 
         <activity
             android:name=".ActivityVideo"
             android:label="@string/title_activity_video"
-            android:parentActivityName=".ActivityCompass"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 

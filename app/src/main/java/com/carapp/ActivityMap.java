@@ -172,7 +172,7 @@ public class ActivityMap extends ComActivity implements OnMapReadyCallback , Ori
     public void whenVideoViewClicked() {
         Log.d( TAG, "VideoView Clicked.");
 
-        boolean useActivity = false;
+        boolean useActivity = false ;
         if( useActivity ) {
             startActivity(new android.content.Intent(ActivityMap.this, ActivityVideo.class));
             return ;

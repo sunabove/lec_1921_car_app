@@ -161,7 +161,9 @@ public class ActivityCar extends ActivityCompass implements Orientation.Listener
 
                 if (event.getAction()==MotionEvent.ACTION_UP){
                     Log.d( TAG, "VideoView Clicked.");
-                    startActivity(new android.content.Intent(ActivityCar.this, ActivityVideo.class));
+                    if( false ) {
+                        startActivity(new android.content.Intent(ActivityCar.this, ActivityVideo.class));
+                    }
                 }
 
                 return false;
@@ -182,12 +184,7 @@ public class ActivityCar extends ActivityCompass implements Orientation.Listener
 
         this.playVideo();
 
-        try {
-            socket = IO.socket("http://10.3.141.1");
-        } catch ( Exception e ) {
-            e.printStackTrace();
-            socket = null ;
-        }
+        Socket socket = this.getSocket();
 
         if( null != socket ) {
             socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
@@ -204,8 +201,10 @@ public class ActivityCar extends ActivityCompass implements Orientation.Listener
 
                 @Override
                 public void call(Object... args) {
+                    int idx = 0 ;
                     for( Object arg : args ) {
-                        Log.d( TAG, "curr_pos args = " + arg );
+                        Log.d( TAG, String.format("[%03d] curr_pos args = %s", idx, "" + arg ) );
+                        idx += 1 ;
                     }
                 }
 
@@ -215,7 +214,7 @@ public class ActivityCar extends ActivityCompass implements Orientation.Listener
 
                 @Override
                 public void call(Object... args) {
-                    socket = null;
+                    ActivityCar.this.socket = null;
 
                     Log.d( TAG, "socket disconnected.");
                 }

@@ -201,7 +201,8 @@ public class ActivitySplash extends ComActivity {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Log.d(TAG, "run: postDelayerd");
+                    //Log.d(TAG, "run: postDelayerd");
+
                     error.setText(errorMessage);
 
                     wifi.setText(getWifiSsid());

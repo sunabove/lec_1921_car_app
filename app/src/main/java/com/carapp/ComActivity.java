@@ -116,6 +116,12 @@ public abstract class ComActivity extends AppCompatActivity implements ComInterf
         super.onPause();
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        finish();
+    }
+
     public <T extends View> T findViewById(@IdRes int id) {
         return (T) super.findViewById(id);
     }
@@ -261,5 +267,23 @@ public abstract class ComActivity extends AppCompatActivity implements ComInterf
         Location.distanceBetween( from.latitude, from.longitude, to.latitude, to.longitude, results );
 
         return results ;
+    }
+
+    public Socket getSocket() {
+        if( null != this.socket ) {
+            return this.socket ;
+        } else if( null == this.socket ) {
+            try {
+                Socket socket = IO.socket("http://10.3.141.1");
+                this.socket = socket ;
+
+                return this.socket ;
+            } catch (Exception e) {
+                e.printStackTrace();
+                this.socket = null;
+            }
+        }
+
+        return this.socket ;
     }
 }
