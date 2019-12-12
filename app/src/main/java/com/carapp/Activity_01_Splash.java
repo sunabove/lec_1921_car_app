@@ -33,6 +33,7 @@ public class Activity_01_Splash extends ComActivity {
     private TextView ipaddr ;
     private ImageView logo;
     private SeekBar seekBar ;
+    private ImageView wifiLogo;
 
     private String errorMessage = "" ;
 
@@ -58,6 +59,8 @@ public class Activity_01_Splash extends ComActivity {
 
         this.logo = this.findViewById(R.id.logo);
         this.seekBar = this.findViewById(R.id.seekBar);
+
+        this.wifiLogo = this.findViewById(R.id.wifiLogo);
 
         class WifiReceiver extends BroadcastReceiver {
 
@@ -209,6 +212,12 @@ public class Activity_01_Splash extends ComActivity {
 
                     wifi.setText(getWifiSsid());
                     ipaddr.setText(getIpAddr());
+
+                    if (isRaspberryWifiConnected()) {
+                        wifiLogo.setImageResource( R.drawable.wifi_good );
+                    } else {
+                        wifiLogo.setImageResource( R.drawable.wifi_bad );
+                    }
 
                     if (1 == mode) {
                         status.setTextColor(Color.parseColor("#009688"));

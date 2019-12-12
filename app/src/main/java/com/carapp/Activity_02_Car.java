@@ -157,7 +157,7 @@ public class Activity_02_Car extends Activity_05_Compass implements Orientation.
 
                 if (event.getAction()==MotionEvent.ACTION_UP){
                     Log.d( TAG, "VideoView Clicked.");
-                    if( false ) {
+                    if( true ) {
                         startActivity(new android.content.Intent(Activity_02_Car.this, Activity_04_Video.class));
                     }
                 }
