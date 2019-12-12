@@ -165,6 +165,13 @@ public class Activity_02_Car extends Activity_05_Compass implements Orientation.
                 return false;
             }
         });
+
+        this.videoView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                return false;
+            }
+        });
     }
 
     @Override

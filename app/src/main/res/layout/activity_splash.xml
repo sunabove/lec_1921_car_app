@@ -24,7 +24,7 @@
                 android:id="@+id/wifiLogo"
                 android:layout_width="40dp"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="4dp"
+                android:layout_marginRight="8dp"
                 android:scaleType="fitCenter"
                 app:srcCompat="@drawable/wifi_bad" />
 

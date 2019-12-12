@@ -84,6 +84,7 @@ public class Activity_05_Compass extends ComActivity {
         Animation an = new RotateAnimation(-currentAzimuth, -azimuth,
                 Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
                 0.5f);
+
         currentAzimuth = azimuth;
 
         an.setDuration(500);

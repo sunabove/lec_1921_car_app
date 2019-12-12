@@ -13,6 +13,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -107,6 +109,23 @@ public class Activity_01_Splash extends ComActivity {
         this.seekBar.setProgress( 0 );
 
         this.checkServer();
+    }
+
+    private void logoAnimation(final long duration ) {
+        // logo animation
+        int relative = Animation.RELATIVE_TO_SELF ;
+        TranslateAnimation animation = new TranslateAnimation(
+                relative, -0.3f,
+                relative, 0.3f,
+                relative, 0.0f,
+                relative, 0.0f);
+
+        animation.setDuration(duration);
+        animation.setRepeatCount(-1);
+        animation.setRepeatMode(Animation.RESTART);
+
+        this.logo.startAnimation(animation);
+        // -- logoanimation
     }
 
     public boolean isRaspberryWifiConnected() {
@@ -228,11 +247,16 @@ public class Activity_01_Splash extends ComActivity {
 
                         activityAlive = false;
 
+                        logoAnimation( 1_500 );
+
                         new Handler().postDelayed(new Runnable() {
                             public void run() {
                                 activityAlive = false;
+
                                 boolean test = false;
-                                if( test ) {
+                                if( false ) {
+                                    // do nothing
+                                } else if( test ) {
                                     startActivity(new android.content.Intent(Activity_01_Splash.this, Activity_04_Video.class));
                                 } else if (test) {
                                     startActivity(new android.content.Intent(Activity_01_Splash.this, Activity_03_Map.class));
