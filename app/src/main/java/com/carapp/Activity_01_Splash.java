@@ -188,7 +188,7 @@ public class Activity_01_Splash extends ComActivity {
 
                         errorMessage = e.getMessage();
 
-                        e.printStackTrace();
+                        //e.printStackTrace();
                     }
 
                     sleep( 5_000 );
@@ -220,11 +220,11 @@ public class Activity_01_Splash extends ComActivity {
                         new Handler().postDelayed(new Runnable() {
                             public void run() {
                                 activityAlive = false;
-                                boolean test = false;
-                                if (!test) {
-                                    startActivity(new android.content.Intent(Activity_01_Splash.this, Activity_02_Car.class));
-                                } else {
+                                boolean test = true;
+                                if (test) {
                                     startActivity(new android.content.Intent(Activity_01_Splash.this, Activity_03_Map.class));
+                                } else {
+                                    startActivity(new android.content.Intent(Activity_01_Splash.this, Activity_02_Car.class));
                                 }
                             }
                         }, 3000);

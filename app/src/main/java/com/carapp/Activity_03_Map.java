@@ -215,15 +215,18 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
     }
 
     private void getCarLocationBySocket() {
-        final Socket socket = this.getSocket();
+        //final Socket socket = this.getSocket();
+
+        this.socket = this.getSocket();
 
         final Activity_03_Map activity = this;
+        final String tag = "socket" ;
 
         if( null != socket ) {
             socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
-                    Log.d( TAG, "socket connected");
+                    Log.d( tag, "socket connected");
                     socket.emit("send_me_curr_pos", "hi");
                     //socket.disconnect();
                 }
@@ -236,9 +239,11 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
                 public void call(Object... args) {
                     int idx = 0 ;
                     for( Object arg : args ) {
-                        Log.d( TAG, String.format("[%03d] curr_pos args = %s", idx, "" + arg ) );
+                        Log.d( tag, String.format("[%03d] curr_pos args = %s", idx, "" + arg ) );
                         idx += 1 ;
                     }
+
+                    socket.emit("send_me_curr_pos", "hi");
                 }
 
             });
@@ -249,7 +254,7 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
                 public void call(Object... args) {
                     activity.socket = null;
 
-                    Log.d( TAG, "socket disconnected.");
+                    Log.d( tag, "socket disconnected.");
                 }
 
             });
@@ -257,7 +262,6 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
             if( ! socket.connected() ) {
                 socket.connect();
             } else {
-
             }
         }
     }
@@ -271,18 +275,6 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
                 getCarLocationByHttpImpl();
             }
         }, delay );
-    }
-
-    public double prettyAngle( double angleDegDecimal ) {
-        double angle = angleDegDecimal %360 ;
-
-        int ang = (int) angle ;
-        double deg = angle - ang ;
-        deg = 60*deg;
-
-        angle = angle + deg ;
-
-        return angle ;
     }
 
     private void getCarLocationByHttpImpl() {

@@ -269,13 +269,25 @@ public abstract class ComActivity extends AppCompatActivity implements ComInterf
         return results ;
     }
 
+    public double prettyAngle( double angleDegDecimal ) {
+        double angle = angleDegDecimal %360 ;
+
+        int ang = (int) angle ;
+        double deg = angle - ang ;
+        deg = 60*deg;
+
+        angle = angle + deg ;
+
+        return angle ;
+    }
+
+
     public Socket getSocket() {
         if( null != this.socket ) {
             return this.socket ;
         } else if( null == this.socket ) {
             try {
-                Socket socket = IO.socket("http://10.3.141.1");
-                this.socket = socket ;
+                this.socket = IO.socket("http://10.3.141.1");
 
                 return this.socket ;
             } catch (Exception e) {
