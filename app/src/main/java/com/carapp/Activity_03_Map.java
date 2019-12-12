@@ -160,7 +160,7 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
 
         this.playVideo();
 
-        this.getCarLocation( 200 );
+        this.getCarLocationByHttp( 500 );
 
         this.orientation.startListening(this);
     }
@@ -212,31 +212,26 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
         videoFullWidth = ! videoFullWidth ;
     }
 
-    private void getCarLocation( long delay ) {
-        this.getCarLocationByHttp( 500 );
-    }
-
     private void getCarLocationBySocket() {
-        //final Socket socket = this.getSocket();
-
         Intent intent = new Intent(this, SocketService.class);
         intent.setAction( SocketService.ACTION_CURR_LOC );
         startService(intent);
     }
 
     // 차량의 최근 위치를 반환한다.
-    private void getCarLocationByHttp( long delay ) {
-        final Handler handler = new Handler();
+    private void getCarLocationByHttp( final long delay ) {
+        final Handler handler = new Handler() ;
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                getCarLocationByHttpImpl();
+                getCarLocationByHttpImpl( delay );
             }
         }, delay );
     }
 
-    private void getCarLocationByHttpImpl() {
+    private void getCarLocationByHttpImpl( final long delay ) {
         String url = "http://10.3.141.1/send_me_curr_pos.json";
+        final String tag = TAG ;
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -246,7 +241,7 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
                         setCarLocationByJsonString( response );
 
                         if( Activity_03_Map.this.getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
-                            getCarLocation(1_000);
+                            getCarLocationByHttp( delay );
                         }
                     }
 
@@ -254,7 +249,9 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        getCarLocation( 3_000 );
+                        Log.d( tag, "Error has occured" );
+
+                        getCarLocationByHttp( 3*delay );
                     }
                 });
 
