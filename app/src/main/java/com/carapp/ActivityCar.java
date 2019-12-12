@@ -19,6 +19,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import io.socket.client.IO;
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
+
 public class ActivityCar extends ActivityCompass implements Orientation.Listener {
 
     private WebView videoView ;
@@ -177,6 +181,37 @@ public class ActivityCar extends ActivityCompass implements Orientation.Listener
         this.orientation.startListening(this);
 
         this.playVideo();
+
+        try {
+            socket = IO.socket("http://localhost");
+        } catch ( Exception e ) {
+            e.printStackTrace();
+            socket = null ;
+        }
+
+        if( null != socket ) {
+            socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    socket.emit("foo", "hi");
+                    socket.disconnect();
+                }
+
+            }).on("event", new Emitter.Listener() {
+
+                @Override
+                public void call(Object... args) {
+                }
+
+            }).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
+
+                @Override
+                public void call(Object... args) {
+                }
+
+            });
+            socket.connect();
+        }
     }
 
     @Override

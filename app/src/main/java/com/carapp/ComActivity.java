@@ -48,11 +48,6 @@ import io.socket.emitter.Emitter;
 
 public abstract class ComActivity extends AppCompatActivity implements ComInterface {
 
-    private FloatingActionButton goBack ;
-
-    protected RequestQueue requestQueue ;
-    protected boolean motionEnabled = false ;
-
     protected static final int gray = Color.parseColor("#d3d3d3") ;
     protected static final int yellow = Color.parseColor("#ffff00") ;
     protected static final int green = Color.parseColor("#00FF00") ;
@@ -66,6 +61,13 @@ public abstract class ComActivity extends AppCompatActivity implements ComInterf
         public static final String RIGHT = "RIGHT" ;
         public static final String STOP = "STOP" ;
     }
+
+    protected RequestQueue requestQueue ;
+    protected boolean motionEnabled = false ;
+
+    protected Socket socket = null;
+
+    private FloatingActionButton goBack ;
 
     public abstract int getLayoutId() ;
 
