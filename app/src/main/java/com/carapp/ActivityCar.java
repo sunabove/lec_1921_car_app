@@ -183,7 +183,7 @@ public class ActivityCar extends ActivityCompass implements Orientation.Listener
         this.playVideo();
 
         try {
-            socket = IO.socket("http://localhost");
+            socket = IO.socket("http://10.3.141.1");
         } catch ( Exception e ) {
             e.printStackTrace();
             socket = null ;
@@ -193,23 +193,35 @@ public class ActivityCar extends ActivityCompass implements Orientation.Listener
             socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
-                    socket.emit("foo", "hi");
-                    socket.disconnect();
-                }
-
-            }).on("event", new Emitter.Listener() {
-
-                @Override
-                public void call(Object... args) {
-                }
-
-            }).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
-
-                @Override
-                public void call(Object... args) {
+                    Log.d( TAG, "socket connected");
+                    //socket.emit("send_me_curr_pos", "hi");
+                    //socket.disconnect();
                 }
 
             });
+
+            socket.on("send_me_curr_pos", new Emitter.Listener() {
+
+                @Override
+                public void call(Object... args) {
+                    for( Object arg : args ) {
+                        Log.d( TAG, "curr_pos args = " + arg );
+                    }
+                }
+
+            });
+
+            socket.on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
+
+                @Override
+                public void call(Object... args) {
+                    socket = null;
+
+                    Log.d( TAG, "socket disconnected.");
+                }
+
+            });
+
             socket.connect();
         }
     }
