@@ -121,8 +121,8 @@ public class Activity_01_Splash extends ComActivity {
                 relative, 0.0f);
 
         animation.setDuration(duration);
-        animation.setRepeatCount(-1);
-        animation.setRepeatMode(Animation.RESTART);
+        animation.setRepeatCount( 1 );
+        //animation.setRepeatMode(Animation.RESTART);
 
         this.logo.startAnimation(animation);
         // -- logoanimation
