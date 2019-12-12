@@ -23,7 +23,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class ActivitySplash extends ComActivity {
+public class Activity_01_Splash extends ComActivity {
 
     private boolean activityAlive = false ;
     private boolean serverActive = false ;
@@ -123,7 +123,7 @@ public class ActivitySplash extends ComActivity {
             final Handler handler = new Handler();
 
             handler.postDelayed( new Runnable() {
-                SeekBar seekBar = ActivitySplash.this.seekBar ;
+                SeekBar seekBar = Activity_01_Splash.this.seekBar ;
                 int dir = 1 ;
 
                 public void run() {
@@ -222,9 +222,9 @@ public class ActivitySplash extends ComActivity {
                                 activityAlive = false;
                                 boolean test = false;
                                 if (!test) {
-                                    startActivity(new android.content.Intent(ActivitySplash.this, ActivityCar.class));
+                                    startActivity(new android.content.Intent(Activity_01_Splash.this, Activity_02_Car.class));
                                 } else {
-                                    startActivity(new android.content.Intent(ActivitySplash.this, ActivityMap.class));
+                                    startActivity(new android.content.Intent(Activity_01_Splash.this, Activity_03_Map.class));
                                 }
                             }
                         }, 3000);

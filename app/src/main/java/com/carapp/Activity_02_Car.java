@@ -19,11 +19,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import io.socket.client.IO;
-import io.socket.client.Socket;
-import io.socket.emitter.Emitter;
-
-public class ActivityCar extends ActivityCompass implements Orientation.Listener {
+public class Activity_02_Car extends Activity_05_Compass implements Orientation.Listener {
 
     private WebView videoView ;
     private Button forward;
@@ -134,19 +130,19 @@ public class ActivityCar extends ActivityCompass implements Orientation.Listener
         // 지도 버튼을 클릭하면 지도 화면으로 이동한다.
         goToMap.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                startActivity(new android.content.Intent(ActivityCar.this, ActivityMap.class));
+                startActivity(new android.content.Intent(Activity_02_Car.this, Activity_03_Map.class));
             }
         });
 
         this.compassDial.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                startActivity(new android.content.Intent(ActivityCar.this, ActivityCompass.class));
+                startActivity(new android.content.Intent(Activity_02_Car.this, Activity_05_Compass.class));
             }
         });
 
         this.compassHands.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                startActivity(new android.content.Intent(ActivityCar.this, ActivityCompass.class));
+                startActivity(new android.content.Intent(Activity_02_Car.this, Activity_05_Compass.class));
             }
         });
 
@@ -162,7 +158,7 @@ public class ActivityCar extends ActivityCompass implements Orientation.Listener
                 if (event.getAction()==MotionEvent.ACTION_UP){
                     Log.d( TAG, "VideoView Clicked.");
                     if( false ) {
-                        startActivity(new android.content.Intent(ActivityCar.this, ActivityVideo.class));
+                        startActivity(new android.content.Intent(Activity_02_Car.this, Activity_04_Video.class));
                     }
                 }
 
@@ -183,46 +179,6 @@ public class ActivityCar extends ActivityCompass implements Orientation.Listener
         this.orientation.startListening(this);
 
         this.playVideo();
-
-        Socket socket = this.getSocket();
-
-        if( null != socket ) {
-            socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
-                @Override
-                public void call(Object... args) {
-                    Log.d( TAG, "socket connected");
-                    //socket.emit("send_me_curr_pos", "hi");
-                    //socket.disconnect();
-                }
-
-            });
-
-            socket.on("send_me_curr_pos", new Emitter.Listener() {
-
-                @Override
-                public void call(Object... args) {
-                    int idx = 0 ;
-                    for( Object arg : args ) {
-                        Log.d( TAG, String.format("[%03d] curr_pos args = %s", idx, "" + arg ) );
-                        idx += 1 ;
-                    }
-                }
-
-            });
-
-            socket.on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
-
-                @Override
-                public void call(Object... args) {
-                    ActivityCar.this.socket = null;
-
-                    Log.d( TAG, "socket disconnected.");
-                }
-
-            });
-
-            socket.connect();
-        }
     }
 
     @Override

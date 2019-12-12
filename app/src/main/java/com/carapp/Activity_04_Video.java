@@ -16,7 +16,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-public class ActivityVideo extends ComActivity {
+public class Activity_04_Video extends ComActivity {
 
     @Override
     public int getLayoutId() {

@@ -48,7 +48,10 @@ import androidx.lifecycle.Lifecycle;
 
 import org.json.JSONObject;
 
-public class ActivityMap extends ComActivity implements OnMapReadyCallback , Orientation.Listener  {
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
+
+public class Activity_03_Map extends ComActivity implements OnMapReadyCallback , Orientation.Listener  {
 
     private GoogleMap map;
     private FusedLocationProviderClient fusedLocationClient;
@@ -174,7 +177,7 @@ public class ActivityMap extends ComActivity implements OnMapReadyCallback , Ori
 
         boolean useActivity = false ;
         if( useActivity ) {
-            startActivity(new android.content.Intent(ActivityMap.this, ActivityVideo.class));
+            startActivity(new android.content.Intent(Activity_03_Map.this, Activity_04_Video.class));
             return ;
         }
 
@@ -207,13 +210,65 @@ public class ActivityMap extends ComActivity implements OnMapReadyCallback , Ori
         videoFullWidth = ! videoFullWidth ;
     }
 
-    // 차량의 최근 위치를 반환한다.
     private void getCarLocation( long delay ) {
+        this.getCarLocationBySocket();
+    }
+
+    private void getCarLocationBySocket() {
+        final Socket socket = this.getSocket();
+
+        final Activity_03_Map activity = this;
+
+        if( null != socket ) {
+            socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    Log.d( TAG, "socket connected");
+                    socket.emit("send_me_curr_pos", "hi");
+                    //socket.disconnect();
+                }
+
+            });
+
+            socket.on("send_me_curr_pos", new Emitter.Listener() {
+
+                @Override
+                public void call(Object... args) {
+                    int idx = 0 ;
+                    for( Object arg : args ) {
+                        Log.d( TAG, String.format("[%03d] curr_pos args = %s", idx, "" + arg ) );
+                        idx += 1 ;
+                    }
+                }
+
+            });
+
+            socket.on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
+
+                @Override
+                public void call(Object... args) {
+                    activity.socket = null;
+
+                    Log.d( TAG, "socket disconnected.");
+                }
+
+            });
+
+            if( ! socket.connected() ) {
+                socket.connect();
+            } else {
+
+            }
+        }
+    }
+
+    // 차량의 최근 위치를 반환한다.
+    private void getCarLocationByHttp( long delay ) {
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                getCarLocationImpl();
+                getCarLocationByHttpImpl();
             }
         }, delay );
     }
@@ -230,7 +285,7 @@ public class ActivityMap extends ComActivity implements OnMapReadyCallback , Ori
         return angle ;
     }
 
-    private void getCarLocationImpl() {
+    private void getCarLocationByHttpImpl() {
         String url = "http://10.3.141.1/send_me_curr_pos.json";
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -238,114 +293,9 @@ public class ActivityMap extends ComActivity implements OnMapReadyCallback , Ori
 
                     @Override
                     public void onResponse(JSONObject response) {
+                        setCarLocationByJsonString( response );
 
-                        try {
-                            double latitude = Double.parseDouble(response.get("latitude").toString().trim());
-                            double longitude = Double.parseDouble(response.get("longitude").toString().trim());
-                            double heading = Double.parseDouble(response.get("heading").toString().trim());
-                            double altitude = Double.parseDouble(response.get("altitude").toString().trim());
-                            String timestamp = response.get( "timestamp" ).toString().trim();
-
-                            String text = "" ;
-                            text += String.format(  "Lat     :  %3.6f °", prettyAngle( latitude ) );
-                            text += String.format("   Lon   : %3.6f °", prettyAngle( longitude ) ) ;
-                            text += String.format("\nHead : %3.6f °", prettyAngle( heading ) ) ;
-                            text += String.format("   Alt    :  %3.6f m", altitude ) ;
-
-                            log.setText( text );
-
-                            if( null != currCarMarker ) {
-                                currCarMarker.remove();
-                            }
-
-                            if( null !=gpsPath ) {
-                                gpsPath.remove();
-
-                            }
-
-                            if( true ) {
-                                LatLng latLng = new LatLng(latitude, longitude);
-                                GpsLog gpsLog = ActivityMap.this.gpsLog ;
-
-                                if( null == lastGpsLatLng ) {
-                                    lastGpsLatLng = latLng;
-                                } else if( null != lastGpsLatLng ){
-                                    float dists [] = getDistance( lastGpsLatLng, latLng );
-                                    if( 0.01f > dists[0] ) {
-                                        gpsLog.remove( gpsLog.size() -1 );
-                                        gpsLog.add( latLng );
-                                    } else {
-                                        gpsLog.add( latLng );
-                                    }
-                                } else {
-                                    gpsLog.add(latLng);
-                                }
-
-                                if( 1_000 < gpsLog.size() ) {
-                                    while( 1_000 < gpsLog.size() ) {
-                                        gpsLog.remove( 0 );
-                                    }
-                                }
-
-                                PolylineOptions polyOptions = new PolylineOptions().width( 10 ).color(Color.BLUE).geodesic(true);
-                                for( LatLng log : gpsLog ) {
-                                    polyOptions.add( log );
-                                }
-                                gpsPath = map.addPolyline( polyOptions );
-                            }
-
-                            if( true ){
-                                currMarkerUpdCnt += 1 ;
-
-                                LatLng latLng = new LatLng(latitude, longitude);
-                                MarkerOptions markerOptions = new MarkerOptions();
-                                markerOptions.position(latLng);
-                                markerOptions.title(String.format("현재 차량 위치 [%04d]", currMarkerUpdCnt ));
-
-                                currCarMarker = map.addMarker(markerOptions);
-
-                                currCarMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.car_map_icon_02));
-
-                                if( 1 > gpsLog.size() ) {
-                                    currCarMarker.setRotation( (float) heading );
-                                } else {
-                                    double gpsHeading = gpsLog.getHeading( heading );
-
-                                    currCarMarker.setRotation( (float) gpsHeading );
-
-                                    Log.d( "heading" , "heading = " + gpsHeading );
-                                }
-
-                                //currCarMarker.showInfoWindow();
-
-                                Projection projection = map.getProjection();
-                                Point scrPos = projection.toScreenLocation(currCarMarker.getPosition());
-
-                                double x = scrPos.x;
-                                double y = scrPos.y;
-
-                                int sw = getScreenWidth();
-                                int sh = getScreenHeight();
-
-                                double xr = Math.abs( sw/2.0 - x )/sw ;
-                                double yr = Math.abs( sh/2.0 - y )/sh ;
-
-                                if( false ) {
-                                    Log.d("screen range", "xr = " + xr);
-                                    Log.d("screen range", "yr = " + yr);
-                                }
-
-                                if( 0.35 < xr || 0.4 < yr ) {
-                                    map.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-                                }
-
-                            }
-
-                        } catch ( Exception e ) {
-                            e.printStackTrace();
-                        }
-
-                        if( ActivityMap.this.getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
+                        if( Activity_03_Map.this.getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
                             getCarLocation(1_000);
                         }
                     }
@@ -359,6 +309,119 @@ public class ActivityMap extends ComActivity implements OnMapReadyCallback , Ori
                 });
 
         this.requestQueue.add( jsonObjectRequest );
+    }
+
+    private void setCarLocationByJsonString( Object obj ) {
+        try {
+            JSONObject response = null ;
+            if( obj instanceof JSONObject ) {
+                response = (JSONObject) obj ;
+            }
+
+            double latitude = Double.parseDouble(response.get("latitude").toString().trim());
+            double longitude = Double.parseDouble(response.get("longitude").toString().trim());
+            double heading = Double.parseDouble(response.get("heading").toString().trim());
+            double altitude = Double.parseDouble(response.get("altitude").toString().trim());
+            String timestamp = response.get( "timestamp" ).toString().trim();
+
+            String text = "" ;
+            text += String.format(  "Lat     :  %3.6f °", prettyAngle( latitude ) );
+            text += String.format("   Lon   : %3.6f °", prettyAngle( longitude ) ) ;
+            text += String.format("\nHead : %3.6f °", prettyAngle( heading ) ) ;
+            text += String.format("   Alt    :  %3.6f m", altitude ) ;
+
+            log.setText( text );
+
+            if( null != currCarMarker ) {
+                currCarMarker.remove();
+            }
+
+            if( null !=gpsPath ) {
+                gpsPath.remove();
+
+            }
+
+            if( true ) {
+                LatLng latLng = new LatLng(latitude, longitude);
+                GpsLog gpsLog = Activity_03_Map.this.gpsLog ;
+
+                if( null == lastGpsLatLng ) {
+                    lastGpsLatLng = latLng;
+                } else if( null != lastGpsLatLng ){
+                    float dists [] = getDistance( lastGpsLatLng, latLng );
+                    if( 0.01f > dists[0] ) {
+                        gpsLog.remove( gpsLog.size() -1 );
+                        gpsLog.add( latLng );
+                    } else {
+                        gpsLog.add( latLng );
+                    }
+                } else {
+                    gpsLog.add(latLng);
+                }
+
+                if( 1_000 < gpsLog.size() ) {
+                    while( 1_000 < gpsLog.size() ) {
+                        gpsLog.remove( 0 );
+                    }
+                }
+
+                PolylineOptions polyOptions = new PolylineOptions().width( 10 ).color(Color.BLUE).geodesic(true);
+                for( LatLng log : gpsLog ) {
+                    polyOptions.add( log );
+                }
+                gpsPath = map.addPolyline( polyOptions );
+            }
+
+            if( true ){
+                currMarkerUpdCnt += 1 ;
+
+                LatLng latLng = new LatLng(latitude, longitude);
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(latLng);
+                markerOptions.title(String.format("현재 차량 위치 [%04d]", currMarkerUpdCnt ));
+
+                currCarMarker = map.addMarker(markerOptions);
+
+                currCarMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.car_map_icon_02));
+
+                if( 1 > gpsLog.size() ) {
+                    currCarMarker.setRotation( (float) heading );
+                } else {
+                    double gpsHeading = gpsLog.getHeading( heading );
+
+                    currCarMarker.setRotation( (float) gpsHeading );
+
+                    Log.d( "heading" , "heading = " + gpsHeading );
+                }
+
+                //currCarMarker.showInfoWindow();
+
+                Projection projection = map.getProjection();
+                Point scrPos = projection.toScreenLocation(currCarMarker.getPosition());
+
+                double x = scrPos.x;
+                double y = scrPos.y;
+
+                int sw = getScreenWidth();
+                int sh = getScreenHeight();
+
+                double xr = Math.abs( sw/2.0 - x )/sw ;
+                double yr = Math.abs( sh/2.0 - y )/sh ;
+
+                if( false ) {
+                    Log.d("screen range", "xr = " + xr);
+                    Log.d("screen range", "yr = " + yr);
+                }
+
+                if( 0.35 < xr || 0.4 < yr ) {
+                    map.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+                }
+
+            }
+
+        } catch ( Exception e ) {
+            e.printStackTrace();
+        }
     }
 
     // 핸드폰의 최근 위치를 반환한다.

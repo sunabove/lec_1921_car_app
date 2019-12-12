@@ -8,7 +8,7 @@
     android:gravity="center_horizontal|center_vertical"
     android:orientation="vertical"
     android:padding="10dp"
-    tools:context=".ActivitySplash">
+    tools:context=".Activity_01_Splash">
 
     <TableRow
         android:layout_width="match_parent"

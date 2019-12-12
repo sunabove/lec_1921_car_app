@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class ActivityCompass extends ComActivity {
+public class Activity_05_Compass extends ComActivity {
 
     private Compass compass;
     private ImageView arrowView;

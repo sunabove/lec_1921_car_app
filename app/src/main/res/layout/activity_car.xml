@@ -8,7 +8,7 @@
     android:gravity="center_horizontal|center_vertical"
     android:orientation="vertical"
     android:padding="10dp"
-    tools:context=".ActivityCar">
+    tools:context=".Activity_02_Car">
 
     <TableLayout
         android:layout_width="fill_parent"
