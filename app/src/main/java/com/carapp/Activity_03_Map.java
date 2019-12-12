@@ -231,7 +231,9 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
 
     private void getCarLocationByHttpImpl( final long delay ) {
         String url = "http://10.3.141.1/send_me_curr_pos.json";
-        final String tag = TAG ;
+        final String tag = "car location" ;
+
+        Log.d( tag, "Getting car location by http...." );
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -244,8 +246,6 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
                             getCarLocationByHttp( delay );
                         }
                     }
-
-
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
