@@ -222,7 +222,7 @@ public class Activity_01_Splash extends ComActivity {
                         new Handler().postDelayed(new Runnable() {
                             public void run() {
                                 activityAlive = false;
-                                boolean test = true;
+                                boolean test = false;
                                 if( test ) {
                                     startActivity(new android.content.Intent(Activity_01_Splash.this, Activity_04_Video.class));
                                 } else if (test) {
@@ -260,6 +260,5 @@ public class Activity_01_Splash extends ComActivity {
             }, 2_000);
         }
     }
-
 
 }

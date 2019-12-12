@@ -118,7 +118,6 @@ public abstract class ComActivity extends AppCompatActivity implements ComInterf
     @Override
     protected void onStop() {
         super.onStop();
-        finish();
     }
 
     public <T extends View> T findViewById(@IdRes int id) {
