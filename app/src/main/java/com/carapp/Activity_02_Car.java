@@ -173,21 +173,43 @@ public class Activity_02_Car extends Activity_05_Compass implements Orientation.
         this.pitchRollUpdated( pitch, roll );
     }
 
-    private void logoAnimation(final long duration ) {
+    public void paintUI() {
+        if( motionEnabled )  {
+            stop.setText( "STOP" );
+            this.carAni.setImageResource(R.drawable.car_top_01_move);
+        } else {
+            stop.setText( "START" );
+            this.carAni.setImageResource(R.drawable.car_top_03_stop);
+        }
+
+        String currMotion = this.currMotion ;
+
+        this.animateCarAdvance( 1 );
+    }
+    // -- paintUI
+
+    private Animation carAnimation = null ;
+
+    private void animateCarAdvance( int dir ) {
+        if( null != this.carAnimation ) {
+            this.carAni.clearAnimation();
+        }
+
         // logo animation
         int relative = Animation.RELATIVE_TO_SELF ;
-        TranslateAnimation animation = new TranslateAnimation(
-                relative, -0.3f,
-                relative, 0.3f,
+        Animation animation = new TranslateAnimation(
                 relative, 0.0f,
-                relative, 0.0f);
+                relative, 0.0f,
+                relative, 0.3f,
+                relative, -0.0f);
 
-        animation.setDuration(duration);
+        animation.setDuration( 2_000 );
         animation.setRepeatCount( 1 );
-        //animation.setRepeatMode(Animation.RESTART);
+        animation.setRepeatMode(Animation.RESTART);
 
-        //this.logo.startAnimation(animation);
-        // -- logoanimation
+        this.carAni.startAnimation( animation );
+
+        this.carAnimation = animation ;
     }
 
     private void adjustArrow(float azimuth) {
@@ -207,19 +229,6 @@ public class Activity_02_Car extends Activity_05_Compass implements Orientation.
 
         //arrowView.startAnimation(an);
     }
-
-    public void paintUI() {
-        if( motionEnabled )  {
-            stop.setText( "STOP" );
-            this.carAni.setImageResource(R.drawable.car_top_01_move);
-        } else {
-            stop.setText( "START" );
-            this.carAni.setImageResource(R.drawable.car_top_03_stop);
-        }
-
-        String currMotion = this.currMotion ;
-    }
-    // -- paintUI
 
     public void moveCar(final String motion, final EditText status ) {
         this.currMotion = motion ;
