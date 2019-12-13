@@ -57,9 +57,13 @@ public abstract class ComActivity extends AppCompatActivity implements ComInterf
     protected static class Motion {
         public static final String FORWARD = "FORWARD" ;
         public static final String BACKWARD = "BACKWARD" ;
+
         public static final String LEFT = "LEFT" ;
         public static final String RIGHT = "RIGHT" ;
+
         public static final String STOP = "STOP" ;
+
+        public static final String AUTOPILOT = "AUTOPILOT" ;
     }
 
     protected RequestQueue requestQueue ;

@@ -215,6 +215,8 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
 
                     stop.setImageResource( R.drawable.start_btn_icon);
 
+                    status.setText( "화면을 터치하여 목적지를 설정하세요." );
+
                     Toast.makeText( getApplicationContext(),"화면을 터치하여 목적지를 설정하세요.",Toast.LENGTH_SHORT).show();
                 } else {
                     this.animateCarAutoPilot();
@@ -222,11 +224,17 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
                     stop.setImageResource( R.drawable.stop_btn_icon);
 
                     Toast.makeText( getApplicationContext(),"자율 주행을 시작합니다.",Toast.LENGTH_SHORT).show();
+
+                    status.setText( "자율 주행을 시작합니다." );
+
+                    moveCar( Motion.AUTOPILOT, status, 0, 0, pathEnd.getPosition() );
                 }
             } else {
                 carAni.setImageResource(R.drawable.car_top_01_move);
 
                 stop.setImageResource( R.drawable.stop_btn_icon);
+
+                status.setText( "수동 주행" );
 
                 Toast.makeText( getApplicationContext(),"차량 수동 주행을 시작합니다.",Toast.LENGTH_SHORT).show();
             }
@@ -253,6 +261,7 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    status.setText( "화면을 터치하여 목적지를 설정하세요." );
                     Toast.makeText( getApplicationContext(),"화면을 터치하여 목적지를 설정하세요.",Toast.LENGTH_SHORT).show();
                 }
             }, 1_200 );
@@ -350,6 +359,9 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
         polyOptions.pattern( pattern );
 
         autoPilotPath = map.addPolyline( polyOptions );
+
+        Toast.makeText( getApplicationContext(),"목적지가 설정되었습니다.",Toast.LENGTH_SHORT).show();
+
         // -- 출발지 -> 도착지 경로 표시
 
     }
@@ -707,6 +719,10 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
     }
 
     public void moveCar(final String motion, final EditText status, double pitchDeg, double rollDeg ) {
+        this.moveCar( motion, status, pitchDeg, rollDeg, null);
+    }
+
+    public void moveCar(final String motion, final EditText status, double pitchDeg, double rollDeg, LatLng latLng ) {
         pitchDeg = pitchDeg % 360;
         rollDeg = rollDeg % 360;
 
@@ -741,6 +757,11 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
         this.motionCurr = motion ;
 
         String url = String.format("http://10.3.141.1/car_drive.json?motion=%s&pitchDeg=%f&rollDeg=%f", motion, pitchDeg, rollDeg);
+
+        if( null != latLng ) {
+            url += "&lat=" + latLng.latitude ;
+            url += "&lon=" + latLng.longitude ;
+        }
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
