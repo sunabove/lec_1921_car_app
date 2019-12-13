@@ -42,6 +42,8 @@ import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Dash;
+import com.google.android.gms.maps.model.Dot;
+import com.google.android.gms.maps.model.Gap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -58,6 +60,7 @@ import androidx.lifecycle.Lifecycle;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import io.socket.client.Socket;
@@ -98,7 +101,12 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
 
     private boolean videoFullWidth = false ;
 
+    // auto pilot
+    private Marker pathStart ;
+    private Marker pathEnd ;
+    private Polyline autoPilotPath ;
     private boolean isAutopilot = false;
+    // -- auto pilot
 
     public int getLayoutId() {
         return R.layout.activity_maps;
@@ -210,10 +218,6 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
         this.stopPlayVideo();
     }
 
-    private Marker pathStart ;
-    private Marker pathEnd ;
-    private Polyline autoPilotPath ;
-
     private void whenAutopilotClicked( View v ){
         isAutopilot = ! isAutopilot ;
 
@@ -289,6 +293,13 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
             autoPilotPath.remove();
         }
 
+        // clear gps log
+        this.gpsLog = new GpsLog();
+
+        if( null != gpsPath ) {
+            gpsPath.remove();
+        }
+
         // 도착 지점 추가
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
@@ -305,16 +316,14 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
         // -- 도착 지점 추가
 
         // 출발지 -> 도착지 경로 표시
-        int PATTERN_DASH_LENGTH_PX = 20;
-        PatternItem dash = new Dash(PATTERN_DASH_LENGTH_PX);
 
-        List<PatternItem> patternList = new ArrayList<>();
-        patternList.add( dash );
+        List<PatternItem> pattern = Arrays.<PatternItem>asList(new Dash(20), new Gap(10) );
+        //List<PatternItem> pattern = Arrays.<PatternItem>asList(new Dot(), new Gap(20), new Dash(30), new Gap(20));
 
         PolylineOptions polyOptions = new PolylineOptions().width( 20 ).color(Color.GREEN).geodesic(true);
         polyOptions.add( pathStart.getPosition() );
         polyOptions.add( pathEnd.getPosition() );
-        polyOptions.pattern( patternList );
+        polyOptions.pattern( pattern );
 
         autoPilotPath = map.addPolyline( polyOptions );
         // -- 출발지 -> 도착지 경로 표시
