@@ -129,6 +129,8 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
 
         this.orientation = new Orientation(this);
 
+        this.stop.setEnabled( false );
+        this.autopilot.setEnabled( false );
 
         this.status.setText( "" );
 
@@ -350,15 +352,17 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
 
         // 출발지 -> 도착지 경로 표시
 
-        List<PatternItem> pattern = Arrays.<PatternItem>asList(new Dash(20), new Gap(10) );
-        //List<PatternItem> pattern = Arrays.<PatternItem>asList(new Dot(), new Gap(20), new Dash(30), new Gap(20));
+        if( null != pathStart ) {
+            List<PatternItem> pattern = Arrays.<PatternItem>asList(new Dash(20), new Gap(10));
+            //List<PatternItem> pattern = Arrays.<PatternItem>asList(new Dot(), new Gap(20), new Dash(30), new Gap(20));
 
-        PolylineOptions polyOptions = new PolylineOptions().width( 20 ).color(Color.GREEN).geodesic(true);
-        polyOptions.add( pathStart.getPosition() );
-        polyOptions.add( pathEnd.getPosition() );
-        polyOptions.pattern( pattern );
+            PolylineOptions polyOptions = new PolylineOptions().width(20).color(Color.GREEN).geodesic(true);
+            polyOptions.add(pathStart.getPosition());
+            polyOptions.add(pathEnd.getPosition());
+            polyOptions.pattern(pattern);
 
-        autoPilotPath = map.addPolyline( polyOptions );
+            autoPilotPath = map.addPolyline(polyOptions);
+        }
 
         Toast.makeText( getApplicationContext(),"목적지가 설정되었습니다.",Toast.LENGTH_SHORT).show();
 
@@ -633,6 +637,9 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
                                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, map.getMaxZoomLevel() - 2 ));
 
                                     status.setText( "지도를 핸드폰 현재 위치로 이동하였습니다.");
+
+                                    stop.setEnabled( true );
+                                    autopilot.setEnabled( true );
                                 }
                             }
                         }
