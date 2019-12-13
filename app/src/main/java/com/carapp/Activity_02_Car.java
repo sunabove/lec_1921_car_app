@@ -219,7 +219,7 @@ public class Activity_02_Car extends Activity_05_Compass implements Orientation.
         int relative = Animation.RELATIVE_TO_SELF ;
 
         Animation animation = new RotateAnimation(
-                0, dir*80,
+                0, dir*70,
                 relative, 0.5f,
                 relative,  0.5f);
 
