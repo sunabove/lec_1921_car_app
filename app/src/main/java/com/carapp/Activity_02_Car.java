@@ -216,17 +216,12 @@ public class Activity_02_Car extends Activity_05_Compass implements Orientation.
 
         this.carAni.setImageResource(R.drawable.car_top_01_move );
 
-        float currentAzimuth = 0.0f;
-        float azimuth = 0.0f;
-
         int relative = Animation.RELATIVE_TO_SELF ;
 
         Animation animation = new RotateAnimation(
-                0, dir*55,
+                0, dir*80,
                 relative, 0.5f,
                 relative,  0.5f);
-
-        currentAzimuth = azimuth;
 
         animation.setDuration( 2_500 );
         animation.setRepeatCount( -1 );
