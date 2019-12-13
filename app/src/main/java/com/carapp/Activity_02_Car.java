@@ -200,11 +200,11 @@ public class Activity_02_Car extends Activity_05_Compass implements Orientation.
         Animation animation = new TranslateAnimation(
                 relative, 0.0f,
                 relative, 0.0f,
-                relative, 0.3f,
-                relative, -0.0f);
+                relative, dir*0.5f,
+                relative, -dir*0.5f);
 
-        animation.setDuration( 2_000 );
-        animation.setRepeatCount( 1 );
+        animation.setDuration( 2_500 );
+        animation.setRepeatCount( -1 );
         animation.setRepeatMode(Animation.RESTART);
 
         this.carAni.startAnimation( animation );
