@@ -29,6 +29,17 @@
         android:layout_marginBottom="4dp"
         app:srcCompat="@drawable/start" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/autopilot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="66dp"
+        app:maxImageSize="35dp"
+        app:srcCompat="@drawable/autopilot_disabled" />
+
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"

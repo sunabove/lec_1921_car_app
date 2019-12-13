@@ -72,6 +72,7 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
 
     private WebView videoView ;
     private FloatingActionButton stop ;
+    private FloatingActionButton autopilot ;
     private EditText status ;
     private EditText log ;
 
@@ -92,6 +93,8 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
 
     private boolean videoFullWidth = false ;
 
+    private boolean isAutopilot = false;
+
     public int getLayoutId() {
         return R.layout.activity_maps;
     }
@@ -109,13 +112,17 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
         this.status = this.findViewById(R.id.status);
         this.log = this.findViewById(R.id.log);
 
+        this.autopilot = this.findViewById(R.id.autopilot);
+
         this.pitch = this.findViewById(R.id.pitch);
         this.roll = this.findViewById(R.id.roll);
 
         this.carAni = this.findViewById(R.id.carAni);
 
         this.motionEnabled = false ;
+
         this.orientation = new Orientation(this);
+
 
         this.status.setText( "" );
 
@@ -162,6 +169,23 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
                 }
 
                 return false;
+            }
+        });
+
+        // 자율 주행 토글
+        this.autopilot.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                isAutopilot = ! isAutopilot ;
+
+                if( isAutopilot ) { // autopilot enabled
+                    autopilot.setImageResource(R.drawable.autopilot_enabled);
+
+                    Toast.makeText( getApplicationContext(),"자율 주행 모드입니다.",Toast.LENGTH_SHORT).show();
+                } else { // autopilot disabled
+                    autopilot.setImageResource(R.drawable.autopilot_disabled);
+
+                    Toast.makeText( getApplicationContext(),"수동 주행 모드입니다.",Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
