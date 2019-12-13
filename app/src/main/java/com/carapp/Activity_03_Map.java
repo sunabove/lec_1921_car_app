@@ -283,8 +283,22 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
     private void setCarLocationByJsonString( Object obj ) {
         try {
             JSONObject response = null ;
+
             if( obj instanceof JSONObject ) {
                 response = (JSONObject) obj ;
+            }
+
+            Object test = null;
+
+            try {
+                test = response.get("latitude");
+            } catch ( Exception e ) {
+                test = null;
+            }
+
+            if( null == test || 1 > test.toString().trim().length() ) {
+                Log.d( "sunabove", "There is no gps data.");
+                return ;
             }
 
             double latitude = Double.parseDouble(response.get("latitude").toString().trim());
