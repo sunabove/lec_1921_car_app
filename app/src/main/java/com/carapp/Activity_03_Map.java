@@ -529,9 +529,15 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
 
                 PolylineOptions polyOptions = new PolylineOptions().width( width ).color( color ).geodesic(true);
 
+                if( isAutopilot ) {
+                    List<PatternItem> pattern = Arrays.<PatternItem>asList(new Dash(20), new Gap(10));
+                    polyOptions.pattern( pattern );
+                }
+
                 for( LatLng log : gpsLog ) {
                     polyOptions.add( log );
                 }
+
                 gpsPath = map.addPolyline( polyOptions );
             }
 
