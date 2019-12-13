@@ -548,7 +548,7 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
                     public void onResponse(String response) {
                         if( null != status ) {
                             moveCnt += 1 ;
-                            status.setText(String.format("[%04d] %s", moveCnt, motion.toUpperCase() ) );
+                            status.setText(String.format("%s [%04d]", motion.toUpperCase(), moveCnt) );
                         }
                     }
                 }, new Response.ErrorListener() {
