@@ -28,6 +28,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -133,13 +134,13 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
             public void onClick(View v) {
                 motionEnabled = ! motionEnabled ;
 
-                if( motionEnabled ) {
+                if( motionEnabled ) { // drive
                     carAni.setImageResource(R.drawable.car_top_01_move);
-
-                    moveCar( Motion.STOP, status, 0, 0 );
-                } else {
+                } else { // stop
                     carAni.clearAnimation();
                     carAni.setImageResource(R.drawable.car_top_03_stop);
+
+                    moveCar( Motion.STOP, status, 0, 0 );
                 }
 
                 stop.setImageResource( motionEnabled ? R.drawable.stop : R.drawable.start );
@@ -194,6 +195,7 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
         Log.d( TAG, "VideoView Clicked.");
 
         boolean useActivity = false ;
+
         if( useActivity ) {
             startActivity(new android.content.Intent(Activity_03_Map.this, Activity_04_Video.class));
             return ;
@@ -559,6 +561,15 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
                 }
             }
         });
+
+        if( Motion.STOP.equalsIgnoreCase( motion ) ) {
+            requestQueue.cancelAll(new RequestQueue.RequestFilter() {
+                @Override
+                public boolean apply(Request<?> request) {
+                    return true;
+                }
+            });
+        }
 
         requestQueue.add(stringRequest);
 
