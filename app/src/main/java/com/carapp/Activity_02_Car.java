@@ -245,10 +245,14 @@ public class Activity_02_Car extends Activity_05_Compass implements Orientation.
 
                 if (motionPrev.equalsIgnoreCase(motion)) {
                     // do nothing
-                } else if ("FORAWD.BACKWARD".contains(motion.toUpperCase())) {
-                    animateCarAdvance(Motion.FORWARD.equalsIgnoreCase(motion) ? 1 : -1);
-                } else if ("RIGHT.LEFT".contains(motion.toUpperCase())) {
-                    animateCarRotate(Motion.RIGHT.equalsIgnoreCase(motion) ? 1 : -1);
+                } else if ( Motion.FORWARD.contains(motion.toUpperCase())) {
+                    animateCarAdvance( 1 );
+                } else if ( Motion.BACKWARD.contains(motion.toUpperCase())) {
+                    animateCarAdvance( -1 );
+                } else if ( Motion.RIGHT.contains(motion.toUpperCase())) {
+                    animateCarRotate( 1 );
+                } else if ( Motion.LEFT.contains(motion.toUpperCase())) {
+                    animateCarRotate( -1 );
                 } else if( "STOP".equalsIgnoreCase( Motion.STOP)) {
                     carAni.clearAnimation();
                     carAni.setImageResource(R.drawable.car_top_03_stop);
