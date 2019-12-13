@@ -1,7 +1,6 @@
 package com.carapp;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -10,7 +9,6 @@ import android.graphics.Point;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.PowerManager;
 import android.provider.Settings;
 import android.text.InputType;
 import android.util.Log;
@@ -42,7 +40,6 @@ import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Dash;
-import com.google.android.gms.maps.model.Dot;
 import com.google.android.gms.maps.model.Gap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -59,12 +56,8 @@ import androidx.lifecycle.Lifecycle;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import io.socket.client.Socket;
-import io.socket.emitter.Emitter;
 
 public class Activity_03_Map extends ComActivity implements OnMapReadyCallback , Orientation.Listener  {
 
@@ -214,25 +207,33 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
             if( isAutopilot ) {
                 carAni.setImageResource(R.drawable.car_top_02_drive );
 
-                this.animateCarAutoPilot();
-
                 gpsLog = new GpsLog();
                 gpsPath.remove();
 
                 if( null == pathEnd ) {
+                    motionEnabled = false ;
+
+                    stop.setImageResource( R.drawable.start_btn_icon);
+
                     Toast.makeText( getApplicationContext(),"화면을 터치하여 목적지를 설정하세요.",Toast.LENGTH_SHORT).show();
+                } else {
+                    this.animateCarAutoPilot();
+
+                    stop.setImageResource( R.drawable.stop_btn_icon);
                 }
             } else {
                 carAni.setImageResource(R.drawable.car_top_01_move);
+
+                stop.setImageResource( R.drawable.stop_btn_icon);
             }
-        } else { // stop
+        } else { // stop_btn_icon
             carAni.clearAnimation();
             carAni.setImageResource(R.drawable.car_top_03_stop);
 
+            stop.setImageResource( R.drawable.start_btn_icon);
+
             moveCar( Motion.STOP, status, 0, 0 );
         }
-
-        stop.setImageResource( motionEnabled ? R.drawable.stop : R.drawable.start );
     }
 
     private void whenAutopilotClicked( View v ){
@@ -799,7 +800,7 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
             }
             */
 
-            if( "stop".equalsIgnoreCase( this.motionCurr ) && "stop".equalsIgnoreCase( motion ) ) {
+            if( Motion.STOP.equalsIgnoreCase( this.motionCurr ) && Motion.STOP.equalsIgnoreCase( motion ) ) {
                 // do nothing!
             } else if( true ){
                 this.moveCar(motion, status, pitch, roll );
