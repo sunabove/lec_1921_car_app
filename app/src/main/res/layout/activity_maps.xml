@@ -58,28 +58,31 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/status"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:background="#4DCFCACA"
-                android:clickable="false"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:text="Status " />
+            <ImageView
+                android:id="@+id/carAni"
+                android:layout_width="60dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+                android:background="#66CDDC39"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/car_top_01_move" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/status"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:background="#4DCFCACA"
+                    android:clickable="false"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:text="Status " />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -147,47 +150,25 @@
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <EditText
-                        android:id="@+id/log"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:gravity="start|top"
-                        android:inputType="textMultiLine" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-
             </LinearLayout>
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/log"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="start|top"
+                android:inputType="textMultiLine" />
+
+        </LinearLayout>
+
     </LinearLayout>
-
-    <ImageView
-        android:id="@+id/carAni"
-        android:layout_width="60dp"
-        android:layout_height="100dp"
-        android:layout_weight="1"
-        android:background="#66CDDC39"
-        android:scaleType="fitCenter"
-        app:srcCompat="@drawable/car_top_01_move"
-
-        android:layout_gravity="top|end"
-        android:layout_marginTop="4dp"
-        android:layout_marginRight="85dp"
-        />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
