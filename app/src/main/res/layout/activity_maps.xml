@@ -60,7 +60,7 @@
 
             <EditText
                 android:id="@+id/status"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:background="#4DCFCACA"
@@ -77,12 +77,12 @@
             android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
 
@@ -148,7 +148,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
@@ -169,19 +169,25 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:id="@+id/carAni"
-                    android:layout_width="60dp"
-                    android:layout_height="100dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:background="#66FFFFFF"
-                    android:scaleType="fitCenter"
-                    app:srcCompat="@drawable/car_top_01_move" />
+
             </LinearLayout>
 
         </LinearLayout>
 
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/carAni"
+        android:layout_width="60dp"
+        android:layout_height="100dp"
+        android:layout_weight="1"
+        android:background="#66CDDC39"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/car_top_01_move"
+
+        android:layout_gravity="top|end"
+        android:layout_marginTop="4dp"
+        android:layout_marginRight="85dp"
+        />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
