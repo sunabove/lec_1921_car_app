@@ -268,6 +268,12 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
                 }
             }, 1_200 );
 
+            gpsLog = new GpsLog();
+
+            if( null != gpsPath ) {
+                gpsPath.remove();
+            }
+
             // 출발 지점 추가
             LatLng latLng = null ;
 
