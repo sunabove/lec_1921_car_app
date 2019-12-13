@@ -6,6 +6,9 @@ import android.os.Handler;
 import android.text.InputType;
 import android.util.Log;
 import android.view.*;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
+import android.view.animation.TranslateAnimation;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,10 +25,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 public class Activity_02_Car extends Activity_05_Compass implements Orientation.Listener {
 
     private WebView videoView ;
-    private Button forward;
-    private Button backward;
-    private Button left;
-    private Button right;
+
     private Button stop;
 
     private EditText status ;
@@ -34,6 +34,7 @@ public class Activity_02_Car extends Activity_05_Compass implements Orientation.
     private FloatingActionButton goToMap ;
     private ImageView compassDial ;
     private ImageView compassHands ;
+    private ImageView carAni ;
 
     // orientation sensor
     private Orientation orientation;
@@ -56,7 +57,7 @@ public class Activity_02_Car extends Activity_05_Compass implements Orientation.
 
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        this.sotwNewLine = true ;
+        this.sotwNewLine = false ;
 
         this.orientation = new Orientation(this);
         this.attitudeIndicator = this.findViewById(R.id.attitude_indicator);
@@ -67,6 +68,8 @@ public class Activity_02_Car extends Activity_05_Compass implements Orientation.
         this.compassDial = this.findViewById(R.id.main_image_dial);
         this.compassHands = this.findViewById(R.id.main_image_hands);
 
+        this.carAni = this.findViewById( R.id.carAni );
+
         this.goToMap = this.findViewById(R.id.goToMap );
 
         // hide keyboard always
@@ -75,43 +78,7 @@ public class Activity_02_Car extends Activity_05_Compass implements Orientation.
         this.roll.setInputType(InputType.TYPE_NULL);
 
         videoView = this.findViewById(R.id.videoView);
-        forward = this.findViewById(R.id.forward);
-        backward = this.findViewById(R.id.backward);
-        left = this.findViewById(R.id.left);
-        right = this.findViewById(R.id.right);
         stop = this.findViewById(R.id.stop);
-
-        forward.setText(HtmlCompat.fromHtml("&uarr;", HtmlCompat.FROM_HTML_MODE_COMPACT));
-        backward.setText(HtmlCompat.fromHtml("&darr;", HtmlCompat.FROM_HTML_MODE_COMPACT));
-        left.setText(HtmlCompat.fromHtml("&larr;", HtmlCompat.FROM_HTML_MODE_COMPACT));
-        right.setText(HtmlCompat.fromHtml("&rarr;", HtmlCompat.FROM_HTML_MODE_COMPACT));
-        // stop.setText(HtmlCompat.fromHtml("&bull;", HtmlCompat.FROM_HTML_MODE_COMPACT));
-
-        this.paintUI();
-
-        forward.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                moveCar( Motion.FORWARD, status );
-            }
-        });
-
-        backward.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                moveCar( Motion.BACKWARD, status );
-            }
-        });
-
-        left.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                moveCar( Motion.LEFT, status );
-            }
-        });
-
-        right.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                moveCar( Motion.RIGHT, status );
-            }
-        });
 
         stop.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -183,6 +150,8 @@ public class Activity_02_Car extends Activity_05_Compass implements Orientation.
 
         this.hideActionBar();
 
+        this.paintUI();
+
         this.orientation.startListening(this);
 
         this.playVideo();
@@ -204,38 +173,51 @@ public class Activity_02_Car extends Activity_05_Compass implements Orientation.
         this.pitchRollUpdated( pitch, roll );
     }
 
+    private void logoAnimation(final long duration ) {
+        // logo animation
+        int relative = Animation.RELATIVE_TO_SELF ;
+        TranslateAnimation animation = new TranslateAnimation(
+                relative, -0.3f,
+                relative, 0.3f,
+                relative, 0.0f,
+                relative, 0.0f);
+
+        animation.setDuration(duration);
+        animation.setRepeatCount( 1 );
+        //animation.setRepeatMode(Animation.RESTART);
+
+        //this.logo.startAnimation(animation);
+        // -- logoanimation
+    }
+
+    private void adjustArrow(float azimuth) {
+        //Log.d(TAG, "will set rotation from " + currentAzimuth + " to " + azimuth);
+
+        float currentAzimuth = 0.0f;
+
+        Animation an = new RotateAnimation(-currentAzimuth, -azimuth,
+                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
+                0.5f);
+
+        currentAzimuth = azimuth;
+
+        an.setDuration(500);
+        an.setRepeatCount(0);
+        an.setFillAfter(true);
+
+        //arrowView.startAnimation(an);
+    }
+
     public void paintUI() {
         if( motionEnabled )  {
             stop.setText( "STOP" );
+            this.carAni.setImageResource(R.drawable.car_top_01_move);
         } else {
             stop.setText( "START" );
+            this.carAni.setImageResource(R.drawable.car_top_03_stop);
         }
-
-        forward.setEnabled( motionEnabled );
-        backward.setEnabled( motionEnabled );
-        left.setEnabled( motionEnabled );
-        right.setEnabled( motionEnabled );
 
         String currMotion = this.currMotion ;
-
-        forward.setBackgroundColor( currMotion.equalsIgnoreCase( Motion.FORWARD ) ? green : gray );
-        backward.setBackgroundColor( currMotion.equalsIgnoreCase( Motion.BACKWARD ) ? green : gray );
-        left.setBackgroundColor( currMotion.equalsIgnoreCase( Motion.LEFT ) ? green : gray );
-        right.setBackgroundColor( currMotion.equalsIgnoreCase( Motion.RIGHT ) ? green : gray );
-        stop.setBackgroundColor( currMotion.equalsIgnoreCase( Motion.STOP ) ? green : gray );
-
-        forward.setTextColor( currMotion.equalsIgnoreCase( Motion.FORWARD ) ? yellow : black );
-        backward.setTextColor( currMotion.equalsIgnoreCase( Motion.BACKWARD ) ? yellow : black );
-        left.setTextColor( currMotion.equalsIgnoreCase( Motion.LEFT ) ? yellow : black );
-        right.setTextColor( currMotion.equalsIgnoreCase( Motion.RIGHT ) ? yellow : black );
-        stop.setTextColor( currMotion.equalsIgnoreCase( Motion.STOP ) ? yellow : black );
-
-        if( ! motionEnabled ) {
-            stop.setBackgroundColor( gray );
-            stop.setTextColor( red );
-        } else {
-            stop.setTextColor( black );
-        }
     }
     // -- paintUI
 
