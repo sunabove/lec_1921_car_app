@@ -14,8 +14,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import androidx.core.text.HtmlCompat;
-
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -41,9 +39,9 @@ public class Activity_02_Car extends Activity_05_Compass implements Orientation.
     private AttitudeIndicator attitudeIndicator;
     // -- orientation sensor
 
-    private String currMotion = "";
     private long motionTime = System.currentTimeMillis();
-    private String motionPrev = "" ;
+
+    private String motionCurr = "";
 
     public int getLayoutId() {
         return R.layout.activity_car ;
@@ -82,10 +80,10 @@ public class Activity_02_Car extends Activity_05_Compass implements Orientation.
 
         stop.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                motionPrev = "";
-
                 if( motionEnabled ) {
                     moveCar(Motion.STOP, status );
+                } else {
+                    carAni.clearAnimation();
                 }
 
                 motionEnabled = ! motionEnabled ;
@@ -179,14 +177,9 @@ public class Activity_02_Car extends Activity_05_Compass implements Orientation.
             this.carAni.setImageResource(R.drawable.car_top_01_move);
         } else {
             stop.setText( "START" );
+
             this.carAni.setImageResource(R.drawable.car_top_03_stop);
         }
-
-        String currMotion = this.currMotion ;
-
-        //this.animateCarAdvance( -1 );
-
-        this.animateCarRotate( 1 );
     }
     // -- paintUI
 
@@ -241,7 +234,31 @@ public class Activity_02_Car extends Activity_05_Compass implements Orientation.
     }
 
     public void moveCar(final String motion, final EditText status ) {
-        this.currMotion = motion ;
+        final Activity_02_Car activity = this ;
+
+        Runnable runnable = new Runnable() {
+            String motionPrev = activity.motionCurr ;
+            @Override
+            public void run() {
+                Log.d( "motion", String.format("motion prev = %s, motion curr = %s", motionPrev, motion ));
+
+
+                if (motionPrev.equalsIgnoreCase(motion)) {
+                    // do nothing
+                } else if ("FORAWD.BACKWARD".contains(motion.toUpperCase())) {
+                    animateCarAdvance(Motion.FORWARD.equalsIgnoreCase(motion) ? 1 : -1);
+                } else if ("RIGHT.LEFT".contains(motion.toUpperCase())) {
+                    animateCarRotate(Motion.RIGHT.equalsIgnoreCase(motion) ? 1 : -1);
+                } else if( "STOP".equalsIgnoreCase( Motion.STOP)) {
+                    carAni.clearAnimation();
+                    carAni.setImageResource(R.drawable.car_top_03_stop);
+                }
+
+                paintUI();
+            }
+        };
+
+        this.motionCurr = motion ;
 
         String url = String.format("http://10.3.141.1/car.json?motion=%s", motion.toLowerCase() );
 
@@ -264,12 +281,7 @@ public class Activity_02_Car extends Activity_05_Compass implements Orientation.
 
         requestQueue.add(stringRequest);
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                paintUI();
-            }
-        }, 0);
+        new Handler().postDelayed( runnable, 0);
     }
 
     // pitch roll 값이 변했을 경우, 차를 제어한다.
@@ -310,7 +322,6 @@ public class Activity_02_Car extends Activity_05_Compass implements Orientation.
 
             if( true ){
                 this.moveCar(motion, status);
-                this.motionPrev = motion;
             }
 
             motionTime = now ;
