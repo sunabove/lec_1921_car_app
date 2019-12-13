@@ -32,7 +32,9 @@ public class Activity_02_Car extends Activity_05_Compass implements Orientation.
     private FloatingActionButton goToMap ;
     private ImageView compassDial ;
     private ImageView compassHands ;
+
     private ImageView carAni ;
+    private Animation carAnimation = null ;
 
     // orientation sensor
     private Orientation orientation;
@@ -80,13 +82,15 @@ public class Activity_02_Car extends Activity_05_Compass implements Orientation.
 
         stop.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                motionEnabled = ! motionEnabled ;
+
                 if( motionEnabled ) {
+                    carAni.setImageResource(R.drawable.car_top_01_move);
                     moveCar(Motion.STOP, status );
                 } else {
                     carAni.clearAnimation();
+                    carAni.setImageResource(R.drawable.car_top_03_stop);
                 }
-
-                motionEnabled = ! motionEnabled ;
 
                 paintUI();
             }
@@ -182,8 +186,6 @@ public class Activity_02_Car extends Activity_05_Compass implements Orientation.
         }
     }
     // -- paintUI
-
-    private Animation carAnimation = null ;
 
     private void animateCarAdvance( int dir ) {
         if( null != this.carAnimation ) {

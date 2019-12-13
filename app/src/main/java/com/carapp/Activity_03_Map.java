@@ -17,8 +17,12 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
+import android.view.animation.TranslateAnimation;
 import android.webkit.WebView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -73,12 +77,17 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
     private EditText pitch ;
     private EditText roll ;
 
+    private ImageView carAni ;
+    private Animation carAnimation = null ;
+
     // orientation sensor
     private Orientation orientation;
 
     private String currMotion = "";
     private long motionTime = System.currentTimeMillis();
-    private String motionPrev = "" ;
+
+    private int moveCnt = 0 ;
+    private String motionCurr = "" ;
 
     private boolean videoFullWidth = false ;
 
@@ -102,6 +111,8 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
         this.pitch = this.findViewById(R.id.pitch);
         this.roll = this.findViewById(R.id.roll);
 
+        this.carAni = this.findViewById(R.id.carAni);
+
         this.motionEnabled = false ;
         this.orientation = new Orientation(this);
 
@@ -120,11 +131,16 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
 
         this.stop.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if( motionEnabled ) {
-                    moveCar(Motion.STOP.toLowerCase(), status, 0, 0 );
-                }
-
                 motionEnabled = ! motionEnabled ;
+
+                if( motionEnabled ) {
+                    carAni.setImageResource(R.drawable.car_top_01_move);
+
+                    moveCar( Motion.STOP, status, 0, 0 );
+                } else {
+                    carAni.clearAnimation();
+                    carAni.setImageResource(R.drawable.car_top_03_stop);
+                }
 
                 stop.setImageResource( motionEnabled ? R.drawable.stop : R.drawable.start );
             }
@@ -486,11 +502,43 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
         }
     }
 
-    private int moveCnt = 0 ;
+    public void paintUI() {
+        // do nothing.
+    }
 
     public void moveCar(final String motion, final EditText status, double pitchDeg, double rollDeg ) {
         pitchDeg = pitchDeg % 360;
         rollDeg = rollDeg % 360;
+
+        final Activity_03_Map activity = this ;
+
+        Runnable runnable = new Runnable() {
+            String motionPrev = activity.motionCurr ;
+            @Override
+            public void run() {
+                Log.d( "motion", String.format("motion prev = %s, motion curr = %s", motionPrev, motion ));
+
+
+                if (motionPrev.equalsIgnoreCase(motion)) {
+                    // do nothing
+                } else if ( Motion.FORWARD.contains(motion.toUpperCase())) {
+                    animateCarAdvance( 1 );
+                } else if ( Motion.BACKWARD.contains(motion.toUpperCase())) {
+                    animateCarAdvance( -1 );
+                } else if ( Motion.RIGHT.contains(motion.toUpperCase())) {
+                    animateCarRotate( 1 );
+                } else if ( Motion.LEFT.contains(motion.toUpperCase())) {
+                    animateCarRotate( -1 );
+                } else if( "STOP".equalsIgnoreCase( Motion.STOP)) {
+                    carAni.clearAnimation();
+                    carAni.setImageResource(R.drawable.car_top_03_stop);
+                }
+
+                paintUI();
+            }
+        };
+
+        this.motionCurr = motion ;
 
         String url = String.format("http://10.3.141.1/car.json?motion=%s&pitchDeg=%f&rollDeg=%f", motion, pitchDeg, rollDeg);
 
@@ -513,6 +561,8 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
         });
 
         requestQueue.add(stringRequest);
+
+        new Handler().postDelayed( runnable, 0);
     }
 
     // pitch roll 값이 변했을 경우, 차를 제어한다.
@@ -557,15 +607,64 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
             }
             */
 
-            if( "stop".equalsIgnoreCase( this.motionPrev) && "stop".equalsIgnoreCase( motion ) ) {
+            if( "stop".equalsIgnoreCase( this.motionCurr ) && "stop".equalsIgnoreCase( motion ) ) {
                 // do nothing!
             } else if( true ){
                 this.moveCar(motion, status, pitch, roll );
-                this.motionPrev = motion;
+
+                this.motionCurr = motion;
+
                 motionTime = now ;
             }
 
         }
     }
     // -- pitchRollUpdated
+
+    private void animateCarAdvance( int dir ) {
+        if( null != this.carAnimation ) {
+            this.carAni.clearAnimation();
+        }
+
+        this.carAni.setImageResource( 1 == dir ? R.drawable.car_top_02_drive : R.drawable.car_top_01_move );
+
+        // logo animation
+        int relative = Animation.RELATIVE_TO_SELF ;
+        Animation animation = new TranslateAnimation(
+                relative, 0.0f,
+                relative, 0.0f,
+                relative, dir*0.6f,
+                relative, -dir*0.6f);
+
+        animation.setDuration( 2_500 );
+        animation.setRepeatCount( -1 );
+        animation.setRepeatMode(Animation.RESTART);
+
+        this.carAnimation = animation ;
+
+        this.carAni.startAnimation( animation );
+    }
+
+    private void animateCarRotate( int dir ) {
+        if( null != this.carAnimation ) {
+            this.carAni.clearAnimation();
+        }
+
+        this.carAni.setImageResource(R.drawable.car_top_01_move );
+
+        int relative = Animation.RELATIVE_TO_SELF ;
+
+        Animation animation = new RotateAnimation(
+                0, dir*70,
+                relative, 0.5f,
+                relative,  0.5f);
+
+        animation.setDuration( 2_500 );
+        animation.setRepeatCount( -1 );
+        animation.setFillAfter(true);
+
+        this.carAnimation = animation ;
+
+        this.carAni.startAnimation( animation );
+    }
 }

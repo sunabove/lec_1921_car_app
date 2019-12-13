@@ -176,18 +176,23 @@
 
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/carAni"
-        android:layout_width="60dp"
-        android:layout_height="100dp"
-        android:layout_weight="1"
-        android:background="#66CDDC39"
-        android:scaleType="fitCenter"
-        app:srcCompat="@drawable/car_top_01_move"
-
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:layout_gravity="top|end"
         android:layout_marginTop="4dp"
         android:layout_marginRight="80dp"
-        />
+        >
+        <ImageView
+            android:id="@+id/carAni"
+            android:layout_width="60dp"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            android:background="#66CDDC39"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/car_top_03_stop"
+            />
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
