@@ -152,18 +152,7 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
 
         this.stop.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                motionEnabled = ! motionEnabled ;
-
-                if( motionEnabled ) { // drive
-                    carAni.setImageResource(R.drawable.car_top_01_move);
-                } else { // stop
-                    carAni.clearAnimation();
-                    carAni.setImageResource(R.drawable.car_top_03_stop);
-
-                    moveCar( Motion.STOP, status, 0, 0 );
-                }
-
-                stop.setImageResource( motionEnabled ? R.drawable.stop : R.drawable.start );
+                whenStopClicked( v );
             }
         });
 
@@ -216,6 +205,34 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
         orientation.stopListening();
 
         this.stopPlayVideo();
+    }
+
+    private void whenStopClicked(View v) {
+        motionEnabled = ! motionEnabled ;
+
+        if( motionEnabled ) { // drive
+            if( isAutopilot ) {
+                carAni.setImageResource(R.drawable.car_top_02_drive );
+
+                this.animateCarAutoPilot();
+
+                gpsLog = new GpsLog();
+                gpsPath.remove();
+
+                if( null == pathEnd ) {
+                    Toast.makeText( getApplicationContext(),"화면을 터치하여 목적지를 설정하세요.",Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                carAni.setImageResource(R.drawable.car_top_01_move);
+            }
+        } else { // stop
+            carAni.clearAnimation();
+            carAni.setImageResource(R.drawable.car_top_03_stop);
+
+            moveCar( Motion.STOP, status, 0, 0 );
+        }
+
+        stop.setImageResource( motionEnabled ? R.drawable.stop : R.drawable.start );
     }
 
     private void whenAutopilotClicked( View v ){
@@ -758,8 +775,10 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
 
         if( ! motionEnabled ) {
             // do nothing!
-        }else if (now - motionTime < 700 ) {
+        } else if (now - motionTime < 700 ) {
             // do nothing!
+        } else if( isAutopilot ) {
+            // do nothing
         } else {
             String motion = "" ;
             if (15 <= roll) {
@@ -835,6 +854,58 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
         animation.setDuration( 2_500 );
         animation.setRepeatCount( -1 );
         animation.setFillAfter(true);
+
+        this.carAnimation = animation ;
+
+        this.carAni.startAnimation( animation );
+    }
+
+    private int aniAutoPilotDir = 1 ;
+    private void animateCarAutoPilot() {
+        if( null != this.carAnimation ) {
+            this.carAni.clearAnimation();
+        }
+
+        this.carAni.setImageResource(R.drawable.car_top_02_drive );
+
+        int relative = Animation.RELATIVE_TO_SELF ;
+
+        final int dir = aniAutoPilotDir ;
+
+        Animation animation = new RotateAnimation(
+                -dir*20, dir*20,
+                relative, 0.5f,
+                relative,  0.5f);
+
+        animation.setDuration( 2_000 );
+        animation.setRepeatCount( 0 );
+        animation.setFillAfter(true);
+
+        final Activity_03_Map activity = this ;
+
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if( activity.isAutopilot && activity.motionEnabled ) {
+                            aniAutoPilotDir = -aniAutoPilotDir;
+                            animateCarAutoPilot();
+                        }
+                    }
+                }, 700 );
+            }
+
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
 
         this.carAnimation = animation ;
 
