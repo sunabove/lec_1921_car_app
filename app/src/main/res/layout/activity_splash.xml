@@ -183,6 +183,16 @@
                 android:text="Error "
                 android:textColor="#E91E63"
                 android:textSize="20dp" />
+
+            <CheckBox
+                android:id="@+id/goToMap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="monospace"
+                android:text="지도 바로 가기"
+                android:textColor="#4CAF50"
+                android:textSize="22sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
     </TableRow>

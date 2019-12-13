@@ -3,7 +3,7 @@ package com.carapp;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.net.NetworkInfo;
@@ -15,7 +15,10 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,10 +35,11 @@ public class Activity_01_Splash extends ComActivity {
     private TextView status ;
     private TextView error ;
     private TextView wifi ;
-    private TextView ipaddr ;
+    private TextView ipaddr;
     private ImageView logo;
     private SeekBar seekBar ;
     private ImageView wifiLogo;
+    private CheckBox goToMap ;
 
     private String errorMessage = "" ;
 
@@ -63,6 +67,7 @@ public class Activity_01_Splash extends ComActivity {
         this.seekBar = this.findViewById(R.id.seekBar);
 
         this.wifiLogo = this.findViewById(R.id.wifiLogo);
+        this.goToMap = this.findViewById(R.id.goToMap);
 
         class WifiReceiver extends BroadcastReceiver {
 
@@ -81,6 +86,28 @@ public class Activity_01_Splash extends ComActivity {
                 }
             }
         }
+
+        final SharedPreferences sharedPref = getSharedPreferences("mySettings", MODE_PRIVATE);
+
+        if( true ) {
+            String goToMapChecked = sharedPref.getString("goToMapChecked", "0" );
+
+            this.goToMap.setChecked( "1".equalsIgnoreCase( goToMapChecked.trim() ) );
+        }
+
+        this.goToMap.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            String tag = "goToMap";
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.d( tag, "goToMap checked = " + isChecked );
+                String mySetting = sharedPref.getString("goToMapChecked", isChecked ? "1" : "0" );
+
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString( "goToMapChecked", isChecked ? "1" : "0" );
+                editor.commit();
+            }
+
+        });
 
         /*
         IntentFilter intentFilter = new IntentFilter();
@@ -261,7 +288,11 @@ public class Activity_01_Splash extends ComActivity {
                                 } else if (test) {
                                     startActivity(new android.content.Intent(Activity_01_Splash.this, Activity_03_Map.class));
                                 } else {
-                                    startActivity(new android.content.Intent(Activity_01_Splash.this, Activity_02_Car.class));
+                                    if( goToMap.isSelected() ) {
+                                        startActivity(new android.content.Intent(Activity_01_Splash.this, Activity_03_Map.class));
+                                    } else {
+                                        startActivity(new android.content.Intent(Activity_01_Splash.this, Activity_02_Car.class));
+                                    }
                                 }
                             }
                         }, 3000);
