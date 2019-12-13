@@ -184,7 +184,9 @@ public class Activity_02_Car extends Activity_05_Compass implements Orientation.
 
         String currMotion = this.currMotion ;
 
-        this.animateCarAdvance( 1 );
+        //this.animateCarAdvance( -1 );
+
+        this.animateCarRotate( 1 );
     }
     // -- paintUI
 
@@ -207,27 +209,35 @@ public class Activity_02_Car extends Activity_05_Compass implements Orientation.
         animation.setRepeatCount( -1 );
         animation.setRepeatMode(Animation.RESTART);
 
-        this.carAni.startAnimation( animation );
-
         this.carAnimation = animation ;
+
+        this.carAni.startAnimation( animation );
     }
 
-    private void adjustArrow(float azimuth) {
-        //Log.d(TAG, "will set rotation from " + currentAzimuth + " to " + azimuth);
+    private void animateCarRotate( int dir ) {
+        if( null != this.carAnimation ) {
+            this.carAni.clearAnimation();
+        }
 
         float currentAzimuth = 0.0f;
+        float azimuth = 0.0f;
 
-        Animation an = new RotateAnimation(-currentAzimuth, -azimuth,
-                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
-                0.5f);
+        int relative = Animation.RELATIVE_TO_SELF ;
+
+        Animation animation = new RotateAnimation(
+                0, dir*45,
+                relative, 0.5f,
+                relative,  0.5f);
 
         currentAzimuth = azimuth;
 
-        an.setDuration(500);
-        an.setRepeatCount(0);
-        an.setFillAfter(true);
+        animation.setDuration( 2_500 );
+        animation.setRepeatCount( -1 );
+        animation.setFillAfter(true);
 
-        //arrowView.startAnimation(an);
+        this.carAnimation = animation ;
+
+        this.carAni.startAnimation( animation );
     }
 
     public void moveCar(final String motion, final EditText status ) {
