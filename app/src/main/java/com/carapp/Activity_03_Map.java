@@ -540,7 +540,7 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
 
         this.motionCurr = motion ;
 
-        String url = String.format("http://10.3.141.1/car.json?motion=%s&pitchDeg=%f&rollDeg=%f", motion, pitchDeg, rollDeg);
+        String url = String.format("http://10.3.141.1/car_drive.json?motion=%s&pitchDeg=%f&rollDeg=%f", motion, pitchDeg, rollDeg);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
