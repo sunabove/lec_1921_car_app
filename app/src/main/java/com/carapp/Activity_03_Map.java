@@ -175,17 +175,7 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
         // 자율 주행 토글
         this.autopilot.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                isAutopilot = ! isAutopilot ;
-
-                if( isAutopilot ) { // autopilot enabled
-                    autopilot.setImageResource(R.drawable.autopilot_enabled);
-
-                    Toast.makeText( getApplicationContext(),"자율 주행 모드입니다.",Toast.LENGTH_SHORT).show();
-                } else { // autopilot disabled
-                    autopilot.setImageResource(R.drawable.autopilot_disabled);
-
-                    Toast.makeText( getApplicationContext(),"수동 주행 모드입니다.",Toast.LENGTH_SHORT).show();
-                }
+                whenAutopilotClicked( v );
             }
         });
     }
@@ -213,6 +203,59 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
         orientation.stopListening();
 
         this.stopPlayVideo();
+    }
+
+    private Marker pathStart ;
+    private Marker pathEnd ;
+
+    private void whenAutopilotClicked( View v ){
+        isAutopilot = ! isAutopilot ;
+
+        if( isAutopilot ) { // autopilot enabled
+            autopilot.setImageResource(R.drawable.autopilot_enabled);
+
+            Toast.makeText( getApplicationContext(),"자율 주행 모드입니다.",Toast.LENGTH_SHORT).show();
+
+            LatLng latLng = null ;
+
+            if( null != lastGpsLatLng ) {
+                latLng = lastGpsLatLng ;
+            } else if( null != myPhoneMarker ) {
+                latLng = myPhoneMarker.getPosition();
+            } else {
+                latLng = map.getCameraPosition().target ;
+            }
+
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(latLng);
+            markerOptions.title( "시작점" );
+
+            pathStart = map.addMarker(markerOptions);
+
+            if( null != myPhoneMarker ) {
+                myPhoneMarker.hideInfoWindow();
+            }
+
+            pathStart.showInfoWindow();
+        } else { // autopilot disabled
+            autopilot.setImageResource(R.drawable.autopilot_disabled);
+
+            Toast.makeText( getApplicationContext(),"수동 주행 모드입니다.",Toast.LENGTH_SHORT).show();
+
+            if( null != pathStart ) {
+                pathStart.remove();
+                pathEnd.remove();
+
+                pathStart = null ;
+                pathEnd = null;
+            }
+        }
+    }
+
+    private void whenMapClick(LatLng latLng) {
+        final String tag = "google map";
+
+        Log.d( tag, "onMapClick");
     }
 
     public void whenVideoViewClicked() {
@@ -513,6 +556,8 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
 
+        final Activity_03_Map activity = this;
+
         // Add a marker in Sydney and move the camera
         LatLng latlng = new LatLng(37.5866, 126.97);
         map.addMarker(new MarkerOptions().position(latlng).title("청와대"));
@@ -533,17 +578,9 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                onMapClick( latLng );
+                activity.whenMapClick( latLng );
             }
         });
-
-    }
-
-    private void onMapClick(LatLng latLng) {
-        final String tag = "google map";
-
-        Log.d( tag, "onMapClick");
-
 
     }
 
