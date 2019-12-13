@@ -760,7 +760,7 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
 
         if( null != latLng ) {
             url += "&lat=" + latLng.latitude ;
-            url += "&lon=" + latLng.longitude ;
+            url += "&lng=" + latLng.longitude ;
         }
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
