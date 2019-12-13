@@ -216,6 +216,7 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
 
             Toast.makeText( getApplicationContext(),"자율 주행 모드입니다.",Toast.LENGTH_SHORT).show();
 
+            // add start point
             LatLng latLng = null ;
 
             if( null != lastGpsLatLng ) {
@@ -228,15 +229,18 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
 
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(latLng);
-            markerOptions.title( "시작점" );
+            markerOptions.title( "시작 지점" );
 
             pathStart = map.addMarker(markerOptions);
+            pathStart.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.path_start));
+
 
             if( null != myPhoneMarker ) {
                 myPhoneMarker.hideInfoWindow();
             }
 
             pathStart.showInfoWindow();
+            // add start point
         } else { // autopilot disabled
             autopilot.setImageResource(R.drawable.autopilot_disabled);
 
@@ -256,6 +260,23 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
         final String tag = "google map";
 
         Log.d( tag, "onMapClick");
+
+        if( null != pathEnd ) {
+            pathEnd.remove();
+        }
+
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(latLng);
+        markerOptions.title( "도착 지점" );
+
+        pathEnd = map.addMarker(markerOptions);
+        pathEnd.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.path_end));
+
+        if( null != pathEnd ) {
+            pathEnd.hideInfoWindow();
+        }
+
+        pathEnd.showInfoWindow();
     }
 
     public void whenVideoViewClicked() {
