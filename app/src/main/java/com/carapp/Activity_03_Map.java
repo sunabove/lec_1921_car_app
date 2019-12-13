@@ -530,6 +530,21 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
             }
         }, 5_000);
 
+        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                onMapClick( latLng );
+            }
+        });
+
+    }
+
+    private void onMapClick(LatLng latLng) {
+        final String tag = "google map";
+
+        Log.d( tag, "onMapClick");
+
+
     }
 
     @Override
