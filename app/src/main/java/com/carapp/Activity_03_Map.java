@@ -41,9 +41,11 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Dash;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -54,6 +56,9 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams;
 import androidx.lifecycle.Lifecycle;
 
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
@@ -207,6 +212,7 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
 
     private Marker pathStart ;
     private Marker pathEnd ;
+    private Polyline autoPilotPath ;
 
     private void whenAutopilotClicked( View v ){
         isAutopilot = ! isAutopilot ;
@@ -216,7 +222,14 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
 
             Toast.makeText( getApplicationContext(),"자율 주행 모드입니다.",Toast.LENGTH_SHORT).show();
 
-            // add start point
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText( getApplicationContext(),"목적지를 설정하세요.",Toast.LENGTH_SHORT).show();
+                }
+            }, 1_200 );
+
+            // 출발 지점 추가
             LatLng latLng = null ;
 
             if( null != lastGpsLatLng ) {
@@ -229,7 +242,7 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
 
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(latLng);
-            markerOptions.title( "시작 지점" );
+            markerOptions.title( "출발지" );
 
             pathStart = map.addMarker(markerOptions);
             pathStart.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.path_start));
@@ -240,7 +253,7 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
             }
 
             pathStart.showInfoWindow();
-            // add start point
+            // 출발 지점 추가
         } else { // autopilot disabled
             autopilot.setImageResource(R.drawable.autopilot_disabled);
 
@@ -248,10 +261,17 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
 
             if( null != pathStart ) {
                 pathStart.remove();
-                pathEnd.remove();
-
                 pathStart = null ;
-                pathEnd = null;
+            }
+
+            if( null != pathEnd ) {
+                pathEnd.remove();
+                pathEnd = null ;
+            }
+
+            if( null != autoPilotPath ) {
+                autoPilotPath.remove();
+                autoPilotPath = null ;
             }
         }
     }
@@ -265,9 +285,14 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
             pathEnd.remove();
         }
 
+        if( null != autoPilotPath ) {
+            autoPilotPath.remove();
+        }
+
+        // 도착 지점 추가
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
-        markerOptions.title( "도착 지점" );
+        markerOptions.title( "목적지" );
 
         pathEnd = map.addMarker(markerOptions);
         pathEnd.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.path_end));
@@ -277,6 +302,23 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
         }
 
         pathEnd.showInfoWindow();
+        // -- 도착 지점 추가
+
+        // 출발지 -> 도착지 경로 표시
+        int PATTERN_DASH_LENGTH_PX = 20;
+        PatternItem dash = new Dash(PATTERN_DASH_LENGTH_PX);
+
+        List<PatternItem> patternList = new ArrayList<>();
+        patternList.add( dash );
+
+        PolylineOptions polyOptions = new PolylineOptions().width( 20 ).color(Color.GREEN).geodesic(true);
+        polyOptions.add( pathStart.getPosition() );
+        polyOptions.add( pathEnd.getPosition() );
+        polyOptions.pattern( patternList );
+
+        autoPilotPath = map.addPolyline( polyOptions );
+        // -- 출발지 -> 도착지 경로 표시
+
     }
 
     public void whenVideoViewClicked() {
