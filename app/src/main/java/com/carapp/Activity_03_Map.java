@@ -220,17 +220,23 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
                     this.animateCarAutoPilot();
 
                     stop.setImageResource( R.drawable.stop_btn_icon);
+
+                    Toast.makeText( getApplicationContext(),"자율 주행을 시작합니다.",Toast.LENGTH_SHORT).show();
                 }
             } else {
                 carAni.setImageResource(R.drawable.car_top_01_move);
 
                 stop.setImageResource( R.drawable.stop_btn_icon);
+
+                Toast.makeText( getApplicationContext(),"차량 수동 주행을 시작합니다.",Toast.LENGTH_SHORT).show();
             }
         } else { // stop_btn_icon
             carAni.clearAnimation();
             carAni.setImageResource(R.drawable.car_top_03_stop);
 
             stop.setImageResource( R.drawable.start_btn_icon);
+
+            Toast.makeText( getApplicationContext(),"차량 주행을 종료합니다..",Toast.LENGTH_SHORT).show();
 
             moveCar( Motion.STOP, status, 0, 0 );
         }
@@ -247,7 +253,7 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText( getApplicationContext(),"목적지를 설정하세요.",Toast.LENGTH_SHORT).show();
+                    Toast.makeText( getApplicationContext(),"화면을 터치하여 목적지를 설정하세요.",Toast.LENGTH_SHORT).show();
                 }
             }, 1_200 );
 
@@ -458,6 +464,8 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
                 return ;
             }
 
+            boolean isAutopilot = this.isAutopilot;
+
             double latitude = Double.parseDouble(response.get("latitude").toString().trim());
             double longitude = Double.parseDouble(response.get("longitude").toString().trim());
             double heading = Double.parseDouble(response.get("heading").toString().trim());
@@ -516,7 +524,11 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
                     }
                 }
 
-                PolylineOptions polyOptions = new PolylineOptions().width( 10 ).color(Color.BLUE).geodesic(true);
+                int color = isAutopilot ? Color.RED : Color.BLUE ;
+                int width = isAutopilot ? 12 : 10 ;
+
+                PolylineOptions polyOptions = new PolylineOptions().width( width ).color( color ).geodesic(true);
+
                 for( LatLng log : gpsLog ) {
                     polyOptions.add( log );
                 }
