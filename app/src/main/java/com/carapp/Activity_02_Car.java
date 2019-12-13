@@ -174,11 +174,11 @@ public class Activity_02_Car extends Activity_05_Compass implements Orientation.
     public void paintUI() {
         if( motionEnabled )  {
             stop.setText( "STOP" );
-            this.carAni.setImageResource(R.drawable.car_top_01_move);
+            //this.carAni.setImageResource(R.drawable.car_top_01_move);
         } else {
             stop.setText( "START" );
 
-            this.carAni.setImageResource(R.drawable.car_top_03_stop);
+            //this.carAni.setImageResource(R.drawable.car_top_03_stop);
         }
     }
     // -- paintUI
@@ -190,13 +190,15 @@ public class Activity_02_Car extends Activity_05_Compass implements Orientation.
             this.carAni.clearAnimation();
         }
 
+        this.carAni.setImageResource( 1 == dir ? R.drawable.car_top_02_drive : R.drawable.car_top_01_move );
+
         // logo animation
         int relative = Animation.RELATIVE_TO_SELF ;
         Animation animation = new TranslateAnimation(
                 relative, 0.0f,
                 relative, 0.0f,
-                relative, dir*0.5f,
-                relative, -dir*0.5f);
+                relative, dir*0.6f,
+                relative, -dir*0.6f);
 
         animation.setDuration( 2_500 );
         animation.setRepeatCount( -1 );
@@ -212,13 +214,15 @@ public class Activity_02_Car extends Activity_05_Compass implements Orientation.
             this.carAni.clearAnimation();
         }
 
+        this.carAni.setImageResource(R.drawable.car_top_01_move );
+
         float currentAzimuth = 0.0f;
         float azimuth = 0.0f;
 
         int relative = Animation.RELATIVE_TO_SELF ;
 
         Animation animation = new RotateAnimation(
-                0, dir*45,
+                0, dir*55,
                 relative, 0.5f,
                 relative,  0.5f);
 
