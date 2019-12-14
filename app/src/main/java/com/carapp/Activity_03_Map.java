@@ -292,7 +292,6 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
             pathStart = map.addMarker(markerOptions);
             pathStart.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.path_start));
 
-
             if( null != myPhoneMarker ) {
                 myPhoneMarker.hideInfoWindow();
             }
@@ -326,53 +325,56 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
 
         Log.d( tag, "onMapClick");
 
-        if( null != pathEnd ) {
-            pathEnd.remove();
+        if( isAutopilot ) {
+
+            if (null != pathEnd) {
+                pathEnd.remove();
+            }
+
+            if (null != autoPilotPath) {
+                autoPilotPath.remove();
+            }
+
+            // clear gps log
+            this.gpsLog = new GpsLog();
+
+            if (null != gpsPath) {
+                gpsPath.remove();
+            }
+
+            // 도착 지점 추가
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(latLng);
+            markerOptions.title("목적지");
+
+            pathEnd = map.addMarker(markerOptions);
+            pathEnd.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.path_end));
+
+            if (null != pathEnd) {
+                pathEnd.hideInfoWindow();
+            }
+
+            pathEnd.showInfoWindow();
+            // -- 도착 지점 추가
+
+            // 출발지 -> 도착지 경로 표시
+
+            if (null != pathStart) {
+                List<PatternItem> pattern = Arrays.<PatternItem>asList(new Dash(20), new Gap(10));
+                //List<PatternItem> pattern = Arrays.<PatternItem>asList(new Dot(), new Gap(20), new Dash(30), new Gap(20));
+
+                PolylineOptions polyOptions = new PolylineOptions().width(20).color(Color.GREEN).geodesic(true);
+                polyOptions.add(pathStart.getPosition());
+                polyOptions.add(pathEnd.getPosition());
+                polyOptions.pattern(pattern);
+
+                autoPilotPath = map.addPolyline(polyOptions);
+            }
+
+            Toast.makeText(getApplicationContext(), "목적지가 설정되었습니다.", Toast.LENGTH_SHORT).show();
+
+            // -- 출발지 -> 도착지 경로 표시
         }
-
-        if( null != autoPilotPath ) {
-            autoPilotPath.remove();
-        }
-
-        // clear gps log
-        this.gpsLog = new GpsLog();
-
-        if( null != gpsPath ) {
-            gpsPath.remove();
-        }
-
-        // 도착 지점 추가
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(latLng);
-        markerOptions.title( "목적지" );
-
-        pathEnd = map.addMarker(markerOptions);
-        pathEnd.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.path_end));
-
-        if( null != pathEnd ) {
-            pathEnd.hideInfoWindow();
-        }
-
-        pathEnd.showInfoWindow();
-        // -- 도착 지점 추가
-
-        // 출발지 -> 도착지 경로 표시
-
-        if( null != pathStart ) {
-            List<PatternItem> pattern = Arrays.<PatternItem>asList(new Dash(20), new Gap(10));
-            //List<PatternItem> pattern = Arrays.<PatternItem>asList(new Dot(), new Gap(20), new Dash(30), new Gap(20));
-
-            PolylineOptions polyOptions = new PolylineOptions().width(20).color(Color.GREEN).geodesic(true);
-            polyOptions.add(pathStart.getPosition());
-            polyOptions.add(pathEnd.getPosition());
-            polyOptions.pattern(pattern);
-
-            autoPilotPath = map.addPolyline(polyOptions);
-        }
-
-        Toast.makeText( getApplicationContext(),"목적지가 설정되었습니다.",Toast.LENGTH_SHORT).show();
-
-        // -- 출발지 -> 도착지 경로 표시
 
     }
 
