@@ -326,14 +326,14 @@ public class Activity_01_Splash extends ComActivity {
 
                         activityAlive = false;
 
-                        //activity.animateLogoTranslate( 1_500 );
+                        activity.animateLogoTranslate( 1_500 );
 
                         new Handler().postDelayed(new Runnable() {
                             public void run() {
                                 activityAlive = false;
 
                                 boolean test = false;
-                                if( true ) {
+                                if( false ) {
                                     // do nothing
                                 } else if( test ) {
                                     startActivity(new android.content.Intent(Activity_01_Splash.this, Activity_04_Video.class));
