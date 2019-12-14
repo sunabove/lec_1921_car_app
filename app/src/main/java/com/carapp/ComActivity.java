@@ -3,6 +3,7 @@ package com.carapp;
 import android.Manifest;
 import android.app.ActionBar;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -65,6 +66,8 @@ public abstract class ComActivity extends AppCompatActivity implements ComInterf
 
         public static final String AUTOPILOT = "AUTOPILOT" ;
     }
+
+    final protected SharedPreferences sharedPref = getSharedPreferences("mySettings", MODE_PRIVATE);
 
     protected RequestQueue requestQueue ;
     protected boolean motionEnabled = false ;

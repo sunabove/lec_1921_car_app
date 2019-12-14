@@ -192,7 +192,7 @@
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/go_to_map_icon"
                 android:fontFamily="monospace"
-                android:text="지도 바로 가기"
+                android:text=" 지도바로가기"
                 android:textColor="#4CAF50"
                 android:textSize="22sp"
                 android:textStyle="bold" />

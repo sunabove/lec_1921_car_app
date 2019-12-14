@@ -2,6 +2,7 @@ package com.carapp;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -634,22 +635,27 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
                                         myPhoneMarker.remove();
                                     }
 
-                                    LatLng latlng = new LatLng(location.getLatitude(), location.getLongitude());
+                                    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
                                     MarkerOptions options = new MarkerOptions();
-                                    options.position(latlng).title("현재 나의 위치") ;
+                                    options.position(latLng).title("현재 나의 위치") ;
 
                                     myPhoneMarker = map.addMarker(options);
                                     myPhoneMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.smart_phone_icon_01));
 
                                     myPhoneMarker.showInfoWindow();
 
-                                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, map.getMaxZoomLevel() - 2 ));
+                                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, map.getMaxZoomLevel() - 2 ));
 
                                     status.setText( "지도를 핸드폰 현재 위치로 이동하였습니다.");
 
                                     stop.setEnabled( true );
                                     autopilot.setEnabled( true );
+
+                                    SharedPreferences.Editor editor = sharedPref.edit();
+                                    editor.putFloat( "lastPhoneLat", (float) latLng.latitude );
+                                    editor.putFloat( "lastPhoneLng", (float) latLng.longitude);
+                                    editor.commit();
                                 }
                             }
                         }
@@ -696,10 +702,15 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
         final Activity_03_Map activity = this;
 
         // Add a marker in Sydney and move the camera
-        LatLng latlng = new LatLng(37.5866, 126.97);
-        map.addMarker(new MarkerOptions().position(latlng).title("청와대"));
+        if( false ) {
+            map.addMarker(new MarkerOptions().position(new LatLng(37.5866, 126.97)).title("청와대"));
+        }
 
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
+        Float lat = sharedPref.getFloat("lastPhoneLat", 37.5866f );
+        Float lng = sharedPref.getFloat("lastPhoneLat", 126.97f );
+
+        LatLng latlng = new LatLng(lat, lng);
+
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 17));
 
         status.setText( "지도가 로드되었습니다.");

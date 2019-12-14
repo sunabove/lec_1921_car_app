@@ -87,12 +87,9 @@ public class Activity_01_Splash extends ComActivity {
             }
         }
 
-        final SharedPreferences sharedPref = getSharedPreferences("mySettings", MODE_PRIVATE);
-
         if( true ) {
-            String goToMapChecked = sharedPref.getString("goToMapChecked", "0" );
-
-            this.goToMap.setChecked( "1".equalsIgnoreCase( goToMapChecked.trim() ) );
+            Boolean goToMapChecked = sharedPref.getBoolean("goToMapChecked", false );
+            this.goToMap.setChecked( goToMapChecked );
         }
 
         this.goToMap.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -100,10 +97,9 @@ public class Activity_01_Splash extends ComActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Log.d( tag, "goToMap checked = " + isChecked );
-                String mySetting = sharedPref.getString("goToMapChecked", isChecked ? "1" : "0" );
 
                 SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putString( "goToMapChecked", isChecked ? "1" : "0" );
+                editor.putBoolean( "goToMapChecked", isChecked  );
                 editor.commit();
             }
 
