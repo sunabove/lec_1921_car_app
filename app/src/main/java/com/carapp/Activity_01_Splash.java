@@ -154,7 +154,7 @@ public class Activity_01_Splash extends ComActivity {
         }
 
         Animation animation = new RotateAnimation(fromDegree, toDegree,
-                relative, 0.5f, relative, 0.5f);
+                relative, 0.5f, relative, 0.7f);
 
         animation.setDuration( 2_500 );
         animation.setRepeatCount( 0 );
