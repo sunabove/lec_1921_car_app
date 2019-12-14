@@ -67,7 +67,7 @@ public abstract class ComActivity extends AppCompatActivity implements ComInterf
         public static final String AUTOPILOT = "AUTOPILOT" ;
     }
 
-    final protected SharedPreferences sharedPref = getSharedPreferences("mySettings", MODE_PRIVATE);
+    protected SharedPreferences sharedPref = null;
 
     protected RequestQueue requestQueue ;
     protected boolean motionEnabled = false ;
@@ -82,6 +82,10 @@ public abstract class ComActivity extends AppCompatActivity implements ComInterf
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView( this.getLayoutId() );
+
+        if( null == sharedPref ) {
+            sharedPref = getSharedPreferences("mySettings", MODE_PRIVATE);
+        }
 
         this.requestQueue = Volley.newRequestQueue(this);
 
