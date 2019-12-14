@@ -173,7 +173,7 @@ public class Activity_01_Splash extends ComActivity {
             @Override
             public void onAnimationEnd(Animation animation) {
                 if( 2 == mode ) {
-                    animateLogoTranslate( 1_500 );
+                    animateLogoTranslate(1_500);
                 } else {
                     animateLogoRotate(-dir);
                 }
@@ -202,11 +202,61 @@ public class Activity_01_Splash extends ComActivity {
                 relative, 0.0f);
 
         animation.setDuration(duration);
-        animation.setRepeatCount( 1 );
+        animation.setRepeatCount( -1 );
         //animation.setRepeatMode(Animation.RESTART);
 
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            int animationCnt = 0 ;
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+                Log.d( "animation", "onAnimationRepeat "  + animationCnt );
+
+                if( 2 == mode ) {
+                    if( animationCnt > 1 ) {
+                        logo.clearAnimation();
+
+                        moveToNextActivity();
+                    } else {
+                        animationCnt += 1;
+                    }
+                }
+            }
+        });
+
         this.logo.startAnimation(animation);
-        // -- logoanimation
+    }
+    // -- animateLogoTranslate
+
+    private void moveToNextActivity() {
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                activityAlive = false;
+
+                boolean test = false;
+                if( false ) {
+                    // do nothing
+                } else if( test ) {
+                    startActivity(new android.content.Intent(Activity_01_Splash.this, Activity_04_Video.class));
+                } else if (test) {
+                    startActivity(new android.content.Intent(Activity_01_Splash.this, Activity_03_Map.class));
+                } else {
+                    if( goToMap.isSelected() || goToMap.isChecked()) {
+                        startActivity(new android.content.Intent(Activity_01_Splash.this, Activity_03_Map.class));
+                    } else {
+                        startActivity(new android.content.Intent(Activity_01_Splash.this, Activity_02_Car.class));
+                    }
+                }
+            }
+        }, 0);
     }
 
     public boolean isRaspberryWifiConnected() {
@@ -330,26 +380,6 @@ public class Activity_01_Splash extends ComActivity {
 
                         activityAlive = false;
 
-                        new Handler().postDelayed(new Runnable() {
-                            public void run() {
-                                activityAlive = false;
-
-                                boolean test = false;
-                                if( false ) {
-                                    // do nothing
-                                } else if( test ) {
-                                    startActivity(new android.content.Intent(Activity_01_Splash.this, Activity_04_Video.class));
-                                } else if (test) {
-                                    startActivity(new android.content.Intent(Activity_01_Splash.this, Activity_03_Map.class));
-                                } else {
-                                    if( goToMap.isSelected() || goToMap.isChecked()) {
-                                        startActivity(new android.content.Intent(Activity_01_Splash.this, Activity_03_Map.class));
-                                    } else {
-                                        startActivity(new android.content.Intent(Activity_01_Splash.this, Activity_02_Car.class));
-                                    }
-                                }
-                            }
-                        }, 3000);
                     } else if (3 == mode) {
                         status.setTextColor(Color.parseColor("#FF0000"));
 
