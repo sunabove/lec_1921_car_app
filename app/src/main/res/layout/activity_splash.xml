@@ -130,7 +130,7 @@
                 android:paddingTop="5dp"
                 android:text="BerryCar"
                 android:textColor="#3F51B5"
-                android:textSize="20sp"
+                android:textSize="22sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -141,7 +141,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="  V1.0.05"
-                android:textColor="#FF5722" />
+                android:textColor="#FF5722"
+                android:textSize="18sp" />
 
         </LinearLayout>
 
@@ -189,6 +190,7 @@
                 android:id="@+id/goToMap"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:drawableStart="@drawable/go_to_map_icon"
                 android:fontFamily="monospace"
                 android:text="지도 바로 가기"
                 android:textColor="#4CAF50"
