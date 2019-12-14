@@ -149,7 +149,15 @@ public class Activity_01_Splash extends ComActivity {
 
         int relative = Animation.RELATIVE_TO_SELF ;
 
-        Animation animation = new RotateAnimation(-dir*20, dir*20,
+        int fromDegree = -50 ;
+        int toDegree = 30 ;
+
+        if( 0 > dir ) {
+            fromDegree = 30 ;
+            toDegree = -50;
+        }
+
+        Animation animation = new RotateAnimation(fromDegree, toDegree,
                 relative, 0.5f, relative,  0.5f);
 
         animation.setDuration( 2_500 );
