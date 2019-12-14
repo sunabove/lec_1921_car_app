@@ -172,7 +172,11 @@ public class Activity_01_Splash extends ComActivity {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                animateLogoRotate( -dir );
+                if( 2 == mode ) {
+                    animateLogoTranslate( 1_500 );
+                } else {
+                    animateLogoRotate(-dir);
+                }
             }
 
             @Override
@@ -325,8 +329,6 @@ public class Activity_01_Splash extends ComActivity {
                         status.setText("서버 연결에 성공하였습니다.\n차량 제어 화면으로 이동합니다.\n잠시만 기다려 주세요.");
 
                         activityAlive = false;
-
-                        activity.animateLogoTranslate( 1_500 );
 
                         new Handler().postDelayed(new Runnable() {
                             public void run() {
