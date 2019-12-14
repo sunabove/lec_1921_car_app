@@ -325,7 +325,9 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
 
         Log.d( tag, "onMapClick");
 
-        if( isAutopilot ) {
+        if( ! isAutopilot ) {
+            Log.d( tag, "Autopilot is not enabled." );
+        } else if( isAutopilot ) {
 
             if (null != pathEnd) {
                 pathEnd.remove();

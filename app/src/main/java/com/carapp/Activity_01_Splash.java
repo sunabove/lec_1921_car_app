@@ -14,11 +14,11 @@ import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -135,10 +135,35 @@ public class Activity_01_Splash extends ComActivity {
         this.seekBar.setEnabled( false );
         this.seekBar.setProgress( 0 );
 
+        this.animateLogoRotate();
+
         this.checkServer();
     }
 
-    private void logoAnimation(final long duration ) {
+    private void animateLogoRotate( ) {
+        if( null != this.logo ) {
+            this.logo.clearAnimation();
+        }
+
+        this.logo.setImageResource(R.drawable.splash_icon );
+
+        int relative = Animation.RELATIVE_TO_SELF ;
+
+        Animation animation = new RotateAnimation(0, 360,
+                relative, 0.5f, relative,  0.5f);
+
+        animation.setDuration( 2_500 );
+        animation.setRepeatCount( -1 );
+        animation.setFillAfter(true);
+
+        this.logo.startAnimation( animation );
+    }
+
+    private void animateLogoTranslate(final long duration ) {
+        if( null != this.logo ) {
+            this.logo.clearAnimation();
+        }
+
         // logo animation
         int relative = Animation.RELATIVE_TO_SELF ;
         TranslateAnimation animation = new TranslateAnimation(
@@ -161,6 +186,8 @@ public class Activity_01_Splash extends ComActivity {
     }
 
     private void checkServer() {
+
+        final Activity_01_Splash activity = this ;
 
         status.setTextColor(Color.parseColor("#009688"));
         status.setText( "서버 연결중입니다.\n잠시만 기다려 주세요!" );
@@ -274,7 +301,7 @@ public class Activity_01_Splash extends ComActivity {
 
                         activityAlive = false;
 
-                        logoAnimation( 1_500 );
+                        activity.animateLogoTranslate( 1_500 );
 
                         new Handler().postDelayed(new Runnable() {
                             public void run() {
