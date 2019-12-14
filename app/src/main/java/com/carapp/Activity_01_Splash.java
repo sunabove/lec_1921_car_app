@@ -135,12 +135,12 @@ public class Activity_01_Splash extends ComActivity {
         this.seekBar.setEnabled( false );
         this.seekBar.setProgress( 0 );
 
-        this.animateLogoRotate();
+        this.animateLogoRotate( 1 );
 
         this.checkServer();
     }
 
-    private void animateLogoRotate( ) {
+    private void animateLogoRotate(final int dir) {
         if( null != this.logo ) {
             this.logo.clearAnimation();
         }
@@ -149,12 +149,29 @@ public class Activity_01_Splash extends ComActivity {
 
         int relative = Animation.RELATIVE_TO_SELF ;
 
-        Animation animation = new RotateAnimation(0, 360,
+        Animation animation = new RotateAnimation(-dir*20, dir*20,
                 relative, 0.5f, relative,  0.5f);
 
         animation.setDuration( 2_500 );
-        animation.setRepeatCount( -1 );
+        animation.setRepeatCount( 0 );
         animation.setFillAfter(true);
+
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                animateLogoRotate( -dir );
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
 
         this.logo.startAnimation( animation );
     }
@@ -301,14 +318,14 @@ public class Activity_01_Splash extends ComActivity {
 
                         activityAlive = false;
 
-                        activity.animateLogoTranslate( 1_500 );
+                        //activity.animateLogoTranslate( 1_500 );
 
                         new Handler().postDelayed(new Runnable() {
                             public void run() {
                                 activityAlive = false;
 
                                 boolean test = false;
-                                if( false ) {
+                                if( true ) {
                                     // do nothing
                                 } else if( test ) {
                                     startActivity(new android.content.Intent(Activity_01_Splash.this, Activity_04_Video.class));
