@@ -67,6 +67,8 @@ public abstract class ComActivity extends AppCompatActivity implements ComInterf
         public static final String AUTOPILOT = "AUTOPILOT" ;
     }
 
+    protected Context context ;
+
     protected SharedPreferences sharedPref = null;
 
     protected RequestQueue requestQueue ;
@@ -74,7 +76,7 @@ public abstract class ComActivity extends AppCompatActivity implements ComInterf
 
     protected Socket socket = null;
 
-    private FloatingActionButton goBack ;
+    protected FloatingActionButton goBack ;
 
     public abstract int getLayoutId() ;
 
@@ -82,6 +84,8 @@ public abstract class ComActivity extends AppCompatActivity implements ComInterf
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView( this.getLayoutId() );
+
+        this.context = this.getApplicationContext();
 
         if( null == sharedPref ) {
             sharedPref = getSharedPreferences("mySettings", MODE_PRIVATE);
