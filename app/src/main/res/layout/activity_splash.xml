@@ -45,11 +45,11 @@
 
                     <Spinner
                         android:id="@+id/wifiSpinner"
-                        android:layout_width="wrap_content"
+                        android:layout_width="200dp"
                         android:layout_height="wrap_content"
-                        android:textSize="22sp"
                         android:spinnerMode="dropdown"
-                        android:splitMotionEvents="false" />
+                        android:splitMotionEvents="false"
+                        android:textSize="22sp" />
                 </TableRow>
 
                 <TableRow

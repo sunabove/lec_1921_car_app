@@ -9,6 +9,7 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
+import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -132,6 +133,28 @@ public class Activity_01_Splash extends ComActivity {
         registerReceiver( new WifiReceiver(), intentFilter);
         */
 
+    }
+    // -- on create
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        Log.v( "sunabove", "onResume");
+
+        this.activityAlive = true ;
+        this.serverActive = false ;
+
+        this.ipaddr.setText( this.getIpAddr() );
+
+        this.errorMessage = "";
+        this.error.setText( errorMessage );
+
+        this.seekBar.setEnabled( false );
+        this.seekBar.setProgress( 0 );
+
+        this.animateLogoRotate( 1 );
+
         // wifi scan
         final WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 
@@ -153,12 +176,32 @@ public class Activity_01_Splash extends ComActivity {
         context.registerReceiver(wifiScanReceiver, intentFilter);
 
         wifiManager.startScan();
+
         // -- wifi scan
+
+        this.checkServer();
     }
-    // -- on create
 
     private void whenWifiItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
+        String tag = "wifi";
+
+        String ssid = "" + wifiSpinner.getItemAtPosition( position );
+
+        WifiManager wifiManager = (WifiManager) context.getApplicationContext()
+                .getSystemService(Context.WIFI_SERVICE);
+
+        List<WifiConfiguration> wifiConfigurations = wifiManager.getConfiguredNetworks();
+
+        for (WifiConfiguration wifiConfiguration : wifiConfigurations) {
+            if (wifiConfiguration.SSID.equals("\"" + ssid + "\"")) {
+                wifiManager.enableNetwork(wifiConfiguration.networkId, true);
+                Log.i( tag, "connectToWifi: will enable " + wifiConfiguration.SSID);
+                wifiManager.reconnect();
+
+                return ;
+            }
+        }
     }
 
     private void scanSuccess( WifiManager wifiManager ) {
@@ -167,27 +210,39 @@ public class Activity_01_Splash extends ComActivity {
 
         final Spinner spinner = this.wifiSpinner ;
 
+        String currSsid = this.getWifiSsid() ;
+
         List<String> list = new ArrayList<>();
 
+        int position = 0 ;
 
         int idx = 0 ;
         for( ScanResult scan : results ) {
             String ssid = scan.SSID ;
 
+            if( null != ssid ) {
+                ssid = ssid.trim();
+            }
+
             Log.d( tag, String.format("[%03d] scan ssid = %s", idx, scan.SSID ) ) ;
 
             if( null != ssid && 0 < ssid.trim().length() ) {
                 list.add(scan.SSID);
-            }
 
-            idx ++ ;
+                if( ssid.equals( currSsid )) {
+                    position = idx;
+                }
+
+                idx ++ ;
+            }
         }
 
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, list);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, list);
         //dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         spinner.setAdapter(dataAdapter);
+
+        spinner.setSelection( position );
 
     }
 
@@ -195,28 +250,6 @@ public class Activity_01_Splash extends ComActivity {
         // handle failure: new scan did NOT succeed
         // consider using old scan results: these are the OLD results!
         List<ScanResult> results = wifiManager.getScanResults();
-    }
-
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-        Log.v( "sunabove", "onResume");
-
-        this.activityAlive = true ;
-        this.serverActive = false ;
-
-        this.ipaddr.setText( this.getIpAddr() );
-
-        this.errorMessage = "";
-        this.error.setText( errorMessage );
-
-        this.seekBar.setEnabled( false );
-        this.seekBar.setProgress( 0 );
-
-        this.animateLogoRotate( 1 );
-
-        this.checkServer();
     }
 
     private void animateLogoRotate(final int dir) {
