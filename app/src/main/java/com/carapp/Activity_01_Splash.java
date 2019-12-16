@@ -79,9 +79,15 @@ public class Activity_01_Splash extends ComActivity {
         this.goToMap = this.findViewById(R.id.goToMap);
         this.wifiSpinner = this.findViewById(R.id.wifiSpinner);
 
-        this.wifiSpinner.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        this.wifiSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 whenWifiItemSelected( parent, view, position, id );
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
 
