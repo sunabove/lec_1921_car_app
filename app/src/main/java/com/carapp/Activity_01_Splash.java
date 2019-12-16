@@ -246,6 +246,15 @@ public class Activity_01_Splash extends ComActivity {
 
         spinner.setSelection( position );
 
+        if( false && ! this.isRaspberryWifiConnected() ) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    spinner.performClick();
+                }
+            }, 0);
+        }
+
     }
 
     private void scanFailure( WifiManager wifiManager ) {
