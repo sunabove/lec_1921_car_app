@@ -44,10 +44,11 @@
                         android:text="   Wi-Fi : " />
 
                     <Spinner
-                        android:id="@+id/planets_spinner"
+                        android:id="@+id/wifiSpinner"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:spinnerMode="dialog"
+                        android:textSize="22sp"
+                        android:spinnerMode="dropdown"
                         android:splitMotionEvents="false" />
                 </TableRow>
 

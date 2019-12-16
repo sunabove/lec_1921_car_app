@@ -15,13 +15,17 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +33,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Activity_01_Splash extends ComActivity {
@@ -43,6 +48,7 @@ public class Activity_01_Splash extends ComActivity {
     private SeekBar seekBar ;
     private ImageView wifiLogo;
     private CheckBox goToMap ;
+    private Spinner wifiSpinner ;
 
     private String errorMessage = "" ;
 
@@ -71,6 +77,13 @@ public class Activity_01_Splash extends ComActivity {
 
         this.wifiLogo = this.findViewById(R.id.wifiLogo);
         this.goToMap = this.findViewById(R.id.goToMap);
+        this.wifiSpinner = this.findViewById(R.id.wifiSpinner);
+
+        this.wifiSpinner.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                whenWifiItemSelected( parent, view, position, id );
+            }
+        });
 
         class WifiReceiver extends BroadcastReceiver {
 
@@ -140,15 +153,37 @@ public class Activity_01_Splash extends ComActivity {
     }
     // -- on create
 
+    private void whenWifiItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+    }
+
     private void scanSuccess( WifiManager wifiManager ) {
         String tag = "wifi" ;
         List<ScanResult> results = wifiManager.getScanResults();
 
+        final Spinner spinner = this.wifiSpinner ;
+
+        List<String> list = new ArrayList<>();
+
+
         int idx = 0 ;
         for( ScanResult scan : results ) {
+            String ssid = scan.SSID ;
+
             Log.d( tag, String.format("[%03d] scan ssid = %s", idx, scan.SSID ) ) ;
+
+            if( null != ssid && 0 < ssid.trim().length() ) {
+                list.add(scan.SSID);
+            }
+
             idx ++ ;
         }
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, list);
+        //dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinner.setAdapter(dataAdapter);
 
     }
 
@@ -427,18 +462,15 @@ public class Activity_01_Splash extends ComActivity {
                         if (isRaspberryWifiConnected()) {
                             status.setText("차량 서버 실행 여부를 체크하세요.\n\n잠시후 다시 연결을 시도합니다.");
                         } else {
-                            status.setText("라즈베리파이 공유기를 연결하세요.\n\nWi-Fi 선택 화면으로 이동합니다.");
+                            status.setText("라즈베리파이 공유기를 연결하세요.");
 
-                            activityAlive = false;
+                            if( false ) {
+                                status.setText("라즈베리파이 공유기를 연결하세요.\n\nWi-Fi 선택 화면으로 이동합니다.");
 
-                            Toast.makeText(status.getContext(), "Wi-Fi 선택 화면으로 이동합니다.", Toast.LENGTH_SHORT).show();
+                                activityAlive = false;
 
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
-                                }
-                            }, 2_000);
+                                openWifiSelector();
+                            }
                         }
                     }
 
@@ -449,5 +481,6 @@ public class Activity_01_Splash extends ComActivity {
             }, 2_000);
         }
     }
+
 
 }

@@ -3,6 +3,7 @@ package com.carapp;
 import android.Manifest;
 import android.app.ActionBar;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -14,6 +15,7 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.text.format.Formatter;
 import android.util.Log;
 import android.view.View;
@@ -292,6 +294,18 @@ public abstract class ComActivity extends AppCompatActivity implements ComInterf
         angle = angle + deg ;
 
         return angle ;
+    }
+
+    // 와이파이 선택창을 오픈한다.
+    public void openWifiSelector() {
+        Toast.makeText( context, "Wi-Fi 선택 화면으로 이동합니다.", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+            }
+        }, 2_000);
     }
 
 }
