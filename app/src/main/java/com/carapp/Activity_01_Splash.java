@@ -42,7 +42,6 @@ public class Activity_01_Splash extends ComActivity {
     private boolean serverActive = false ;
     private TextView status ;
     private TextView error ;
-    private TextView wifi ;
     private TextView ipaddr;
     private ImageView logo;
     private SeekBar seekBar ;
@@ -69,7 +68,6 @@ public class Activity_01_Splash extends ComActivity {
         this.status = this.findViewById(R.id.status);
         this.error = this.findViewById(R.id.error);
 
-        this.wifi = this.findViewById(R.id.wifi);
         this.ipaddr = this.findViewById(R.id.ipaddr);
 
         this.logo = this.findViewById(R.id.logo);
@@ -208,7 +206,6 @@ public class Activity_01_Splash extends ComActivity {
         this.activityAlive = true ;
         this.serverActive = false ;
 
-        this.wifi.setText( this.getWifiSsid() );
         this.ipaddr.setText( this.getIpAddr() );
 
         this.errorMessage = "";
@@ -353,7 +350,6 @@ public class Activity_01_Splash extends ComActivity {
         status.setTextColor(Color.parseColor("#009688"));
         status.setText( "서버 연결중입니다.\n잠시만 기다려 주세요!" );
 
-        this.wifi.setText( this.getWifiSsid() );
         this.ipaddr.setText( this.getIpAddr() );
 
         this.serverActive = false ;
@@ -444,7 +440,6 @@ public class Activity_01_Splash extends ComActivity {
 
                     error.setText(errorMessage);
 
-                    wifi.setText(getWifiSsid());
                     ipaddr.setText(getIpAddr());
 
                     if (isRaspberryWifiConnected()) {
