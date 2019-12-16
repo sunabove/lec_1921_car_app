@@ -136,11 +136,20 @@ public class Activity_01_Splash extends ComActivity {
         context.registerReceiver(wifiScanReceiver, intentFilter);
 
         wifiManager.startScan();
+        // -- wifi scan
     }
     // -- on create
 
     private void scanSuccess( WifiManager wifiManager ) {
+        String tag = "wifi" ;
         List<ScanResult> results = wifiManager.getScanResults();
+
+        int idx = 0 ;
+        for( ScanResult scan : results ) {
+            Log.d( tag, String.format("[%03d] scan ssid = %s", idx, scan.SSID ) ) ;
+            idx ++ ;
+        }
+
     }
 
     private void scanFailure( WifiManager wifiManager ) {
