@@ -43,13 +43,20 @@
                         android:gravity="center_horizontal|right"
                         android:text="   Wi-Fi : " />
 
-                    <Spinner
-                        android:id="@+id/wifiSpinner"
+                    <LinearLayout
                         android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        android:spinnerMode="dropdown"
-                        android:splitMotionEvents="false"
-                        android:textSize="22sp" />
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <Spinner
+                            android:id="@+id/wifiSpinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:spinnerMode="dropdown"
+                            android:splitMotionEvents="false"
+                            android:textSize="22sp" />
+                    </LinearLayout>
+
                 </TableRow>
 
                 <TableRow

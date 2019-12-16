@@ -237,10 +237,12 @@ public class Activity_01_Splash extends ComActivity {
             }
         }
 
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, list);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, list);
         //dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        spinner.setAdapter(dataAdapter);
+        spinner.setAdapter(adapter);
+
+        adapter.setDropDownViewResource(R.layout.spin_item);
 
         spinner.setSelection( position );
 
