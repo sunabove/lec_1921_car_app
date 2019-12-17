@@ -291,6 +291,10 @@ public class Activity_02_Car extends Activity_05_Compass implements Orientation.
 
     // pitch roll 값이 변했을 경우, 차를 제어한다.
     private void pitchRollUpdated( double pitch, double roll ) {
+
+        if( true ) {
+            return ;
+        }
         pitch = -prettyDegree(pitch);
         roll = -prettyDegree(roll);
 
@@ -336,13 +340,16 @@ public class Activity_02_Car extends Activity_05_Compass implements Orientation.
         double ry = Math.toDegrees( values[1] ) % 360 ;
         double rz = Math.toDegrees( values[2] ) % 360 ;
 
-        this.roll.setText( String.format( "%5.2f", this.prettyDegree( rz )));
-
         rx = this.prettyDegree( rx );
         ry = this.prettyDegree( ry );
         rz = this.prettyDegree( rz );
 
-        double rollRate = rz ;
+        double pitchRate = rx ;
+        double rollRate   = rz ;
+
+        this.pitch.setText( String.format( "%5.2f", pitchRate ));
+        this.roll.setText( String.format( "%5.2f", rollRate ));
+
 
         if( false ) {
             Log.d(tag, String.format("r/s2 x = %3.6f, y = %3.6f, z = %3.6f", rx, ry, rz));
@@ -356,17 +363,24 @@ public class Activity_02_Car extends Activity_05_Compass implements Orientation.
             // do nothing!
         } else {
             String motion = "" ;
-            if ( 100 <= rollRate) {
-                motion = Motion.LEFT ;
+
+            if ( -100 >= pitchRate ) {
+                motion = Motion.FORWARD ;
+            } else if ( 100 <= pitchRate ) {
+                motion = Motion.BACKWARD;
             } else if ( -100 >= rollRate) {
                 motion = Motion.RIGHT ;
+            } else if ( 100 <= rollRate) {
+                motion = Motion.LEFT ;
+            } else {
+                //motion = Motion.STOP ;
             }
 
             if( 0 < motion.length() ){
                 this.moveCar(motion, status);
-            }
 
-            motionTime = now ;
+                motionTime = now ;
+            }
         }
 
     }
