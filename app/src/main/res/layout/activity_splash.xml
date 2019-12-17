@@ -18,7 +18,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center|center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="4dp">
 
             <ImageView
                 android:id="@+id/wifiLogo"
@@ -33,7 +34,7 @@
                 android:layout_height="wrap_content">
 
                 <TableRow
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
                     <TextView
@@ -44,13 +45,14 @@
                         android:text="   Wi-Fi : " />
 
                     <LinearLayout
-                        android:layout_width="200dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:paddingRight="8dp">
 
                         <Spinner
                             android:id="@+id/wifiSpinner"
-                            android:layout_width="match_parent"
+                            android:layout_width="150dp"
                             android:layout_height="wrap_content"
                             android:spinnerMode="dropdown"
                             android:splitMotionEvents="false"
