@@ -932,7 +932,7 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
                 relative, -dir*0.6f);
 
         animation.setDuration( 2_500 );
-        animation.setRepeatCount( 2 );
+        animation.setRepeatCount( 0 );
 
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -971,7 +971,7 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
                 relative,  0.5f);
 
         animation.setDuration( 2_500 );
-        animation.setRepeatCount( 2 );
+        animation.setRepeatCount( 0 );
 
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override

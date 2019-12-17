@@ -203,7 +203,7 @@ public class Activity_02_Car extends Activity_05_Compass implements Orientation.
                 relative, -dir*0.6f);
 
         animation.setDuration( 2_500 );
-        animation.setRepeatCount( 1 );
+        animation.setRepeatCount( 0 );
         animation.setFillAfter(true);
 
         animation.setAnimationListener(new Animation.AnimationListener() {
@@ -243,7 +243,7 @@ public class Activity_02_Car extends Activity_05_Compass implements Orientation.
                 relative,  0.5f);
 
         animation.setDuration( 2_500 );
-        animation.setRepeatCount( 1 );
+        animation.setRepeatCount( 0 );
         animation.setFillAfter(true);
 
         animation.setAnimationListener(new Animation.AnimationListener() {
