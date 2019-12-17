@@ -284,7 +284,7 @@ public abstract class ComActivity extends AppCompatActivity implements ComInterf
         return results ;
     }
 
-    public double prettyAngle( double angleDegDecimal ) {
+    public double prettyAngle60(double angleDegDecimal ) {
         double angle = angleDegDecimal %360 ;
 
         int ang = (int) angle ;

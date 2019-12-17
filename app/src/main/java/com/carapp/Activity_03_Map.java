@@ -500,9 +500,9 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
             String timestamp = response.get( "timestamp" ).toString().trim();
 
             String text = "" ;
-            text += String.format(  "Lat     :  %3.6f °", prettyAngle( latitude ) );
-            text += String.format("   Lon   : %3.6f °", prettyAngle( longitude ) ) ;
-            text += String.format("\nHead : %3.6f °", prettyAngle( heading ) ) ;
+            text += String.format(  "Lat     :  %3.6f °", prettyAngle60( latitude ) );
+            text += String.format("   Lon   : %3.6f °", prettyAngle60( longitude ) ) ;
+            text += String.format("\nHead : %3.6f °", prettyAngle60( heading ) ) ;
             text += String.format("   Alt    :  %3.6f m", altitude ) ;
 
             log.setText( text );
