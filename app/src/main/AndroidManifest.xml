@@ -6,8 +6,8 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
     <application
         android:allowBackup="true"
@@ -18,9 +18,12 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
 
+        <activity android:name=".RotationVectorDemo">
+        </activity>
+
         <service
             android:name=".SocketService"
-            android:exported="false"></service>
+            android:exported="false" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -35,29 +38,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".Activity_02_Car"
             android:label="@string/title_activity_car"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".Activity_03_Map"
             android:label="@string/title_activity_maps"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-
         <activity
             android:name=".Activity_05_Compass"
             android:label="MyCar Compass"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".Activity_04_Video"
             android:label="@string/title_activity_video"
-            android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="landscape"
-            />
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

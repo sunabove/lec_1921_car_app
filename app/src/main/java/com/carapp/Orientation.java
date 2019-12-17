@@ -16,6 +16,7 @@ public class Orientation implements SensorEventListener {
 
     public interface Listener {
         void onOrientationChanged(float pitch, float roll);
+        void onGyroChanged(float [] values);
     }
 
     private static final int SENSOR_DELAY_MICROS = 16 * 1000; // 16ms
@@ -24,8 +25,9 @@ public class Orientation implements SensorEventListener {
 
     private final SensorManager sensorManager;
 
-    @Nullable
-    private final Sensor rotationSensor;
+
+    private Sensor rotationSensor;
+    private Sensor gyroSensor;
 
     private int lastAccuracy;
     private Listener listener;
@@ -36,6 +38,7 @@ public class Orientation implements SensorEventListener {
 
         // Can be null if the sensor hardware is not available
         rotationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+        gyroSensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
     }
 
     public void startListening(Listener listener) {
@@ -49,6 +52,7 @@ public class Orientation implements SensorEventListener {
             return;
         }
         sensorManager.registerListener(this, rotationSensor, SENSOR_DELAY_MICROS);
+        sensorManager.registerListener(this, gyroSensor, SENSOR_DELAY_MICROS);
     }
 
     public void stopListening() {
@@ -68,12 +72,20 @@ public class Orientation implements SensorEventListener {
         if (listener == null) {
             return;
         }
+
         if (lastAccuracy == SensorManager.SENSOR_STATUS_UNRELIABLE) {
             return;
         }
+
         if (event.sensor == rotationSensor) {
             updateOrientation(event.values);
+        }else if (event.sensor == gyroSensor) {
+            updateGyro(event.values);
         }
+    }
+
+    private void updateGyro(float [] values) {
+        listener.onGyroChanged( values );
     }
 
     @SuppressWarnings("SuspiciousNameCombination")

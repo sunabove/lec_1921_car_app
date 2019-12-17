@@ -334,4 +334,15 @@ public class Activity_02_Car extends Activity_05_Compass implements Orientation.
     }
     // -- pitchRollUpdated
 
+    public void onGyroChanged( float [] values ) {
+        String tag = "gyro";
+
+        double rx = Math.toDegrees( values[0] ) % 360 ;
+        double ry = Math.toDegrees( values[1] ) % 360 ;
+        double rz = Math.toDegrees( values[2] ) % 360 ;
+
+        Log.d( tag, String.format("r/s2 x = %3.6f, y = %3.6f, z = %3.6f", rx, ry, rz ) );
+
+    }
+
 }
