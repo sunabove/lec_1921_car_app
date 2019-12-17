@@ -191,6 +191,8 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
 
         this.getCarLocationByHttp( 500 );
 
+        this.isAutopilot = false ;
+
         this.orientation.startListening(this);
     }
 
@@ -802,120 +804,6 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
         new Handler().postDelayed( runnable, 0);
     }
 
-    // pitch roll 값이 변했을 경우, 차를 제어한다.
-    public void onOrientationChanged( float pitch, float roll ) {
-        this.pitchRollUpdated( pitch, roll );
-    }
-
-    // pitch roll 값이 변했을 경우, 차를 제어한다.
-    private void pitchRollUpdated( double pitch, double roll ) {
-
-        if( true ) {
-            return;
-        }
-
-        pitch = -prettyDegree(pitch);
-        roll = -prettyDegree(roll);
-
-        String text = String.format("pitch: %05.2f  roll %05.2f", pitch, roll);
-
-        this.pitch.setText( String.format( "%5.2f", pitch));
-        this.roll.setText( String.format( "%5.2f", roll));
-
-        final long now = System.currentTimeMillis();
-
-        if( ! motionEnabled ) {
-            // do nothing!
-        } else if (now - motionTime < 700 ) {
-            // do nothing!
-        } else if( isAutopilot ) {
-            // do nothing
-        } else {
-            String motion = "" ;
-            if (15 <= roll) {
-                motion = Motion.RIGHT ;
-            } else if ( -15 >= roll) {
-                motion = Motion.LEFT ;
-            } else if ( 45 <= pitch) {
-                motion = Motion.FORWARD ;
-            } else if ( 32 >= pitch) {
-                motion = Motion.BACKWARD ;
-            } else {
-                motion = Motion.STOP ;
-            }
-
-            /*
-            if( false && motion.equalsIgnoreCase( motionPrev ) ) {
-                // do nothing!
-            }
-            */
-
-            if( Motion.STOP.equalsIgnoreCase( this.motionCurr ) && Motion.STOP.equalsIgnoreCase( motion ) ) {
-                // do nothing!
-            } else if( true ){
-                this.moveCar(motion, status, null );
-
-                this.motionCurr = motion;
-
-                motionTime = now ;
-            }
-
-        }
-    }
-    // -- pitchRollUpdated
-
-    public void onGyroChanged( float [] values ) {
-        String tag = "gyro";
-
-        double rx = Math.toDegrees( values[0] ) % 360 ;
-        double ry = Math.toDegrees( values[1] ) % 360 ;
-        double rz = Math.toDegrees( values[2] ) % 360 ;
-
-        rx = this.prettyDegree( rx );
-        ry = this.prettyDegree( ry );
-        rz = this.prettyDegree( rz );
-
-        double pitchRate = rx ;
-        double rollRate   = rz ;
-
-        this.pitch.setText( String.format( "%3.2f", pitchRate ));
-        this.roll.setText( String.format( "%3.2f", rollRate ));
-
-
-        if( false ) {
-            Log.d(tag, String.format("r/s2 x = %3.6f, y = %3.6f, z = %3.6f", rx, ry, rz));
-        }
-
-        final long now = System.currentTimeMillis();
-
-        if( ! motionEnabled ) {
-            // do nothing!
-        }else if (now - motionTime < 700 ) {
-            // do nothing!
-        } else {
-            String motion = "" ;
-
-            if ( -80 >= pitchRate ) {
-                motion = Motion.FORWARD ;
-            } else if ( 80 <= pitchRate ) {
-                motion = Motion.BACKWARD;
-            } else if ( -100 >= rollRate) {
-                motion = Motion.RIGHT ;
-            } else if ( 100 <= rollRate) {
-                motion = Motion.LEFT ;
-            } else {
-                //motion = Motion.STOP ;
-            }
-
-            if( 0 < motion.length() ){
-                this.moveCar(motion, status, null);
-
-                motionTime = now ;
-            }
-        }
-
-    }
-
     private void animateCarAdvance( int dir ) {
         if( null != this.carAnimation ) {
             this.carAni.clearAnimation();
@@ -1046,4 +934,122 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
 
         this.carAni.startAnimation( animation );
     }
+
+    // pitch roll 값이 변했을 경우, 차를 제어한다.
+    public void onOrientationChanged( float pitch, float roll ) {
+        this.pitchRollUpdated( pitch, roll );
+    }
+
+    // pitch roll 값이 변했을 경우, 차를 제어한다.
+    private void pitchRollUpdated( double pitch, double roll ) {
+
+        if( true ) {
+            return;
+        }
+
+        pitch = -prettyDegree(pitch);
+        roll = -prettyDegree(roll);
+
+        String text = String.format("pitch: %05.2f  roll %05.2f", pitch, roll);
+
+        this.pitch.setText( String.format( "%5.2f", pitch));
+        this.roll.setText( String.format( "%5.2f", roll));
+
+        final long now = System.currentTimeMillis();
+
+        if( ! motionEnabled ) {
+            // do nothing!
+        } else if (now - motionTime < 700 ) {
+            // do nothing!
+        } else if( isAutopilot ) {
+            // do nothing
+        } else {
+            String motion = "" ;
+            if (15 <= roll) {
+                motion = Motion.RIGHT ;
+            } else if ( -15 >= roll) {
+                motion = Motion.LEFT ;
+            } else if ( 45 <= pitch) {
+                motion = Motion.FORWARD ;
+            } else if ( 32 >= pitch) {
+                motion = Motion.BACKWARD ;
+            } else {
+                motion = Motion.STOP ;
+            }
+
+            /*
+            if( false && motion.equalsIgnoreCase( motionPrev ) ) {
+                // do nothing!
+            }
+            */
+
+            if( Motion.STOP.equalsIgnoreCase( this.motionCurr ) && Motion.STOP.equalsIgnoreCase( motion ) ) {
+                // do nothing!
+            } else if( true ){
+                this.moveCar(motion, status, null );
+
+                this.motionCurr = motion;
+
+                motionTime = now ;
+            }
+
+        }
+    }
+    // -- pitchRollUpdated
+
+    public void onGyroChanged( float [] values ) {
+        String tag = "gyro";
+
+        double rx = Math.toDegrees( values[0] ) % 360 ;
+        double ry = Math.toDegrees( values[1] ) % 360 ;
+        double rz = Math.toDegrees( values[2] ) % 360 ;
+
+        rx = this.prettyDegree( rx );
+        ry = this.prettyDegree( ry );
+        rz = this.prettyDegree( rz );
+
+        double pitchRate = rx ;
+        double rollRate   = rz ;
+
+        this.pitch.setText( String.format( "%3.2f", pitchRate ));
+        this.roll.setText( String.format( "%3.2f", rollRate ));
+
+
+        if( false ) {
+            Log.d(tag, String.format("r/s2 x = %3.6f, y = %3.6f, z = %3.6f", rx, ry, rz));
+        }
+
+        final long now = System.currentTimeMillis();
+
+        if( ! motionEnabled ) {
+            // do nothing!
+        } else if (now - motionTime < 700 ) {
+            // do nothing!
+        } else if( isAutopilot ) {
+            // do nothing
+        }else {
+            String motion = "" ;
+
+            if ( -80 >= pitchRate ) {
+                motion = Motion.FORWARD ;
+            } else if ( 80 <= pitchRate ) {
+                motion = Motion.BACKWARD;
+            } else if ( -100 >= rollRate) {
+                motion = Motion.RIGHT ;
+            } else if ( 100 <= rollRate) {
+                motion = Motion.LEFT ;
+            } else {
+                //motion = Motion.STOP ;
+            }
+
+            if( 0 < motion.length() ){
+                this.moveCar(motion, status, null);
+
+                motionTime = now ;
+            }
+        }
+
+    }
+
+
 }
