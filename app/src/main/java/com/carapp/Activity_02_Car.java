@@ -203,8 +203,25 @@ public class Activity_02_Car extends Activity_05_Compass implements Orientation.
                 relative, -dir*0.6f);
 
         animation.setDuration( 2_500 );
-        animation.setRepeatCount( -1 );
-        animation.setRepeatMode(Animation.RESTART);
+        animation.setRepeatCount( 1 );
+        animation.setFillAfter(true);
+
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                carAni.clearAnimation();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
 
         this.carAnimation = animation ;
 
@@ -226,8 +243,25 @@ public class Activity_02_Car extends Activity_05_Compass implements Orientation.
                 relative,  0.5f);
 
         animation.setDuration( 2_500 );
-        animation.setRepeatCount( -1 );
+        animation.setRepeatCount( 1 );
         animation.setFillAfter(true);
+
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                carAni.clearAnimation();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
 
         this.carAnimation = animation ;
 
@@ -364,9 +398,9 @@ public class Activity_02_Car extends Activity_05_Compass implements Orientation.
         } else {
             String motion = "" ;
 
-            if ( -100 >= pitchRate ) {
+            if ( -80 >= pitchRate ) {
                 motion = Motion.FORWARD ;
-            } else if ( 100 <= pitchRate ) {
+            } else if ( 80 <= pitchRate ) {
                 motion = Motion.BACKWARD;
             } else if ( -100 >= rollRate) {
                 motion = Motion.RIGHT ;

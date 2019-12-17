@@ -230,7 +230,7 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
 
                     status.setText( "자율 주행을 시작합니다." );
 
-                    moveCar( Motion.AUTOPILOT, status, 0, 0, pathEnd.getPosition() );
+                    moveCar( Motion.AUTOPILOT, status, pathEnd.getPosition() );
                 }
             } else {
                 carAni.setImageResource(R.drawable.car_top_01_move);
@@ -249,7 +249,7 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
 
             Toast.makeText( getApplicationContext(),"차량 주행을 종료합니다..",Toast.LENGTH_SHORT).show();
 
-            moveCar( Motion.STOP, status, 0, 0 );
+            moveCar( Motion.STOP, status, null );
         }
     }
 
@@ -731,13 +731,7 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
         // do nothing.
     }
 
-    public void moveCar(final String motion, final EditText status, double pitchDeg, double rollDeg ) {
-        this.moveCar( motion, status, pitchDeg, rollDeg, null);
-    }
-
-    public void moveCar(final String motion, final EditText status, double pitchDeg, double rollDeg, LatLng latLng ) {
-        pitchDeg = pitchDeg % 360;
-        rollDeg = rollDeg % 360;
+    public void moveCar(final String motion, final EditText status, LatLng latLng ) {
 
         final Activity_03_Map activity = this ;
 
@@ -769,7 +763,7 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
 
         this.motionCurr = motion ;
 
-        String url = String.format("http://10.3.141.1/car_drive.json?motion=%s&pitchDeg=%f&rollDeg=%f", motion, pitchDeg, rollDeg);
+        String url = String.format("http://10.3.141.1/car_drive.json?motion=%s", motion );
 
         if( null != latLng ) {
             url += "&lat=" + latLng.latitude ;
@@ -816,6 +810,10 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
     // pitch roll 값이 변했을 경우, 차를 제어한다.
     private void pitchRollUpdated( double pitch, double roll ) {
 
+        if( true ) {
+            return;
+        }
+
         pitch = -prettyDegree(pitch);
         roll = -prettyDegree(roll);
 
@@ -855,7 +853,7 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
             if( Motion.STOP.equalsIgnoreCase( this.motionCurr ) && Motion.STOP.equalsIgnoreCase( motion ) ) {
                 // do nothing!
             } else if( true ){
-                this.moveCar(motion, status, pitch, roll );
+                this.moveCar(motion, status, null );
 
                 this.motionCurr = motion;
 
@@ -867,6 +865,54 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
     // -- pitchRollUpdated
 
     public void onGyroChanged( float [] values ) {
+        String tag = "gyro";
+
+        double rx = Math.toDegrees( values[0] ) % 360 ;
+        double ry = Math.toDegrees( values[1] ) % 360 ;
+        double rz = Math.toDegrees( values[2] ) % 360 ;
+
+        rx = this.prettyDegree( rx );
+        ry = this.prettyDegree( ry );
+        rz = this.prettyDegree( rz );
+
+        double pitchRate = rx ;
+        double rollRate   = rz ;
+
+        this.pitch.setText( String.format( "%3.2f", pitchRate ));
+        this.roll.setText( String.format( "%3.2f", rollRate ));
+
+
+        if( false ) {
+            Log.d(tag, String.format("r/s2 x = %3.6f, y = %3.6f, z = %3.6f", rx, ry, rz));
+        }
+
+        final long now = System.currentTimeMillis();
+
+        if( ! motionEnabled ) {
+            // do nothing!
+        }else if (now - motionTime < 700 ) {
+            // do nothing!
+        } else {
+            String motion = "" ;
+
+            if ( -80 >= pitchRate ) {
+                motion = Motion.FORWARD ;
+            } else if ( 80 <= pitchRate ) {
+                motion = Motion.BACKWARD;
+            } else if ( -100 >= rollRate) {
+                motion = Motion.RIGHT ;
+            } else if ( 100 <= rollRate) {
+                motion = Motion.LEFT ;
+            } else {
+                //motion = Motion.STOP ;
+            }
+
+            if( 0 < motion.length() ){
+                this.moveCar(motion, status, null);
+
+                motionTime = now ;
+            }
+        }
 
     }
 
