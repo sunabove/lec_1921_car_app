@@ -109,7 +109,12 @@ public class Activity_01_Splash extends ComActivity {
         }
 
         if( true ) {
-            Boolean goToMapChecked = sharedPref.getBoolean("goToMapChecked", false );
+            Boolean goToMapChecked = false;
+            try {
+                goToMapChecked = sharedPref.getBoolean("goToMapChecked", false);
+            } catch( Exception e ) {
+
+            }
             this.goToMap.setChecked( goToMapChecked );
         }
 
