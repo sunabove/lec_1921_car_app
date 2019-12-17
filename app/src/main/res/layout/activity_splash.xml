@@ -186,8 +186,10 @@
             <TextView
                 android:id="@+id/error"
                 android:layout_width="250dp"
-                android:layout_height="wrap_content"
+                android:layout_height="80dp"
                 android:gravity="center"
+                android:maxLines="3"
+                android:minLines="3"
                 android:text="Error "
                 android:textColor="#E91E63"
                 android:textSize="20dp" />
