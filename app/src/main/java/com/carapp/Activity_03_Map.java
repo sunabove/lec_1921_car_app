@@ -692,7 +692,7 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
         }
 
         Float lat = sharedPref.getFloat("lastPhoneLat", 37.5866f );
-        Float lng = sharedPref.getFloat("lastPhoneLat", 126.97f );
+        Float lng = sharedPref.getFloat("lastPhoneLng", 126.97f );
 
         LatLng latlng = new LatLng(lat, lng);
 
@@ -932,8 +932,24 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
                 relative, -dir*0.6f);
 
         animation.setDuration( 2_500 );
-        animation.setRepeatCount( -1 );
-        animation.setRepeatMode(Animation.RESTART);
+        animation.setRepeatCount( 2 );
+
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                carAni.clearAnimation();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
 
         this.carAnimation = animation ;
 
@@ -955,8 +971,24 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
                 relative,  0.5f);
 
         animation.setDuration( 2_500 );
-        animation.setRepeatCount( -1 );
-        animation.setFillAfter(true);
+        animation.setRepeatCount( 2 );
+
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                carAni.clearAnimation();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
 
         this.carAnimation = animation ;
 
