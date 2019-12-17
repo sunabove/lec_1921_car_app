@@ -172,7 +172,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="4dp">
 
             <SeekBar
                 android:id="@+id/seekBar"
@@ -185,7 +186,7 @@
 
             <TextView
                 android:id="@+id/error"
-                android:layout_width="250dp"
+                android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:gravity="center"
                 android:maxLines="3"
