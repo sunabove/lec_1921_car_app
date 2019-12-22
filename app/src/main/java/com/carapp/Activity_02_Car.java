@@ -326,14 +326,15 @@ public class Activity_02_Car extends Activity_05_Compass implements Orientation.
     // pitch roll 값이 변했을 경우, 차를 제어한다.
     private void pitchRollUpdated( double pitch, double roll ) {
 
-        if( true ) {
-            return ;
-        }
         pitch = -prettyDegree(pitch);
         roll = -prettyDegree(roll);
 
         this.pitch.setText( String.format( "%5.2f", pitch));
-        //this.roll.setText( String.format( "%5.2f", roll));
+        this.roll.setText( String.format( "%5.2f", roll));
+
+        if( true ) {
+            return ;
+        }
 
         final long now = System.currentTimeMillis();
 
@@ -378,12 +379,11 @@ public class Activity_02_Car extends Activity_05_Compass implements Orientation.
         ry = this.prettyDegree( ry );
         rz = this.prettyDegree( rz );
 
-        double pitchRate = rx ;
+        double pitchRate  = rx ;
         double rollRate   = rz ;
 
-        this.pitch.setText( String.format( "%5.2f", pitchRate ));
-        this.roll.setText( String.format( "%5.2f", rollRate ));
-
+        // this.pitch.setText( String.format( "%5.2f", pitchRate ));
+        // this.roll.setText( String.format( "%5.2f", rollRate ));
 
         if( false ) {
             Log.d(tag, String.format("r/s2 x = %3.6f, y = %3.6f, z = %3.6f", rx, ry, rz));

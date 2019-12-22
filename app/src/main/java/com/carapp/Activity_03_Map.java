@@ -943,17 +943,15 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
     // pitch roll 값이 변했을 경우, 차를 제어한다.
     private void pitchRollUpdated( double pitch, double roll ) {
 
-        if( true ) {
-            return;
-        }
-
         pitch = -prettyDegree(pitch);
         roll = -prettyDegree(roll);
 
-        String text = String.format("pitch: %05.2f  roll %05.2f", pitch, roll);
-
         this.pitch.setText( String.format( "%5.2f", pitch));
         this.roll.setText( String.format( "%5.2f", roll));
+
+        if( true ) {
+            return;
+        }
 
         final long now = System.currentTimeMillis();
 
@@ -1011,8 +1009,10 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
         double pitchRate = rx ;
         double rollRate   = rz ;
 
+        /*
         this.pitch.setText( String.format( "%3.2f", pitchRate ));
         this.roll.setText( String.format( "%3.2f", rollRate ));
+         */
 
 
         if( false ) {
@@ -1050,6 +1050,5 @@ public class Activity_03_Map extends ComActivity implements OnMapReadyCallback ,
         }
 
     }
-
 
 }
