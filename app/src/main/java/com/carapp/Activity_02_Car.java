@@ -1,5 +1,6 @@
 package com.carapp;
 
+import android.annotation.SuppressLint;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
@@ -49,6 +50,7 @@ public class Activity_02_Car extends Activity_05_Compass implements Orientation.
         return R.layout.activity_car ;
     }
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
