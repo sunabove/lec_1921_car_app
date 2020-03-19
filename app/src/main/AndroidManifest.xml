@@ -41,7 +41,6 @@
         <activity
             android:name=".Activity_02_Car"
             android:label="@string/title_activity_car"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity_03_Map"
@@ -54,7 +53,6 @@
         <activity
             android:name=".Activity_04_Video"
             android:label="@string/title_activity_video"
-            android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
