@@ -15,7 +15,7 @@ public class GpsLog extends ArrayList<LatLng> {
         return results ;
     }
 
-    public double getHeading( double def ) {
+    public double getGpsHeading( double def ) {
         double heading = 0.0;
 
         int size = this.size();
