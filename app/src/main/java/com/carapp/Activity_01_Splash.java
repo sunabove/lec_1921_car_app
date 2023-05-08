@@ -39,7 +39,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Activity_01_Splash extends ComActivity {
-
     private boolean activityAlive = false ;
     private boolean serverActive = false ;
     private TextView status ;
