@@ -30,7 +30,9 @@
 
         <activity
             android:name=".Activity_01_Splash"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:exported="true"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -40,18 +42,22 @@
         <activity
             android:name=".Activity_02_Car"
             android:label="@string/title_activity_car"
+            android:exported="true"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity_03_Map"
             android:label="@string/title_activity_maps"
+            android:exported="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".Activity_05_Compass"
             android:label="MyCar Compass"
+            android:exported="true"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity_04_Video"
             android:label="@string/title_activity_video"
+            android:exported="true"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
