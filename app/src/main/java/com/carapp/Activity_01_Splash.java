@@ -65,8 +65,6 @@ public class Activity_01_Splash extends ComActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
         this.status = this.findViewById(R.id.status);
         this.error = this.findViewById(R.id.error);
 
@@ -132,13 +130,6 @@ public class Activity_01_Splash extends ComActivity {
 
         });
 
-        /*
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
-
-        registerReceiver( new WifiReceiver(), intentFilter);
-        */
-
     }
     // -- on create
 
@@ -188,6 +179,7 @@ public class Activity_01_Splash extends ComActivity {
         this.checkServer();
     }
 
+    @SuppressLint("MissingPermission")
     private void whenWifiItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
         String tag = "wifi";
@@ -210,6 +202,7 @@ public class Activity_01_Splash extends ComActivity {
         }
     }
 
+    @SuppressLint("MissingPermission")
     private void scanSuccess( WifiManager wifiManager ) {
         String tag = "wifi" ;
         List<ScanResult> results = wifiManager.getScanResults();
@@ -263,6 +256,7 @@ public class Activity_01_Splash extends ComActivity {
 
     }
 
+    @SuppressLint("MissingPermission")
     private void scanFailure( WifiManager wifiManager ) {
         // handle failure: new scan did NOT succeed
         // consider using old scan results: these are the OLD results!
